@@ -7,7 +7,46 @@ import numba as nb
 
 
 
-def create_filter(ir=None, num_in=None, num_out=None, ir_len=None, broadcast_dim=None, sum_over_input=True, dynamic=False):
+def create_filter(
+    ir=None, 
+    num_in=None, num_out=None, ir_len=None, 
+    broadcast_dim=None, 
+    sum_over_input=True, 
+    dynamic=False):
+    """
+    Returns the appropriate filter object for the desired use.
+
+    All filters has a method called process which takes one parameter 
+        signal : ndarray of shape (num_in, num_samples)
+        and returns an ndarray of shape (out_dim, num_samples), where 
+        out_dim depends on which filter. 
+
+    Either ir must be provided or num_in, num_out and ir_len. In the
+    latter case, the filter coefficients are initialized to zero.  
+
+    Parameters
+    ----------
+    ir : ndarray of shape (num_in, num_out, ir_len)
+    num_in : int
+    num_out : int
+    ir_len : int
+    broadcast_dim : int
+        Supply this value if the filter should be applied to more than one set of signals
+        at the same time. 
+    sum_over_input : bool
+        Choose true to sum over the input dimension after filtering. For a canonical MIMO
+        system choose True, for example when simulating sound in a space with multiple 
+        loudspeakers.
+        Choose False otherwise, in which case filter.process will return a ndarray of 
+        shape (num_in, num_out, num_samples)
+    dynamic : bool
+        Choose true to use an accurate filtering with a linear time-varying system
+        Takes more computational resources
+
+    Returns
+    -------
+    filter : Appropriate filter class from this module
+    """
     if num_in is not None and num_out is not None and ir_len is not None:
         assert ir is None
         ir = np.zeros((num_in, num_out, ir_len))
