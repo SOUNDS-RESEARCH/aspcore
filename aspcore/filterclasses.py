@@ -9,7 +9,9 @@ import numba as nb
 
 def create_filter(
     ir=None, 
-    num_in=None, num_out=None, ir_len=None, 
+    num_in=None, 
+    num_out=None, 
+    ir_len=None, 
     broadcast_dim=None, 
     sum_over_input=True, 
     dynamic=False):
@@ -40,8 +42,8 @@ def create_filter(
         Choose False otherwise, in which case filter.process will return a ndarray of 
         shape (num_in, num_out, num_samples)
     dynamic : bool
-        Choose true to use an accurate filtering with a linear time-varying system
-        Takes more computational resources
+        Choose true to use a convolution specifically implemented for time-varying systems.
+        More accurate, but takes more computational resources. 
 
     Returns
     -------
@@ -59,15 +61,13 @@ def create_filter(
             if sum_over_input:
                 raise NotImplementedError
             assert ir.ndim == 3 and isinstance(broadcast_dim, int) # A fallback to non-numba MD-filter can be added instead of assert
-            return FilterMD(broadcast_dim, ir)
+            return FilterBroadcast(broadcast_dim, ir)
         
         if sum_over_input:
             if dynamic:
                 return FilterSumDynamic(ir)
             return FilterSum(ir)
-        return FilterIndividualInputs(ir)
-
-
+        return FilterNosum(ir)
 
 spec_filtersum = [
     ("ir", nb.float64[:,:,:]),
@@ -112,7 +112,7 @@ spec_filtermd = [
     ("buffer", nb.float64[:,:]),
 ]
 @nb.experimental.jitclass(spec_filtermd)
-class FilterMD:
+class FilterBroadcast:
     """Filter that filters each channel of the input signal
         through each channel of the impulse response.
         input signal is shape (dataDims, numSamples)
@@ -145,32 +145,8 @@ class FilterMD:
         return filtered
 
 
-class FilterSumDynamic:
-    """# Identical in use to FilterSum, but uses a buffered output instead of input
-        for a more correct filtering when the IR changes while processing. """
-    def __init__(self, ir):
-        self.ir = ir
-        self.num_in = ir.shape[0]
-        self.num_out = ir.shape[1]
-        self.ir_len = ir.shape[2]
-        self.buffer = np.zeros((self.num_in, self.ir_len - 1))
-        self.out_buffer = np.zeros((self.num_out, self.ir_len - 1))
 
-    def process(self, data_to_filter):
-        num_samples = data_to_filter.shape[-1]
-        filtered = np.zeros((self.num_out, num_samples+self.ir_len-1))
-        filtered[:,:self.ir_len-1] = self.out_buffer
-        #bufferedInput = np.concatenate((self.buffer, dataToFilter), axis=-1)
-        #for out_idx in range(self.numOut):
-        for i in range(num_samples):
-            filtered[:,i:i+self.ir_len] += np.sum(self.ir * data_to_filter[:,None,i:i+1], axis=0)
-
-        self.out_buffer = filtered[:, num_samples:]
-        return filtered[:,:num_samples]
-
-
-
-class FilterIndividualInputs:
+class FilterNosum:
     """Acts as the FilterSum filter before the sum,
     with each input channel having an indiviudal set of IRs.
     IR should be (inputChannels, outputChannels, irLength)
@@ -214,7 +190,7 @@ class FilterIndividualInputs:
         self.ir = ir_new
 
 
-class FilterMD_IntBuffer:
+class FilterMD_slow_fallback:
     """Multidimensional filter with internal buffer
     Will filter every dimension of the input with every impulse response
     (a0,a1,...,an,None) filter with dataDim (b0,...,bn) will give (a0,...,an,b0,...,bn,None) output
@@ -288,7 +264,7 @@ class FilterMD_IntBuffer:
 
 
 
-class FilterMD_Freqdomain:
+class FilterBroadcastFreq:
     """ir is the time domain impulse response, with shape (a0, a1,..., an, irLen)
     tf is frequency domain transfer function, with shape (2*irLen, a0, a1,..., an),
 
@@ -349,7 +325,7 @@ class FilterMD_Freqdomain:
         ]
         return output_samples
 
-class FilterSum_Freqdomain:
+class FilterSumFreq:
     """- ir is the time domain impulse response, with shape (numIn, numOut, irLen)
     - tf is frequency domain transfer function, with shape (2*irLen, numOut, numIn),
     - it is also possible to only provide the dimensions of the filter, numIn and numOut,
@@ -472,38 +448,75 @@ class FilterSum_Freqdomain:
 
 
 
-
-# Single dimensional filter with internal buffer
-# if multiple input channels are set,
-# the same filter will be used for all input channels
-class Filter_IntBuffer:
+class FilterSumDynamic:
     """
-    Deprecated, to be removed
+    
     """
-    def __init__(self, ir=None, irLen=None, numIn=1, dtype=np.float64):
-        if ir is not None:
-            self.ir = ir
-            self.irLen = ir.shape[-1]
-        elif irLen is not None:
-            self.ir = np.zeros((irLen), dtype=dtype)
-            self.irLen = irLen
-        else:
-            raise Exception("Not enough constructor arguments")
-        self.numIn = numIn
-        self.buffer = np.zeros((numIn, self.irLen - 1), dtype=dtype)
+    def __init__(self, ir):
+        self.ir = ir
+        self.num_in = ir.shape[0]
+        self.num_out = ir.shape[1]
+        self.ir_len = ir.shape[2]
+        self.buffer = np.zeros((self.num_in, self.ir_len - 1))
+        self.ir_all = np.zeros((self.num_in, self.num_out, self.ir_len, self.ir_len-1))
 
-    def process(self, dataToFilter):
-        numSamples = dataToFilter.shape[-1]
-        bufferedInput = np.concatenate((self.buffer, dataToFilter), axis=-1)
-        filtered = np.zeros((self.numIn, numSamples))
-        for i in range(self.numIn):
-            filtered[i, :] = spsig.convolve(self.ir, bufferedInput[i, :], "valid")
+        self.ir_new = ir
+        #self.out_buffer = np.zeros((self.num_out, self.ir_len - 1))
 
-        # self.buffer[:,:] = bufferedInput[:,-self.irLen+1:]
-        self.buffer[:, :] = bufferedInput[:, bufferedInput.shape[-1] - self.irLen + 1 :]
+
+    def update_ir(self, ir_new):
+        self.ir_new = ir_new
+
+    def process(self, in_sig):
+        assert in_sig.ndim == 2
+        assert in_sig.shape[0] == self.num_in #maybe shape is 1 is okay also for implicit broadcasting?
+        num_samples = in_sig.shape[-1]
+
+
+        self.ir = self.ir_new 
+
+        self.ir_all = np.roll(self.ir_all, 1, axis=-1) # should it be -1 instead of 1?
+        self.ir_all[..., 0] = self.ir_new
+        
+
+
+        #this is copied directly from fikltersum
+        buffered_input = np.concatenate((self.buffer, in_sig), axis=-1)
+
+        filtered = np.zeros((self.num_out, num_samples))
+        for out_idx in range(self.num_out):
+            for i in range(num_samples):
+                filtered[out_idx,i] += np.sum(self.ir[:,out_idx,:] * np.fliplr(buffered_input[:,i:self.ir_len+i]))
+
+        self.buffer[:, :] = buffered_input[:, buffered_input.shape[-1] - self.ir_len + 1 :]
         return filtered
 
-    def set_ir(self, irNew):
-        if irNew.shape != self.ir.shape:
-            self.irLen = irNew.shape[-1]
-        self.ir = irNew
+
+
+
+
+class FilterSumDynamic_old:
+    """
+    Likely only correct for moving sources, and not for moving microphones
+    
+    Identical in use to FilterSum, but uses a buffered output instead of input
+        for a more correct filtering when the IR changes while processing. """
+    def __init__(self, ir):
+        self.ir = ir
+        self.num_in = ir.shape[0]
+        self.num_out = ir.shape[1]
+        self.ir_len = ir.shape[2]
+        self.buffer = np.zeros((self.num_in, self.ir_len - 1))
+        self.out_buffer = np.zeros((self.num_out, self.ir_len - 1))
+
+    def process(self, data_to_filter):
+        num_samples = data_to_filter.shape[-1]
+        filtered = np.zeros((self.num_out, num_samples+self.ir_len-1))
+        filtered[:,:self.ir_len-1] = self.out_buffer
+        #bufferedInput = np.concatenate((self.buffer, dataToFilter), axis=-1)
+        #for out_idx in range(self.numOut):
+        for i in range(num_samples):
+            filtered[:,i:i+self.ir_len] += np.sum(self.ir * data_to_filter[:,None,i:i+1], axis=0)
+
+        self.out_buffer = filtered[:, num_samples:]
+        return filtered[:,:num_samples]
