@@ -18,5 +18,6 @@ slask/*/*
 **/.DS_Store
 *.pyc
 
+.gitignore.bak
 
-signalcore_PVJesper.egg-info
+aspcore_PVJesper.egg-info

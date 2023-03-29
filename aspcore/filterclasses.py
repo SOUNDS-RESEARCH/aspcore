@@ -1,7 +1,7 @@
 import numpy as np
 import itertools as it
 
-import ancsim.signal.freqdomainfiltering as fdf
+import aspcore.freqdomainfiltering as fdf
 import scipy.signal as spsig
 import numba as nb
 
@@ -173,12 +173,13 @@ class FilterNosum:
         buffered_input = np.concatenate((self.buffer, data_to_filter), axis=-1)
 
         filtered = np.zeros((self.num_in, self.num_out, num_samples))
-        for in_idx, out_idx in it.product(range(self.num_in), range(self.num_out)):
-            filtered[in_idx, out_idx, :] = spsig.convolve(
-                self.ir[in_idx, out_idx, :], buffered_input[in_idx, :], "valid"
-            )
+        if num_samples > 0:
+            for in_idx, out_idx in it.product(range(self.num_in), range(self.num_out)):
+                filtered[in_idx, out_idx, :] = spsig.convolve(
+                    self.ir[in_idx, out_idx, :], buffered_input[in_idx, :], "valid"
+                )
 
-        self.buffer[:, :] = buffered_input[:, buffered_input.shape[-1] - self.ir_len + 1 :]
+            self.buffer[:, :] = buffered_input[:, buffered_input.shape[-1] - self.ir_len + 1 :]
         return filtered
 
     def set_ir(self, ir_new):
