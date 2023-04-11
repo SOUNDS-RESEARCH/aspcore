@@ -101,7 +101,7 @@ def test_filtersum_dynamic_piecewise_static_ir_equals_normal_filtersum(ir_len, n
     #         sig[:, i * ir_len : (i + 1) * ir_len]
     #     )
 
-
+    assert False #it is not implemented yet
     assert np.allclose(out, out_dyn)
 
 
