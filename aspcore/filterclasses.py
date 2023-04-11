@@ -459,10 +459,12 @@ class FilterSumDynamic:
         self.num_out = ir.shape[1]
         self.ir_len = ir.shape[2]
         self.buffer = np.zeros((self.num_in, self.ir_len - 1))
-        self.ir_all = np.zeros((self.num_in, self.num_out, self.ir_len, self.ir_len-1))
+        self.ir_all = np.zeros((self.num_in, self.num_out, self.ir_len, self.ir_len))
 
         self.ir_new = ir
         #self.out_buffer = np.zeros((self.num_out, self.ir_len - 1))
+
+        #TODO : Change so that time index for IRS is the first index. I assume thats faster?
 
 
     def update_ir(self, ir_new):
@@ -472,24 +474,31 @@ class FilterSumDynamic:
         assert in_sig.ndim == 2
         assert in_sig.shape[0] == self.num_in #maybe shape is 1 is okay also for implicit broadcasting?
         num_samples = in_sig.shape[-1]
+        assert num_samples == 1 #start with this
+        buffered_input = np.concatenate((self.buffer, in_sig), axis=-1)
+        num_buf = buffered_input.shape[-1]
 
-
+        # Update set of IRs
+        # The IR on self.ir_all[:,:,:,-1] is the earliest set
+        # The IR on self.ir_all[:,:,:,0] is the latest set
         self.ir = self.ir_new 
-
         self.ir_all = np.roll(self.ir_all, 1, axis=-1) # should it be -1 instead of 1?
         self.ir_all[..., 0] = self.ir_new
         
+        filtered = np.zeros((self.num_out, num_samples))
 
+        for in_ch in range(self.num_in):
+            for out_ch in range(self.num_out):
+                for j in range(self.ir_len):
+                    filtered[out_ch, 0] += self.ir_all[in_ch, out_ch, j, j] * buffered_input[in_ch,num_buf-1-j]
+                    
 
         #this is copied directly from fikltersum
-        buffered_input = np.concatenate((self.buffer, in_sig), axis=-1)
-
-        filtered = np.zeros((self.num_out, num_samples))
-        for out_idx in range(self.num_out):
-            for i in range(num_samples):
-                filtered[out_idx,i] += np.sum(self.ir[:,out_idx,:] * np.fliplr(buffered_input[:,i:self.ir_len+i]))
-
         self.buffer[:, :] = buffered_input[:, buffered_input.shape[-1] - self.ir_len + 1 :]
+        
+        #for out_idx in range(self.num_out):
+        #    for i in range(num_samples):
+        #        filtered[out_idx,i] += np.sum(self.ir[:,out_idx,:] * np.fliplr(buffered_input[:,i:self.ir_len+i]))
         return filtered
 
 

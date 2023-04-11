@@ -1,13 +1,7 @@
 import numpy as np
 import hypothesis as hyp
 import hypothesis.strategies as st
-import ancsim.signal.filterclasses as fc
-import ancsim.presets as preset
-import pytest
-
-import matplotlib.pyplot as plt
-import time
-
+import aspcore.filterclasses as fc
 
 # @pytest.fixture
 # def setupconstants():
@@ -30,68 +24,84 @@ def test_hardcoded_filtersum():
     assert np.allclose(out, hardcodedOut)
 
 
-def test_impulseir_filtersum():
-    filt1 = fc.FilterSum(np.ones((1, 1, 1)))
-
-    ir2 = np.zeros((1, 1, 10))
+@hyp.settings(deadline=None)
+@hyp.given(
+    ir_len = st.integers(min_value=1, max_value=8),
+    num_samples = st.integers(min_value=1, max_value=32),
+)
+def test_filtersum_ending_zeros_does_not_affect_output(ir_len, num_samples):
+    ir2 = np.zeros((1, 1, ir_len))
     ir2[0, 0, 0] = 1
-    filt2 = fc.FilterSum(ir2)
+    filt = fc.create_filter(ir2)
 
-    inSig = np.random.rand(1, 16)
-
-    out1 = filt1.process(inSig)
-    out2 = filt2.process(inSig)
-
-    assert np.allclose(out1, out2)
-
-
-def test_impulseir_onedimfilter():
-    filt1 = fc.Filter_IntBuffer(
-        np.array((1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0))
-    )
-    inSig = np.random.rand(1, 16)
-    out1 = filt1.process(inSig)
-    assert np.allclose(out1, inSig)
-
-
-def test_hardcoded_onedimfilter():
-    filt1 = fc.Filter_IntBuffer(np.sin(np.arange(5)))
-    inSig = np.array([[10, 9, 8, 7, 6, 5]])
-    out1 = filt1.process(inSig)
-    print(out1)
-    realOut = np.array(
-        [[0, 8.41470985, 16.66621313, 16.3266448, 6.86673143, 5.7316455]]
-    )
-    # assert 0
-    assert np.allclose(out1, realOut)
+    in_sig = np.random.rand(1, num_samples)
+    out = filt.process(in_sig)
+    assert np.allclose(in_sig, out)
 
 
 @hyp.settings(deadline=None)
 @hyp.given(
-    st.integers(min_value=1, max_value=256),
-    st.integers(min_value=1, max_value=8),
-    st.integers(min_value=1, max_value=8),
-    st.integers(min_value=1, max_value=10),
+    ir_len = st.integers(min_value=1, max_value=8),
+    num_in = st.integers(min_value=1, max_value=4),
+    num_out = st.integers(min_value=1, max_value=4),
+    num_samples = st.integers(min_value=1, max_value=32),
 )
-def test_filtersum_dynamic_static_equal_results(irLen, numIn, numOut, numBlocks):
+def test_filtersum_dynamic_with_static_ir_equals_normal_filtersum(ir_len, num_in, num_out, num_samples):
     rng = np.random.default_rng()
-    ir = rng.normal(0, 1, size=(numIn,numOut,irLen))
+    ir = rng.normal(0, 1, size=(num_in,num_out,ir_len))
 
     filt_dyn = fc.FilterSumDynamic(ir)
-    filt = fc.FilterSum(ir)
+    filt = fc.create_filter(ir)
 
-    out = np.zeros((numOut, numBlocks * irLen))
-    out_dyn = np.zeros((numOut, numBlocks * irLen))
+    out = np.zeros((num_out, num_samples))
+    out_dyn = np.zeros((num_out, num_samples))
 
-    sig = rng.normal(0, 1, (numIn, numBlocks * irLen))
-    for i in range(numBlocks):
-        out[:, i * irLen : (i + 1) * irLen] = filt.process(
-            sig[:, i * irLen : (i + 1) * irLen]
-        )
-        out_dyn[:, i * irLen : (i + 1) * irLen] = filt_dyn.process(
-            sig[:, i * irLen : (i + 1) * irLen]
-        )
-    #print(np.mean(np.abs(tdOut - fdOut)**2))
+    sig = rng.normal(0, 1, size=(num_in, num_samples))
+    for i in range(num_samples):
+        out[:,i:i+1] = filt.process(sig[:,i:i+1])
+        out_dyn[:,i:i+1] = filt_dyn.process(sig[:,i:i+1])
+    # for i in range(num_blocks):
+    #     out[:, i * ir_len : (i + 1) * ir_len] = filt.process(
+    #         sig[:, i * ir_len : (i + 1) * ir_len]
+    #     )
+    #     out_dyn[:, i * ir_len : (i + 1) * ir_len] = filt_dyn.process(
+    #         sig[:, i * ir_len : (i + 1) * ir_len]
+    #     )
+
+
+    assert np.allclose(out, out_dyn)
+
+@hyp.settings(deadline=None)
+@hyp.given(
+    ir_len = st.integers(min_value=1, max_value=8),
+    num_in = st.integers(min_value=1, max_value=4),
+    num_out = st.integers(min_value=1, max_value=4),
+    num_samples = st.integers(min_value=1, max_value=32),
+    num_irs = st.integers(min_value=1, max_value=4),
+)
+def test_filtersum_dynamic_piecewise_static_ir_equals_normal_filtersum(ir_len, num_in, num_out, num_samples, num_irs):
+    rng = np.random.default_rng()
+    ir = rng.normal(0, 1, size=(num_in,num_out,ir_len))
+
+    filt_dyn = fc.FilterSumDynamic(ir)
+    filt = fc.create_filter(ir)
+
+    out = np.zeros((num_out, num_samples))
+    out_dyn = np.zeros((num_out, num_samples))
+
+    sig = rng.normal(0, 1, size=(num_in, num_samples))
+    for i in range(num_samples):
+        out[:,i:i+1] = filt.process(sig[:,i:i+1])
+        out_dyn[:,i:i+1] = filt_dyn.process(sig[:,i:i+1])
+    # for i in range(num_blocks):
+    #     out[:, i * ir_len : (i + 1) * ir_len] = filt.process(
+    #         sig[:, i * ir_len : (i + 1) * ir_len]
+    #     )
+    #     out_dyn[:, i * ir_len : (i + 1) * ir_len] = filt_dyn.process(
+    #         sig[:, i * ir_len : (i + 1) * ir_len]
+    #     )
+
+
     assert np.allclose(out, out_dyn)
 
 
@@ -112,8 +122,8 @@ def test_freq_time_filter_sum_equal_results(irLen, numIn, numOut, numBlocks):
     ir = np.random.standard_normal((numIn, numOut, irLen))
     # ir = np.zeros((numIn, numOut, irLen))
     # ir[:,:,0] = 1
-    tdFilt = fc.FilterSum(ir=ir)
-    fdFilt = fc.FilterSum_Freqdomain(ir=ir)
+    tdFilt = fc.create_filter(ir=ir)
+    fdFilt = fc.FilterSumFreq(ir=ir)
 
     tdOut = np.zeros((numOut, numBlocks * irLen))
     fdOut = np.zeros((numOut, numBlocks * irLen))
@@ -137,8 +147,8 @@ def test_freq_time_filter_sum_equal_results(irLen, numIn, numOut, numBlocks):
 )
 def test_freq_time_md_filter_equal_results(irLen, dataDim, filtDim, numBlocks):
     ir = np.random.standard_normal((*filtDim, irLen))
-    tdFilt = fc.FilterMD(dataDim, ir)
-    fdFilt = fc.FilterMD_Freqdomain(dataDim, ir=ir)
+    tdFilt = fc.create_filter(ir, broadcast_dim=dataDim, sum_over_input=False)
+    fdFilt = fc.FilterBroadcastFreq(dataDim, ir=ir)
 
     tdOut = np.zeros((*filtDim, dataDim, numBlocks * irLen))
     fdOut = np.zeros((*filtDim, dataDim, numBlocks * irLen))
