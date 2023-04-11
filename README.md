@@ -8,11 +8,7 @@ The package uses just-in-time compilation from numba to achieve lower computatio
 
 
 ## Usage
-The main function of this package is aspcore.filterclasses.create_filter()
-Using the keyword arguments, it will select and return the appropriate filter class.
-The filter can then be used to filter using its process() method, which returns the filtered signal
-
-Signals are formatted with the time index as the last axis. 
+The main function of this package is aspcore.filterclasses.create_filter(). Using the keyword arguments, it will select and return the appropriate filter class. The filter can then be used to filter using its process() method, which returns the filtered signal. Signals are formatted with the time index as the last axis. 
 
 
 ```python
