@@ -20,4 +20,4 @@ slask/*/*
 
 .gitignore.bak
 
-aspcore_PVJesper.egg-info
+aspcore.egg-info
