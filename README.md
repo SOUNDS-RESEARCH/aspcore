@@ -1,4 +1,4 @@
-#ASPCORE : Adaptive / Audio Signal Processing Core
+# ASPCORE : Adaptive / Audio Signal Processing Core
 ## Introduction
 The package contains classes and functions implementing different versions of linear convolutions. What makes them useful above what's already available in scipy and numpy is that they are intended to be used in a streaming manner, and all filters support multiple inputs and multiple outputs. There is also support for convolution with a time-varying impulse response (soon). 
 
@@ -8,7 +8,8 @@ The package uses just-in-time compilation from numba to achieve lower computatio
 
 
 ## Usage
-The main function of this package is aspcore.filterclasses.create_filter(). Using the keyword arguments, it will select and return the appropriate filter class. The filter can then be used to filter using its process() method, which returns the filtered signal. Signals are formatted with the time index as the last axis. 
+The main function of this package is aspcore.filterclasses.create_filter(). Using the keyword arguments, it will select and return the appropriate filter class. \
+All filters can then be used convolve using its process() method, which returns the filtered signal. Signals are formatted with the time index as the last axis. 
 
 
 ```python
