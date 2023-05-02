@@ -13,6 +13,12 @@ git clone https://github.com/SOUNDS-RESEARCH/aspcore.git
 pip install -e ./aspcore
 ```
 
+It might be easier to go for the develop branch straight away by using instead
+```
+git clone --branch develop https://github.com/SOUNDS-RESEARCH/aspcore.git
+```
+
+
 ## Dependencies
 Python version is required to be 3.8 <= version <= 3.11, because that is supported by Numba (as of 0.57.0). \
 All dependencies can be installed using
