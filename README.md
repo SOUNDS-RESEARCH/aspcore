@@ -7,11 +7,20 @@ The package uses just-in-time compilation from numba to achieve lower computatio
 ## Installation
 I recommend an editable install. That basically means that python pretends that the package is installed like any other package, but it's instead just a link to a folder on your computer with the code. Then you can use the package from anywhere at the same time as you are developing it. It can be done by opening your favorite terminal and writing (changing out cd for the appropriate change-directory command, and the path to whatever you want)
 
+```
 cd c:/folder/parent_folder_to_code
 git clone https://github.com/SOUNDS-RESEARCH/aspcore.git
-pip install -e ./aspsim
+pip install -e ./aspcore
+```
 
 ## Dependencies
+Python version is required to be 3.8 <= version <= 3.11, because that is supported by Numba (as of 0.57.0). \
+All dependencies can be installed using
+```
+cd c:/folder/parent_folder_to_code
+pip install -r aspcore/requirements.txt
+```
+
 Required packages are Numpy, Scipy and Numba. \
 The unit tests are relying on pytest and hypothesis. 
 
