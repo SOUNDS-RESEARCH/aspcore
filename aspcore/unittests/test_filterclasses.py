@@ -57,9 +57,11 @@ def test_filtersum_dynamic_with_static_ir_equals_normal_filtersum(ir_len, num_in
     out_dyn = np.zeros((num_out, num_samples))
 
     sig = rng.normal(0, 1, size=(num_in, num_samples))
-    for i in range(num_samples):
-        out[:,i:i+1] = filt.process(sig[:,i:i+1])
-        out_dyn[:,i:i+1] = filt_dyn.process(sig[:,i:i+1])
+    out_dyn = filt_dyn.process(sig)
+    out = filt.process(sig)
+    # for i in range(num_samples):
+    #     out[:,i:i+1] = filt.process(sig[:,i:i+1])
+    #     out_dyn[:,i:i+1] = filt_dyn.process(sig[:,i:i+1])
     assert np.allclose(out, out_dyn)
 
 
@@ -124,9 +126,33 @@ def test_filtersum_dynamic_piecewise_static_ir_equals_normal_filtersum(ir_len, n
 
 
 
+@hyp.settings(deadline=None)
+@hyp.given(
+    ir_len = st.integers(min_value=1, max_value=8),
+    num_in = st.integers(min_value=1, max_value=4),
+    num_out = st.integers(min_value=1, max_value=4),
+    num_samples = st.integers(min_value=2, max_value=32),
+)
+def test_filtersum_dynamic_zero_ir_equals_static_filter_with_shorter_input_signal(ir_len, num_in, num_out, num_samples):
+
+
+    assert False # not implemented
 
 
 
+
+@hyp.settings(deadline=None)
+@hyp.given(
+    ir_len = st.integers(min_value=1, max_value=8),
+    num_in = st.integers(min_value=1, max_value=4),
+    num_out = st.integers(min_value=1, max_value=4),
+    num_samples = st.integers(min_value=2, max_value=32),
+)
+def test_filtersum_dynamic_equals_direct_implementation_of_definition(ir_len, num_in, num_out, num_samples):
+
+    for n in range(num_samples):
+        out[:,n] = h[i,n] * in_sig[:,n-i]
+    assert False # not implemented
 
 
 @hyp.settings(deadline=None)
