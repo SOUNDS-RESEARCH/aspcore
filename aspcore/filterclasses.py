@@ -2,6 +2,7 @@ import numpy as np
 import itertools as it
 
 import aspcore.freqdomainfiltering as fdf
+import aspcore.filterclassesdynamic as fcd
 import scipy.signal as spsig
 import numba as nb
 
@@ -65,7 +66,7 @@ def create_filter(
         
         if sum_over_input:
             if dynamic:
-                return FilterSumDynamic(ir)
+                return fcd.FilterSumDynamic(ir)
             return FilterSum(ir)
         return FilterNosum(ir)
 
