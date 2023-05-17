@@ -1,8 +1,12 @@
 import numpy as np
 import hypothesis as hyp
 import hypothesis.strategies as st
+from timeit import default_timer as timer
+
 import aspcore.filterclasses as fc
 import aspcore.filterclassesdynamic as fcd
+
+
 
 # @pytest.fixture
 # def setupconstants():
@@ -37,6 +41,10 @@ def test_filtersum_dynamic_with_static_ir_equals_normal_filtersum(ir_len, num_in
     #     out[:,i:i+1] = filt.process(sig[:,i:i+1])
     #     out_dyn[:,i:i+1] = filt_dyn.process(sig[:,i:i+1])
     assert np.allclose(out, out_dyn)
+
+
+
+
 
 
 @hyp.settings(deadline=None)
@@ -171,3 +179,67 @@ def test_filtersum_dynamic_equals_block_based_direct_implementation_of_definitio
                         out[out_ch,b*block_size+n] += ir[b, in_ch, out_ch, i] * buf_sig[in_ch,ir_len+b*block_size+n-i-1]
     assert np.allclose(out, out_dyn)
 
+
+
+
+@hyp.settings(deadline=None)
+@hyp.given(
+    ir_len = st.integers(min_value=1, max_value=8),
+    num_in = st.integers(min_value=1, max_value=4),
+    num_out = st.integers(min_value=1, max_value=4),
+    num_blocks = st.integers(min_value=1, max_value=32),
+    block_size = st.integers(min_value=1, max_value=32),
+)
+def test_filtersum_dynamic_numba_and_python_implementations_are_equal(ir_len, num_in, num_out, num_blocks, block_size):
+    rng = np.random.default_rng()
+    num_samples = num_blocks * block_size
+    ir = rng.normal(0, 1, size = (num_blocks, num_in,num_out,ir_len))
+    sig = rng.normal(0, 1, size = (num_in, num_samples))
+
+    filt = fcd.FilterSumDynamic(ir[0,...])
+    filtpy = fcd.FilterSumDynamic_python(ir[0,...])
+    out = np.zeros((num_out, num_samples))
+    outpy = np.zeros((num_out, num_samples))
+
+    for b in range(num_blocks):
+        filt.update_ir(ir[b,...])
+        filtpy.update_ir(ir[b,...])
+        out[:,b*block_size:(b+1)*block_size] = filt.process(sig[:,b*block_size:(b+1)*block_size])
+        outpy[:,b*block_size:(b+1)*block_size] = filtpy.process(sig[:,b*block_size:(b+1)*block_size])
+    assert np.allclose(out, outpy)
+
+
+
+@hyp.settings(deadline=None)
+@hyp.given(
+    ir_len = st.integers(min_value=128, max_value=128),
+    num_in = st.integers(min_value=4, max_value=4),
+    num_out = st.integers(min_value=5, max_value=5),
+    num_blocks = st.integers(min_value=128, max_value=128),
+    block_size = st.integers(min_value=16, max_value=16),
+)
+def test_filtersum_dynamic_numba_is_faster_than_python_implementation(ir_len, num_in, num_out, num_blocks, block_size):
+    rng = np.random.default_rng()
+    num_samples = num_blocks * block_size
+    ir = rng.normal(0, 1, size = (num_blocks, num_in,num_out,ir_len))
+    sig = rng.normal(0, 1, size = (num_in, num_samples))
+
+    filt = fcd.FilterSumDynamic(ir[0,...])
+    filtpy = fcd.FilterSumDynamic_python(ir[0,...])
+    out = np.zeros((num_out, num_samples))
+    outpy = np.zeros((num_out, num_samples))
+
+    start = timer()
+    for b in range(num_blocks):
+        filt.update_ir(ir[b,...])
+        out[:,b*block_size:(b+1)*block_size] = filt.process(sig[:,b*block_size:(b+1)*block_size])
+    end = timer()
+    time = end - start
+
+    start = timer()
+    for b in range(num_blocks):
+        filtpy.update_ir(ir[b,...])
+        outpy[:,b*block_size:(b+1)*block_size] = filtpy.process(sig[:,b*block_size:(b+1)*block_size])
+    end = timer()
+    timepy = end - start
+    assert time < timepy
