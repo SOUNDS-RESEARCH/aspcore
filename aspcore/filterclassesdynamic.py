@@ -58,6 +58,8 @@ class FilterSumDynamic:
 
 class FilterSumDynamic_single_sample:
     """
+    Equivalent to FilterSumDynamic, but can only deal with one sample at a time
+
     Implements a time-varying convolution y(n) = sum_{i=0}^{I-1} h(i, n) x(n-i)
 
     Use the method update_ir to change h(i,n) between using the process method to
