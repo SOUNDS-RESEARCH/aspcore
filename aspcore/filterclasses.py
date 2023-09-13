@@ -1,3 +1,18 @@
+"""A collection of classes implementing linear convolution. 
+
+The functionality offered beyond what is available in numpy and scipy is
+inherent support for MIMO filters in different forms, as well as
+streaming filtering, where only a part of the signal is known at a time. 
+It is also possible to filter with a time-varying impulse response.
+
+The classes are JIT compiled using numba's experimental jitclass to keep
+computational cost low.
+
+The main function of the module is create_filter, which constructs the appropriate 
+filter object according to the chosen parameters. The only required parameters is
+either an impulse response or the dimensions of the impulse response. In the 
+latter case, the impulse response is initialized to zero.
+"""
 import numpy as np
 import itertools as it
 
@@ -20,9 +35,9 @@ def create_filter(
     Returns the appropriate filter object for the desired use.
 
     All filters has a method called process which takes one parameter 
-        signal : ndarray of shape (num_in, num_samples)
-        and returns an ndarray of shape (out_dim, num_samples), where 
-        out_dim depends on which filter. 
+    signal : ndarray of shape (num_in, num_samples)
+    and returns an ndarray of shape (out_dim, num_samples), where 
+    out_dim depends on which filter. 
 
     Either ir must be provided or num_in, num_out and ir_len. In the
     latter case, the filter coefficients are initialized to zero.  
@@ -31,8 +46,11 @@ def create_filter(
     ----------
     ir : ndarray of shape (num_in, num_out, ir_len)
     num_in : int
+        the number of input channels
     num_out : int
+        the number of output channels
     ir_len : int
+        the length of the impulse response
     broadcast_dim : int
         Supply this value if the filter should be applied to more than one set of signals
         at the same time. 
@@ -79,11 +97,17 @@ spec_filtersum = [
 ]
 @nb.experimental.jitclass(spec_filtersum)
 class FilterSum:
-    """# The ir is a 3D array, where each entry in the first two dimensions is an impulse response
-        Ex. a (3,2,5) filter has 6 (3x2) IRs each of length 5
-        First dimension sets the number of inputs
-        Second dimension sets the number of outputs
-        (3,None) in, (2,None) out"""
+    """A class for implementing an LTI MIMO system. 
+
+    The input dimension will be summed over. 
+    The signal can be processed in chunks of arbitrary size, and the
+    internal buffer will be updated accordingly.
+
+    Parameters
+    ----------
+    ir : ndarray of shape (num_in, num_out, ir_len)
+        The impulse response of the filter
+    """
     def __init__(self, ir):
         self.ir = ir
         self.num_in = ir.shape[0]
@@ -92,6 +116,18 @@ class FilterSum:
         self.buffer = np.zeros((self.num_in, self.ir_len - 1))
 
     def process(self, data_to_filter):
+        """Filter the data with the impulse response.
+        
+        Parameters
+        ----------
+        data_to_filter : ndarray of shape (num_in, num_samples)
+            The data to be filtered
+        
+        Returns
+        -------
+        filtered : ndarray of shape (num_out, num_samples)
+            The filtered data
+        """
         num_samples = data_to_filter.shape[-1]
         buffered_input = np.concatenate((self.buffer, data_to_filter), axis=-1)
 
@@ -114,11 +150,15 @@ spec_filtermd = [
 ]
 @nb.experimental.jitclass(spec_filtermd)
 class FilterBroadcast:
-    """Filter that filters each channel of the input signal
-        through each channel of the impulse response.
-        input signal is shape (dataDims, numSamples)
-        impulse response is shape (dim1, dim2, irLen)
-        output signal is  (dataDims, dim1, dim2, numSamples)"""
+    """Filters all channels of the input signal with all channels of the impulse response.
+    
+    Parameters
+    ----------
+    data_dims : int
+        The number of channels of the input signal
+    ir : ndarray of shape (ir_dim1, ir_dim2, ir_len)
+        The impulse response of the filter
+    """
     def __init__(self, data_dims, ir):
         self.ir = ir
         self.ir_dim1 = ir.shape[0]
@@ -126,13 +166,21 @@ class FilterBroadcast:
         self.ir_len = ir.shape[-1]
         self.data_dims = data_dims
 
-        #self.outputDims = self.irDims + self.dataDims
-        #self.numDataDims = len(self.dataDims)
-        #self.numIrDims = len(self.irDims)
         self.buffer = np.zeros((self.data_dims, self.ir_len - 1))
 
     def process(self, data_to_filter):
-        #inDims = dataToFilter.shape[0:-1]
+        """Filters all input channels with all impulse response channels.
+        
+        Parameters
+        ----------
+        data_to_filter : ndarray of shape (data_dims, num_samples)
+            The data to be filtered
+        
+        Returns
+        -------
+        filtered : ndarray of shape (data_dims, dim1, dim2, num_samples)
+            The filtered data
+        """
         num_samples = data_to_filter.shape[-1]
 
         buffered_input = np.concatenate((self.buffer, data_to_filter), axis=-1)
@@ -148,11 +196,19 @@ class FilterBroadcast:
 
 
 class FilterNosum:
-    """Acts as the FilterSum filter before the sum,
-    with each input channel having an indiviudal set of IRs.
-    IR should be (inputChannels, outputChannels, irLength)
-    Input to process method is (inputChannels, numSamples)
-    output of process method is (inputChannels, outputChannels, numSamples)"""
+    """Filters a signal with a MIMO filter without summing over the input dimension.
+    
+    Is essentially equivalent to FilterBroadcast with ir_dims1=1, 
+    although this can be more convenient to use in some cases.
+
+    Is not JIT compiled, and is therefore generally slower than FilterBroadcast
+    and FilterSum.
+
+    Parameters
+    ----------
+    ir : ndarray of shape (num_in, num_out, ir_len)
+        The impulse response of the filter
+    """
 
     def __init__(self, ir=None, ir_len=None, num_in=None, num_out=None):
         if ir is not None:
@@ -170,6 +226,18 @@ class FilterNosum:
         self.buffer = np.zeros((self.num_in, self.ir_len - 1))
 
     def process(self, data_to_filter):
+        """Filter the data with the impulse response.
+
+        Parameters
+        ----------
+        data_to_filter : ndarray of shape (num_in, num_samples)
+            The data to be filtered
+        
+        Returns
+        -------
+        filtered : ndarray of shape (num_in, num_out, num_samples)
+            The filtered data   
+        """
         num_samples = data_to_filter.shape[-1]
         buffered_input = np.concatenate((self.buffer, data_to_filter), axis=-1)
 
@@ -182,14 +250,6 @@ class FilterNosum:
 
             self.buffer[:, :] = buffered_input[:, buffered_input.shape[-1] - self.ir_len + 1 :]
         return filtered
-
-    def set_ir(self, ir_new):
-        if ir_new.shape != self.ir.shape:
-            self.num_in = ir_new.shape[0]
-            self.num_out = ir_new.shape[1]
-            self.ir_len = ir_new.shape[2]
-            self.buffer = np.zeros((self.num_in, self.ir_len - 1))
-        self.ir = ir_new
 
 
 class FilterMD_slow_fallback:
@@ -495,56 +555,3 @@ class FilterSumDynamic:
                     
         self.buffer[:, :] = buffered_input[:, buffered_input.shape[-1] - self.ir_len + 1 :]
         return filtered
-
-
-
-
-
-class FilterSumDynamic_single_sample:
-    """
-    Implements a time-varying convolution y(n) = sum_{i=0}^{I-1} h(i, n) x(n-i)
-
-    Use the method update_ir to change h(i,n) between using the process method to
-    filter the signal. If update_ir is not called, the last ir is used. 
-    If update_ir is called twice, the first ir is forgotten.
-
-    Parameters
-    ----------
-    ir : ndarray of shape (num_in, num_out, ir_len)
-    """
-    def __init__(self, ir):
-        self.ir = ir
-        self.num_in = ir.shape[0]
-        self.num_out = ir.shape[1]
-        self.ir_len = ir.shape[2]
-        self.buffer = np.zeros((self.num_in, self.ir_len - 1))
-
-        self.ir_new = ir
-
-    def update_ir(self, ir_new):
-        assert ir_new.ndim == 3
-        assert np.allclose(ir_new.shape, (self.num_in, self.num_out, self.ir_len))
-        self.ir_new = ir_new
-
-    def process(self, in_sig):
-        assert in_sig.ndim == 2
-        assert in_sig.shape[0] == self.num_in #maybe shape is 1 is okay also for implicit broadcasting?
-        num_samples = in_sig.shape[-1]
-        assert num_samples == 1 #start with this
-        buffered_input = np.concatenate((self.buffer, in_sig), axis=-1)
-        num_buf = buffered_input.shape[-1]
-
-        self.ir = self.ir_new 
-        
-        filtered = np.zeros((self.num_out, num_samples))
-
-        for in_ch in range(self.num_in):
-            for out_ch in range(self.num_out):
-                for j in range(self.ir_len):
-                    filtered[out_ch, 0] += self.ir_all[in_ch, out_ch, j, 0] * buffered_input[in_ch,num_buf-1-j]
-                    
-        self.buffer[:, :] = buffered_input[:, buffered_input.shape[-1] - self.ir_len + 1 :]
-        return filtered
-
-
-
