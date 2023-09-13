@@ -253,11 +253,17 @@ class FilterNosum:
 
 
 class FilterMD_slow_fallback:
-    """Multidimensional filter with internal buffer
-    Will filter every dimension of the input with every impulse response
-    (a0,a1,...,an,None) filter with dataDim (b0,...,bn) will give (a0,...,an,b0,...,bn,None) output
-    (a,b,None) filter with (x,None) input will give (a,b,x,None) output"""
+    """Equivalent to FilterBroadcast, but can handle arbitrary number of dimensions.
 
+    Is not JIT compiled, and is therefore generally slower than FilterBroadcast
+
+    Parameters
+    ----------
+    data_dims : tuple of ints
+        The number of channels of the input signal
+    ir : ndarray of shape (ir_dim1, ir_dim2, ..., ir_dimN, ir_len)
+        The impulse response of the filter    
+    """
     def __init__(self, data_dims, ir=None, ir_len=None, ir_dims=None):
         if ir is not None:
             self.ir = ir
@@ -281,15 +287,24 @@ class FilterMD_slow_fallback:
         self.buffer = np.zeros(self.data_dims + (self.ir_len - 1,))
 
     def process(self, data_to_filter):
-        inDims = data_to_filter.shape[0:-1]
+        """Filters all input channels with all impulse response channels.
+
+        Parameters
+        ----------
+        data_to_filter : ndarray of shape (b0, b1, ..., bn, num_samples)
+            The data to be filtered
+
+        Returns
+        -------
+        filtered : ndarray of shape (a0, a1, ..., an, b0, b1, ..., bn, num_samples)
+            The filtered data
+        """
         num_samples = data_to_filter.shape[-1]
 
         buffered_input = np.concatenate((self.buffer, data_to_filter), axis=-1)
         filtered = np.zeros(self.ir_dims + self.data_dims + (num_samples,))
 
         for idxs in it.product(*[range(d) for d in self.output_dims]):
-            # filtered[idxs+(slice(None),)] = np.convolve(self.ir[idxs[0:self.numIrDims]+(slice(None),)],
-            #                                             bufferedInput[idxs[-self.numDataDims:]+(slice(None),)], "valid")
             filtered[idxs + (slice(None),)] = spsig.convolve(
                 self.ir[idxs[0 : self.num_ir_dims] + (slice(None),)],
                 buffered_input[idxs[-self.num_data_dims :] + (slice(None),)],
@@ -298,16 +313,6 @@ class FilterMD_slow_fallback:
 
         self.buffer[..., :] = buffered_input[..., -self.ir_len + 1 :]
         return filtered
-
-    def set_ir(self, ir_new):
-        if ir_new.shape != self.ir.shape:
-            self.ir_dims = ir_new.shape[0:-1]
-            self.ir_len = ir_new.shape[-1]
-            self.num_ir_dims = len(self.ir_dims)
-            self.buffer = np.zeros(self.data_dims + (self.ir_len - 1,))
-        self.ir = ir_new
-
-
 
 
 
@@ -388,12 +393,12 @@ class FilterBroadcastFreq:
         return output_samples
 
 class FilterSumFreq:
-    """- ir is the time domain impulse response, with shape (numIn, numOut, irLen)
-    - tf is frequency domain transfer function, with shape (2*irLen, numOut, numIn),
-    - it is also possible to only provide the dimensions of the filter, numIn and numOut,
-        together with either number of frequencies or ir length, where 2*irLen==numFreq
-    - dataDims is extra dimensions of the data to broadcast over. Input should then be
-        with shape (*dataDims, numIn, numSamples), output will be (*dataDims, numOut, numSamples)
+    """ir is the time domain impulse response, with shape (numIn, numOut, irLen)
+    tf is frequency domain transfer function, with shape (2*irLen, numOut, numIn),
+    it is also possible to only provide the dimensions of the filter, numIn and numOut,
+    together with either number of frequencies or ir length, where 2*irLen==numFreq
+    dataDims is extra dimensions of the data to broadcast over. Input should then be
+    with shape (*dataDims, numIn, numSamples), output will be (*dataDims, numOut, numSamples)
 
     If you give to many arguments, it will propritize tf -> ir -> numFreq -> irLen"""
 
@@ -507,51 +512,3 @@ class FilterSumFreq:
                 np.fft.fft(np.concatenate((ir_new, np.zeros_like(ir_new)), axis=-1), axis=-1),
                 (2, 1, 0),
             )
-
-
-
-class FilterSumDynamic:
-    """
-    Implements a time-varying convolution y(n) = sum_{i=0}^{I-1} h(i, n) x(n-i)
-
-    Use the method update_ir to change h(i,n) between using the process method to
-    filter the signal. If update_ir is not called, the last ir is used. 
-    If update_ir is called twice, the first ir is forgotten.
-
-    Parameters
-    ----------
-    ir : ndarray of shape (num_in, num_out, ir_len)
-    """
-    def __init__(self, ir):
-        self.ir = ir
-        self.num_in = ir.shape[0]
-        self.num_out = ir.shape[1]
-        self.ir_len = ir.shape[2]
-        self.buffer = np.zeros((self.num_in, self.ir_len - 1))
-
-        self.ir_new = ir
-
-    def update_ir(self, ir_new):
-        assert ir_new.ndim == 3
-        assert np.allclose(ir_new.shape, (self.num_in, self.num_out, self.ir_len))
-        self.ir_new = ir_new
-
-    def process(self, in_sig):
-        assert in_sig.ndim == 2
-        assert in_sig.shape[0] == self.num_in #maybe shape is 1 is okay also for implicit broadcasting?
-        num_samples = in_sig.shape[-1]
-
-        buffered_input = np.concatenate((self.buffer, in_sig), axis=-1)
-        num_buf = buffered_input.shape[-1]
-        self.ir = self.ir_new 
-        
-        filtered = np.zeros((self.num_out, num_samples))
-
-        for n in range(num_samples):
-            for in_ch in range(self.num_in):
-                for out_ch in range(self.num_out):
-                    for j in range(self.ir_len):
-                        filtered[out_ch, n] += self.ir[in_ch, out_ch, j] * buffered_input[in_ch,num_buf-num_samples+n-j]
-                    
-        self.buffer[:, :] = buffered_input[:, buffered_input.shape[-1] - self.ir_len + 1 :]
-        return filtered
