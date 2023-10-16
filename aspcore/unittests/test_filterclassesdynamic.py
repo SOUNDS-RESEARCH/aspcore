@@ -111,15 +111,31 @@ def test_filtersum_dynamic_piecewise_static_ir_equals_normal_filtersum(ir_len, n
 @hyp.settings(deadline=None)
 @hyp.given(
     ir_len = st.integers(min_value=1, max_value=8),
-    num_in = st.integers(min_value=1, max_value=4),
-    num_out = st.integers(min_value=1, max_value=4),
+    num_in = st.integers(min_value=1, max_value=1),
+    num_out = st.integers(min_value=1, max_value=1),
     num_samples = st.integers(min_value=2, max_value=32),
 )
-def test_filtersum_dynamic_zero_ir_equals_static_filter_with_shorter_input_signal(ir_len, num_in, num_out, num_samples):
+def test_dynamic_filtering_equals_static_filtering_and_then_selecting_samples(ir_len, num_in, num_out, num_samples):
+    rng = np.random.default_rng()
+    irs = rng.normal(0, 1, size=(1,num_samples,ir_len))
+    in_sig = rng.normal(0, 1, size=(1,num_samples))
+
+    static_filt = fc.create_filter(irs)
+    static_sig_out = static_filt.process(in_sig)
+    static_sig_select = np.array([static_sig_out[i,i] for i in range(num_samples)])[None,:]
+
+    dyn_filt = fc.create_filter(irs[:,0:1,:], dynamic=True)
+    dyn_out = np.zeros((1,num_samples))
+    for i in range(num_samples):
+        dyn_filt.update_ir(irs[:,i:i+1,:])
+        dyn_out[:,i] = dyn_filt.process(in_sig[:,i:i+1])
+
+    assert np.allclose(dyn_out, static_sig_select)
 
 
-    assert False # not implemented
+#test_filtersum_dynamic_zero_ir_equals_static_filter_with_shorter_input_signal
 
+#def test_dynamic_filtering_equals_static_filtering_and_then_selecting_sampled()
 
 
 
