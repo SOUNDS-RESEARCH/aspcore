@@ -1,5 +1,5 @@
 import numpy as np
-import aspcore.filterclasses as fc
+import aspcore
 
 # Parameter choices
 rng = np.random.default_rng()
@@ -15,7 +15,7 @@ ir = rng.normal(0, 1, size = (num_in,num_out,ir_len))
 sig = rng.normal(0, 1, size = (num_in, num_samples))
 
 # Filter using the filter class
-filt = fc.create_filter(ir = ir, sum_over_input=True)
+filt = aspcore.create_filter(ir = ir, sum_over_input=True)
 filtered_signal = np.zeros((num_out, num_samples))
 
 for b in range(num_blocks):

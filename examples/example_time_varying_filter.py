@@ -1,5 +1,5 @@
 import numpy as np
-import aspcore.filterclasses as fc
+import aspcore
 
 # Parameter choices
 rng = np.random.default_rng()
@@ -13,7 +13,7 @@ ir = rng.normal(0, 1, size = (num_samples, num_in,num_out,ir_len))
 sig = rng.normal(0, 1, size = (num_in, num_samples))
 
 # Filter using the dynamic filter class
-filt = fc.create_filter(num_in=num_in, num_out=num_out, ir_len=ir_len, sum_over_input=True, dynamic=True)
+filt = aspcore.create_filter(num_in=num_in, num_out=num_out, ir_len=ir_len, sum_over_input=True, dynamic=True)
 filtered_signal_dyn = np.zeros((num_out, num_samples))
 for n in range(num_samples):
     filt.update_ir(ir[n,...])

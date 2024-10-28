@@ -31,7 +31,7 @@ Signals are formatted with the time index as the last axis, with most filters ac
 
 ```python
 import numpy as np
-import aspcore.filterclasses as fc
+import aspcore
 rng = np.random.default_rng()
 
 channels_in, channels_out, num_samples, ir_len = 5, 3, 128, 16
@@ -39,7 +39,7 @@ channels_in, channels_out, num_samples, ir_len = 5, 3, 128, 16
 signal = rng.normal(0,1,size=(channels_in, num_samples))
 ir = rng.normal(0,1,size=(channels_out, ir_len))
 
-filt = fc.create_filter(ir=ir, sum_over_inputs=True)
+filt = aspcore.create_filter(ir=ir, sum_over_inputs=True)
 
 filtered_signal = filt.process(signal)
 ```
