@@ -4,6 +4,8 @@ The package contains classes and functions implementing different versions of li
 
 The package uses just-in-time compilation from numba to achieve lower computational cost. 
 
+**[More info and complete API documentation](https://sounds-research.github.io/aspcore/)**
+
 ## Installation
 The package can be installed via pip by running
 ```
@@ -14,13 +16,11 @@ Alternatively, the package can be installed by cloning the repository and runnin
 pip install path/to/aspcore
 ```
 
-License
-=======
-The software is distributed under the MIT license. See the LICENSE file for more information. If you use this software in your research, please cite the following paper
+## License
+The software is distributed under the MIT license. See the LICENSE file for more information.
 
-Acknowledgements
-================
-The software has been developed during a PhD project as part of the `SOUNDS <https://www.sounds-etn.eu/>`_ ETN project at KU Leuven. The SOUNDS project has recieved funding from the European Union's Horizon 2020 research and innovation programme under grant agreement No. 956369.
+## Acknowledgements
+The software has been developed during a PhD project as part of the [SOUNDS ETN](https://www.sounds-etn.eu) at KU Leuven. The SOUNDS project has recieved funding from the European Union's Horizon 2020 research and innovation programme under grant agreement No. 956369.
 
 
 ## Usage

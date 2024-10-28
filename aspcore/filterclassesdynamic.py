@@ -2,7 +2,7 @@
 
 This module should not have to be referenced directly. Instead, use the
 function create_filter in the module filterclasses.py and specify
-dyanmic=True as keyword argument. 
+dynamic=True as keyword argument. 
 """
 import numpy as np
 import numba as nb
