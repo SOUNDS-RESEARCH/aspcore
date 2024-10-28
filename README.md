@@ -24,8 +24,7 @@ The software has been developed during a PhD project as part of the [SOUNDS ETN]
 
 
 ## Usage
-The main function of this package is aspcore.filterclasses.create_filter(). Using the keyword arguments, it will select and return the appropriate filter class. \
-All filters can then be used convolve using its process() method, which returns the filtered signal. 
+The main function of this package is create_filter(). Using the keyword arguments, it will select and return the appropriate filter class. The filter can then be used to convolve using its process() method, which returns the filtered signal. 
 
 Signals are formatted with the time index as the last axis, with most filters accepting signals of the form (num_channels, num_samples). Some filters accepts signals with higher dimensional channels, such as (a, b, c, ..., num_samples). 
 
