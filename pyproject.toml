@@ -22,6 +22,10 @@ dependencies = [
     "numpy",
     "scipy",
     "numba",
+]
+
+[project.optional-dependencies]
+test = [
     "pytest",
     "hypothesis",
 ]
