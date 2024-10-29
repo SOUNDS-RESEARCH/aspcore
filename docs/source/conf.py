@@ -12,18 +12,23 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../..'))
-#sys.path.insert(0, os.path.abspath('.'))
+sys.path.insert(0, os.path.abspath('../../'))
+sys.path.append(os.path.abspath("./_ext"))
 
+import pathlib
+import tomllib
+with open(pathlib.Path(__file__).parent.parent.parent / "pyproject.toml", "rb") as f:
+    toml = tomllib.load(f)
+pyproject = toml["project"]
 
 # -- Project information -----------------------------------------------------
 
-project = 'aspcore'
-copyright = '2023, Jesper Brunnström'
-author = 'Jesper Brunnström'
+project = pyproject["name"]
+copyright = f"2024, {pyproject['authors'][0]['name']}"
+author = pyproject["authors"][0]["name"]
 
 # The full version, including alpha/beta/rc tags
-release = '0.0.1'
+release = pyproject["version"]
 
 
 # -- General configuration ---------------------------------------------------
