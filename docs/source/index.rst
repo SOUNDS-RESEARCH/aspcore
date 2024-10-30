@@ -6,7 +6,17 @@ Audio signal processing core (aspcore)
    :template: new-module-template.rst
    :recursive:
 
-   aspcore.
+   aspcore.adaptivefilter
+   aspcore.correlation
+   aspcore.filter
+   aspcore.filterdesign
+   aspcore.filterdynamic
+   aspcore.fouriertransform
+   aspcore.lowrank
+   aspcore.matrices
+   aspcore.montecarlo
+   aspcore.pseq
+   aspcore.utilities
 
 License
 =======
