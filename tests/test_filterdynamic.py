@@ -3,8 +3,8 @@ import hypothesis as hyp
 import hypothesis.strategies as st
 from timeit import default_timer as timer
 
-import aspcore.filterclasses as fc
-import aspcore.filterclassesdynamic as fcd
+import aspcore.filter as fc
+import aspcore.filterdynamic as fcd
 
 
 

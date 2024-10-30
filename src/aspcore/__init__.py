@@ -1,1 +1,1 @@
-from aspcore.filterclasses import create_filter
+from aspcore.filter import create_filter

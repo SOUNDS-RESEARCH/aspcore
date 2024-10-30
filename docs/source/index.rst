@@ -1,8 +1,3 @@
-.. aspcol documentation master file, created by
-   sphinx-quickstart on Wed Sep 13 10:22:13 2023.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 Audio signal processing core (aspcore)
 ======================================
 
@@ -11,10 +6,7 @@ Audio signal processing core (aspcore)
    :template: new-module-template.rst
    :recursive:
 
-   aspcore.filterclasses
-   aspcore.filterclassesdynamic
-   aspcore.freqdomainfiltering
-
+   aspcore.
 
 License
 =======

@@ -1,7 +1,7 @@
 """Contains implementations of time-varying FIR filters. 
 
 This module should not have to be referenced directly. Instead, use the
-function create_filter in the module filterclasses.py and specify
+function create_filter in the module filter.py and specify
 dynamic=True as keyword argument. 
 """
 import numpy as np

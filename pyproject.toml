@@ -19,12 +19,17 @@ dependencies = [
     "numpy",
     "scipy",
     "numba",
+    "numexpr",
+    "matplotlib",
+    "tensorly",
+    "samplerate",
 ]
 
 [project.optional-dependencies]
 test = [
     "pytest",
     "hypothesis",
+    "aspsim",
 ]
 
 [project.urls]
