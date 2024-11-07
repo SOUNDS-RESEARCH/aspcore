@@ -85,7 +85,7 @@ def block_of_toeplitz(block_of_col, block_of_row=None):
 
     Returns
     -------
-    block_mat : ndarray of shape (M*K_col, N*K_row)
+    block_mat : ndarray of shape (M \* K_col, N \* K_row)
     """
     if block_of_row is None:
         if np.iscomplexobj(block_of_col):
@@ -220,7 +220,7 @@ def broadcast_func(mat, func, *args, out_shape=None, dtype=float, **kwargs):
     
     Parameters
     ----------
-    mat : ndarray of shape (*tuple, a, b) 
+    mat : ndarray of shape (\*tuple, a, b) 
         or tuple of ndarrays of shape (a, b)
     func : function
         function to be applied to the matrices in the last two axes
@@ -233,7 +233,7 @@ def broadcast_func(mat, func, *args, out_shape=None, dtype=float, **kwargs):
 
     Returns
     -------
-    output : ndarray of shape (*tuple, out_shape)
+    output : ndarray of shape (\*tuple, out_shape)
     """
     if isinstance(mat, (tuple, list)):
         assert all([mat[0].shape == m.shape for m in mat])
@@ -279,17 +279,17 @@ def apply_blockwise(mat, func, out_shape, *args, num_blocks=None, block_size=Non
         size of each block
     separate_axis : bool, optional
         if True, out_shape can be a scalar value or a tuple of any length
-            the output will be of shape (*out_shape, num_blocks, num_blocks)
+            the output will be of shape (\*out_shape, num_blocks, num_blocks)
         if False, out_shape must be length-2 tuple
-            the output will be of shape (num_blocks*out_shape[0], num_blocks*out_shape[1])
+            the output will be of shape (num_blocks * out_shape[0], num_blocks * out_shape[1])
     dtype : type
     kwargs : dict
         passed to func
 
     Returns
     -------
-    out : ndarray of shape (num_blocks*out_shape[0], num_blocks*out_shape[1])
-        or ndarray of shape (*out_shape, num_blocks, num_blocks)
+    out : ndarray of shape (num_blocks * out_shape[0], num_blocks * out_shape[1])
+        or ndarray of shape (\*out_shape, num_blocks, num_blocks)
     """
     assert mat.ndim == 2
     assert mat.shape[0] == mat.shape[1]
@@ -324,7 +324,7 @@ def is_hermitian(mat):
 
     Parameters
     ----------
-    mat : ndarray of shape (a, a) or (*tpl, a, a)
+    mat : ndarray of shape (a, a) or (\*tpl, a, a)
         if ndim > 2, then the array is interpreted as an array of
         multiple matrices
     Returns
@@ -348,7 +348,7 @@ def is_hermitian_hardcoded(mat):
 
     if mat has shape (a,a) then a single boolean is returned
     
-    if mat has shape (*tpl, a, a), then a boolean array of shape
+    if mat has shape (\*tpl, a, a), then a boolean array of shape
     tpl is returned, with the truth value for each indivudal matrix 
     """
     assert mat.ndim >= 2
@@ -370,7 +370,7 @@ def is_pos_semidef(mat):
 
     Parameters
     ----------
-    mat : ndarray of shape (a, a) or (*tpl, a, a)
+    mat : ndarray of shape (a, a) or (\*tpl, a, a)
         if ndim > 2, then the array is interpreted as an array of
         multiple matrices
 
@@ -394,7 +394,7 @@ def is_pos_def(mat):
 
     Parameters
     ----------
-    mat : ndarray of shape (a, a) or (*tpl, a, a)
+    mat : ndarray of shape (a, a) or (\*tpl, a, a)
         if ndim > 2, then the array is interpreted as an array of
         multiple matrices
     
@@ -450,7 +450,7 @@ def ensure_pos_semidef(mat):
 
     Parameters
     ----------
-    mat : ndarray of shape (a, a) or (*tpl, a, a)
+    mat : ndarray of shape (a, a) or (\*tpl, a, a)
 
     Returns
     -------
@@ -473,7 +473,7 @@ def _ensure_pos_def_adhoc(mat, start_reg=-12, verbose=False):
     """
     Adds a scaled identity matrix to the matrix in
     order to ensure positive definiteness. Starts by 
-    adding I * 10**(start_reg), and increases the 
+    adding I \* 10^(start_reg), and increases the 
     scaling by an order of magnitude each time it fails
     to be positive definite.
     
