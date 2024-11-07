@@ -1,0 +1,6 @@
+aspcore.correlation.periodic\_autocorr
+======================================
+
+.. currentmodule:: aspcore.correlation
+
+.. autofunction:: periodic_autocorr

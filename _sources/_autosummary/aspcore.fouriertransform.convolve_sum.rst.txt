@@ -1,0 +1,6 @@
+aspcore.fouriertransform.convolve\_sum
+======================================
+
+.. currentmodule:: aspcore.fouriertransform
+
+.. autofunction:: convolve_sum

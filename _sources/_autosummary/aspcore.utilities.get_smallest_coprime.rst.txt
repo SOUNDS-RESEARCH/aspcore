@@ -1,0 +1,6 @@
+aspcore.utilities.get\_smallest\_coprime
+========================================
+
+.. currentmodule:: aspcore.utilities
+
+.. autofunction:: get_smallest_coprime

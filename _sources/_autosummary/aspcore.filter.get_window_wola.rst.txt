@@ -1,0 +1,6 @@
+aspcore.filter.get\_window\_wola
+================================
+
+.. currentmodule:: aspcore.filter
+
+.. autofunction:: get_window_wola

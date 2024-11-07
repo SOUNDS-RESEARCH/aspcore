@@ -1,0 +1,6 @@
+aspcore.correlation.cov\_est\_qis
+=================================
+
+.. currentmodule:: aspcore.correlation
+
+.. autofunction:: cov_est_qis

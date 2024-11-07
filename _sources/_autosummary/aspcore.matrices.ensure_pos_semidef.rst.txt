@@ -1,0 +1,6 @@
+aspcore.matrices.ensure\_pos\_semidef
+=====================================
+
+.. currentmodule:: aspcore.matrices
+
+.. autofunction:: ensure_pos_semidef

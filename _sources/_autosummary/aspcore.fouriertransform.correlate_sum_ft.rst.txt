@@ -1,0 +1,6 @@
+aspcore.fouriertransform.correlate\_sum\_ft
+===========================================
+
+.. currentmodule:: aspcore.fouriertransform
+
+.. autofunction:: correlate_sum_ft

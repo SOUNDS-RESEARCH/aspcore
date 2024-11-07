@@ -1,0 +1,6 @@
+aspcore.matrices.block\_of\_toeplitz
+====================================
+
+.. currentmodule:: aspcore.matrices
+
+.. autofunction:: block_of_toeplitz

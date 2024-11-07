@@ -1,0 +1,6 @@
+aspcore.matrices.block\_transpose
+=================================
+
+.. currentmodule:: aspcore.matrices
+
+.. autofunction:: block_transpose

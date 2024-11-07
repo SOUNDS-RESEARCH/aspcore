@@ -1,0 +1,6 @@
+aspcore.lowrank.reconstruct\_ir
+===============================
+
+.. currentmodule:: aspcore.lowrank
+
+.. autofunction:: reconstruct_ir

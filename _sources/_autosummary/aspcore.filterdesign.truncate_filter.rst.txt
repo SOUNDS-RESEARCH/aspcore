@@ -1,0 +1,6 @@
+aspcore.filterdesign.truncate\_filter
+=====================================
+
+.. currentmodule:: aspcore.filterdesign
+
+.. autofunction:: truncate_filter

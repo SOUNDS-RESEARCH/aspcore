@@ -1,0 +1,27 @@
+aspcore.filter.FilterBroadcastFreq
+==================================
+
+.. currentmodule:: aspcore.filter
+
+.. autoclass:: FilterBroadcastFreq
+   :show-inheritance:
+   :inherited-members:
+   :members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~FilterBroadcastFreq.__init__
+      ~FilterBroadcastFreq.process
+      ~FilterBroadcastFreq.process_freq
+   
+   
+
+   
+   
+   

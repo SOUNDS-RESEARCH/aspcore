@@ -1,0 +1,6 @@
+aspcore.pseq.decorrelate
+========================
+
+.. currentmodule:: aspcore.pseq
+
+.. autofunction:: decorrelate

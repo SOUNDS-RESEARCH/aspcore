@@ -1,0 +1,27 @@
+aspcore.filterdynamic.FilterSumDynamic\_python
+==============================================
+
+.. currentmodule:: aspcore.filterdynamic
+
+.. autoclass:: FilterSumDynamic_python
+   :show-inheritance:
+   :inherited-members:
+   :members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~FilterSumDynamic_python.__init__
+      ~FilterSumDynamic_python.process
+      ~FilterSumDynamic_python.update_ir
+   
+   
+
+   
+   
+   

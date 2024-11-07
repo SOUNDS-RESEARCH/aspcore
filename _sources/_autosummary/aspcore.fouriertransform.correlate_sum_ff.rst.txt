@@ -1,0 +1,6 @@
+aspcore.fouriertransform.correlate\_sum\_ff
+===========================================
+
+.. currentmodule:: aspcore.fouriertransform
+
+.. autofunction:: correlate_sum_ff

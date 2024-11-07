@@ -1,0 +1,6 @@
+aspcore.pseq.create\_pseq\_lowfreq
+==================================
+
+.. currentmodule:: aspcore.pseq
+
+.. autofunction:: create_pseq_lowfreq
