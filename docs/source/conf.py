@@ -12,7 +12,7 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../../'))
+sys.path.insert(0, os.path.abspath('../..'))
 sys.path.append(os.path.abspath("./_ext"))
 
 import pathlib
@@ -50,7 +50,7 @@ autodoc_inherit_docstrings = True
 set_type_checking_flag = True
 autosummary_imported_members = True
 
-autodoc_mock_imports = ["numpy", "scipy", "numba", "hypothesis", "pytest", "aspsim", "aspcol"]
+autodoc_mock_imports = ["numpy", "scipy", "numba", "matplotlib", "numexpr", "numba", "tensorly", "hypothesis", "pytest", "aspsim", "aspcol", "abc"]
 
 
 # Add any paths that contain templates here, relative to this directory.
