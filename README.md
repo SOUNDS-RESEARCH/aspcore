@@ -22,23 +22,15 @@ The software is distributed under the MIT license. See the LICENSE file for more
 ## Acknowledgements
 The software has been developed during a PhD project as part of the [SOUNDS ETN](https://www.sounds-etn.eu) at KU Leuven. The SOUNDS project has recieved funding from the European Union's Horizon 2020 research and innovation programme under grant agreement No. 956369.
 
-
-## Usage
-The main function of this package is create_filter(). Using the keyword arguments, it will select and return the appropriate filter class. The filter can then be used to convolve using its process() method, which returns the filtered signal. 
-
-Signals are formatted with the time index as the last axis, with most filters accepting signals of the form (num_channels, num_samples). Some filters accepts signals with higher dimensional channels, such as (a, b, c, ..., num_samples). 
-
-```python
-import numpy as np
-import aspcore
-rng = np.random.default_rng()
-
-channels_in, channels_out, num_samples, ir_len = 5, 3, 128, 16
-
-signal = rng.normal(0,1,size=(channels_in, num_samples))
-ir = rng.normal(0,1,size=(channels_out, ir_len))
-
-filt = aspcore.create_filter(ir=ir, sum_over_inputs=True)
-
-filtered_signal = filt.process(signal)
-```
+In particular the lowrank module contains code developed for the following paper, considering citing it if relevant for your work.
+@inproceedings{brunnstromFast2023,
+  author={Brunnström, Jesper and Jälmby, Martin and Van Waterschoot, Toon and Moonen, Marc},
+  booktitle={57th Asilomar Conference on Signals, Systems, and Computers}, 
+  title={Fast Low-rank Filtered-x Least Mean Squares for Multichannel Active Noise Control}, 
+  year={2023},
+  month = oct,
+  volume={},
+  number={},
+  pages={1085-1089},
+  keywords={Loudspeakers;Computers;Convolution;Computational modeling;Frequency-domain analysis;Noise reduction;Adaptive filters;active noise control;filtered- x least mean squares;low rank;tensor decomposition;Kronecker decomposition},
+  doi={10.1109/IEEECONF59524.2023.10477017}}
