@@ -36,9 +36,25 @@ def to_length(ar, length, axis=-1):
     ar = np.pad(ar, pad_tuple)
     return ar
 
-def block_diag(arrays):
+def block_diagonal_same(block, num_blocks):
+    """Creates a block diagonal matrix from a single block. 
+    
+    Parameters
+    ----------
+    block : ndarray of shape (block_size, block_size)
+        The block to be repeated.
+    num_blocks : int
+        The number of times the block is repeated.
+    
+    Returns
+    -------
+    block_diag : ndarray of shape (num_blocks * block_size, num_blocks * block_size)
+        The block diagonal matrix.
     """
-    Creates a block diagonal matrix
+    return np.kron(np.eye(num_blocks, dtype = int), block)
+
+def block_diag(arrays):
+    """Creates a block diagonal matrix
 
     The operation is performed independently (broadcasted) over the first dimension. 
         The length of the first dimension must be the same for all matrices.
@@ -173,10 +189,13 @@ def block_diag_multiply(mat, block_left=None, block_right=None, out_matrix=None)
     if block_left is not None and block_right is not None:
         assert all([block_left.shape[0] == b for b in (*block_left.shape, *block_right.shape)])
         block_size = block_left.shape[0]
+        matrices = (mat, block_left, block_right)
     elif block_left is not None:
         assert block_left.shape[0] == block_left.shape[1]
         block_size = block_left.shape[0]
+        matrices = (mat, block_left)
     elif block_right is not None:
+        matrices = (mat, block_right)
         assert block_right.shape[0] == block_right.shape[1]
         block_size = block_right.shape[0]
     else:
@@ -188,8 +207,8 @@ def block_diag_multiply(mat, block_left=None, block_right=None, out_matrix=None)
     num_blocks = mat_size // block_size
     
     if out_matrix is None:
-        if any(np.issubdtype(m.dtype, np.complexfloating) for m in (mat, block_left, block_right)):
-            dtp = complex
+        if any(np.issubdtype(m.dtype, np.complexfloating) for m in matrices):
+           dtp = complex
         else:
             dtp = float
         out_matrix = np.zeros((mat_size, mat_size), dtype=dtp)
@@ -215,8 +234,7 @@ def block_diag_multiply(mat, block_left=None, block_right=None, out_matrix=None)
 
 
 def broadcast_func(mat, func, *args, out_shape=None, dtype=float, **kwargs):
-    """
-    Applies the same function to each matrix in the array
+    """Applies the same function to each matrix in the array
     
     Parameters
     ----------
@@ -260,10 +278,9 @@ def broadcast_func(mat, func, *args, out_shape=None, dtype=float, **kwargs):
 
 
 def apply_blockwise(mat, func, out_shape, *args, num_blocks=None, block_size=None, separate_axis=False, dtype=float, **kwargs):
-    """
-    Applies the same function to each block in the block matrix mat. 
+    """Applies the same function to each block in the block matrix mat. 
+    
     Assumes that the matrix mat is square, and each block is square. 
-
     Either num_blocks or block_size must be supplied. 
 
     Parameters
@@ -316,6 +333,124 @@ def apply_blockwise(mat, func, out_shape, *args, num_blocks=None, block_size=Non
                 out[i*out_shape[0]:(i+1)*out_shape[0], j*out_shape[1]:(j+1)*out_shape[1]] = \
                     func(mat[i*block_size:(i+1)*block_size, j*block_size:(j+1)*block_size], *args, **kwargs)
     return out
+
+
+
+
+
+
+
+def param2blockmat(R):
+    """Converts from a parametrized block matrix to the standard form
+
+    Parameters
+    ----------
+    R : ndarray of shape (num_blocks1, num_blocks2, len1, len2)
+        The input block matrix in parametrized form.
+        The last two dimensions are the lengths of the blocks.
+
+    Returns
+    -------
+    block_mat : ndarray of shape (num_blocks1 * len1, num_blocks2 * len2)
+        The output block matrix in standard form.
+
+    Notes
+    -----
+    The parametrized form is a block matrix where each (identically sized) block is accessed as R[i,j,:,:].
+    The standard form is a matrix, where the same data is accessed as R[i*len1:(i+1)*len1, j*len2:(j+1)*len2].
+    """
+    assert R.ndim == 4
+    #assert R.shape[2] == R.shape[3]
+    num_blocks1, num_blocks2, len1, len2 = R.shape
+
+    new_mat = np.zeros((num_blocks1 * len1, num_blocks2 * len2), dtype=R.dtype)
+    for i in range(num_blocks1):
+        for j in range(num_blocks2):
+            new_mat[i*len1:(i+1)*len1, j*len2:(j+1)*len2] = R[i,j,:,:]
+    return new_mat
+
+def blockmat2param(R, num_blocks, block_len):
+    """Converts from a standard block matrix to a parametrized form
+
+    Parameters
+    ----------
+    R : ndarray of shape (num_mic * ir_len, num_mic * ir_len)
+        The input block matrix in standard form.
+        Assumes for now that the matrix and the blocks are square.
+    num_blocks : int
+        The number of blocks in each dimension.
+    block_len : int
+        The length of each block.
+
+    Returns
+    -------
+    param_mat : ndarray of shape (num_mic, num_mic, ir_len, ir_len)
+        The output block matrix in parametrized form.
+
+    Notes
+    -----
+    The parametrized form is a block matrix where each (identically sized) block is accessed as R[i,j,:,:].
+    The standard form is a matrix, where the same data is accessed as R[i*len1:(i+1)*len1, j*len2:(j+1)*len2].
+    """
+    new_mat = np.zeros((num_blocks, num_blocks, block_len, block_len), dtype=R.dtype)
+    for i in range(num_blocks):
+        for j in range(num_blocks):
+            new_mat[i,j,:,:] = R[i*block_len:(i+1)*block_len, j*block_len:(j+1)*block_len]
+    return new_mat
+
+
+def param_transpose(R):
+    """Transpose of a block matrix without converting back from parametrized form 
+
+    Equivalent to_blockmat2param(_param2blockmat(R).T)
+
+    Parameters
+    ----------
+    R : ndarray of shape (num_blocks1, num_blocks2, block_len, block_len)
+        The original block matrix in parametrized form.
+
+    Returns
+    -------
+    R : ndarray of shape (num_blocks2, num_blocks1, block_len, block_len)
+        The transposed block matrix in parametrized form.
+    """
+    assert R.ndim == 4
+    assert R.shape[2] == R.shape[3]
+    return np.moveaxis(np.moveaxis(R, 0, 1), 2, 3)
+
+def matmul_param(mat1, mat2):
+    """Multiplies two parametriced block matrices without explicitly converting to full matrices.
+
+    Is equivalent to _blockmat2param(_param2blockmat(mat1) @ _param2blockmat(mat2), num_mic, ir_len). 
+
+    Parameters
+    ----------
+    mat1 : np.ndarray of shape (dim1, dim2, ir_len, ir_len)
+        The first matrix.
+    mat2 : np.ndarray of shape (dim2, dim3, ir_len, ir_len)
+        The second matrix.
+
+    Returns
+    -------
+    np.ndarray of shape (dim1, dim3, ir_len, ir_len)
+        The product matrix.
+    
+    """
+    dim1, dim2, ir_len, _ = mat1.shape
+    dim2b, dim3, _, _ = mat2.shape
+    assert dim2 == dim2b, "The inner dimensions must match."
+    #assert mat1.dtype == mat2.dtype, "The matrices must have the same dtype."
+    new_mat = np.zeros((dim1, dim3, ir_len, ir_len), dtype=mat1.dtype)
+    for i in range(dim1):
+        for j in range(dim3):
+            for k in range(dim2):
+                new_mat[i,j,:,:] += mat1[i,k,:,:] @ mat2[k,j,:,:]
+    return new_mat
+
+
+
+
+
 
 
 def is_hermitian(mat):
@@ -516,3 +651,51 @@ def lsq_with_l2_regularization(A, y, lamb=1e-10):
     """
     U,S, Vh = np.linalg.svd(A, full_matrices=False)
     return np.conj(Vh).T @ ((np.conj(U).T @ y) * (S/(S**2+lamb)))
+
+def regularize_matrix_with_condition_number(mat, max_cond=1e10):
+    """Adds a scaled identity matrix to the matrix so that the condition number is at most max_cond
+
+    Parameters
+    ----------
+    mat : ndarray of shape (a, a) or (num_mats, a, a)
+        Matrix to be regularized, if ndim > 2, then the array is interpreted as an array of
+        multiple matrices
+    max_cond : float, optional
+        maximum condition number allowed
+
+    Returns
+    -------
+    mat_reg : ndarray of shape (a, a) or (num_mats, a, a)
+        Regularized matrix
+    """
+    if mat.ndim == 2:
+        mat = mat[None,:,:]
+        remove_first_dim = True
+    else:
+        remove_first_dim = False
+
+    max_ev = np.concatenate([splin.eigvalsh(mat[i,:,:], subset_by_index=(mat.shape[-1]-1, mat.shape[-1]-1)) for i in range(mat.shape[0])], axis=-1)
+    identity_scaling = max_ev / max_cond
+    mat_reg = mat + identity_scaling[:,None,None] * np.eye(mat.shape[-1])[None,:,:]
+
+    if remove_first_dim:
+        mat_reg = mat_reg[0,:,:]
+    return mat_reg
+
+
+
+
+
+
+
+
+
+
+
+def psd_matrix_metadata(matrices):
+    metadata = {}
+    for mat_name, mat in matrices.items():
+        metadata[f"{mat_name} max eigenvalue"] = splin.eigvalsh(mat, subset_by_index = (mat.shape[-1]-2, mat.shape[-1]-1)).tolist()
+        metadata[f"{mat_name} min eigenvalue"] = splin.eigvalsh(mat, subset_by_index = (0, 1)).tolist()
+        metadata[f"{mat_name} condition number"] = np.linalg.cond(mat).tolist()
+    return metadata
