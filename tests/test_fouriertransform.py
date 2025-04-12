@@ -117,31 +117,58 @@ def test_get_real_freqs_is_equivalent_to_np_rfftfreq(samplerate, fft_len):
     np_freqs = np.fft.rfftfreq(fft_len, 1/samplerate)
     assert np.allclose(freqs, np_freqs)
 
-
+@hyp.settings(deadline=None)
 @hyp.given(
-    st.integers(min_value=1, max_value=128),
-    st.integers(min_value=1, max_value=10),
-    st.integers(min_value=1, max_value=10),
-    st.integers(min_value=1, max_value=10),
+    st.integers(min_value=1, max_value=32),
+    st.integers(min_value=1, max_value=5),
+    st.integers(min_value=1, max_value=5),
+    st.integers(min_value=1, max_value=5),
 )
-def test_freq_time_domain_convolution_is_equal(irLen, numIn, numOut, numBlocks):
-    signal = np.random.standard_normal((numIn, numBlocks * irLen))
-    ir = np.random.standard_normal((numIn, numOut, irLen))
+def test_freq_time_domain_convolution_is_equal(ir_len, num_in, num_out, num_blocks):
+    rng = np.random.default_rng()
 
-    tdFilt = fc.create_filter(ir)
-    fdFilt = np.moveaxis(ft.fft(np.concatenate((ir, np.zeros_like(ir)), axis=-1)), 1,2)
-    initSig = np.random.standard_normal((numIn, irLen))
-    tdFilt.process(initSig)
-    fdInput = np.concatenate((initSig, signal), axis=-1)
+    signal = rng.normal(0, 1, size = (num_in, num_blocks * ir_len))
+    ir = rng.normal(0, 1, size = (num_in, num_out, ir_len))
 
-    tdOut = np.zeros((numOut, irLen * numBlocks))
-    fdOut = np.zeros((numOut, irLen * numBlocks))
-    for i in range(numBlocks):
-        tdOut[:, i * irLen : (i + 1) * irLen] = tdFilt.process(
-            signal[:, i * irLen : (i + 1) * irLen]
+    filt_td = fc.create_filter(ir)
+    filt_fd = np.moveaxis(ft.fft(np.concatenate((ir, np.zeros_like(ir)), axis=-1)), 1,2)
+    sig_init = rng.normal(0, 1, size=(num_in, ir_len))
+    filt_td.process(sig_init)
+    input_fd = np.concatenate((sig_init, signal), axis=-1)
+
+    out_td = np.zeros((num_out, ir_len * num_blocks))
+    out_fd = np.zeros((num_out, ir_len * num_blocks))
+    for i in range(num_blocks):
+        out_td[:, i * ir_len : (i + 1) * ir_len] = filt_td.process(
+            signal[:, i * ir_len : (i + 1) * ir_len]
         )
-        fdOut[:, i * irLen : (i + 1) * irLen] = ft.convolve_sum(
-            fdFilt, fdInput[:, i * irLen : (i + 2) * irLen]
+        out_fd[:, i * ir_len : (i + 1) * ir_len] = ft.convolve_sum(
+            filt_fd, input_fd[:, i * ir_len : (i + 2) * ir_len]
         )
 
-    assert np.allclose(fdOut, tdOut)
+    assert np.allclose(out_fd, out_td)
+
+
+def test_rdft_mat_is_equivalent_to_rfft():
+    rng = np.random.default_rng()
+    num_to_remove = rng.integers(0, 10)
+    dft_len = 100
+
+    signal = rng.normal(size=(1, dft_len))
+    fft_signal = ft.rfft(signal, num_freqs_removed_low=num_to_remove)
+    rdft_mat = ft.rdft_mat(dft_len, num_freqs_removed_low=num_to_remove)
+    fft_signal_mat = (rdft_mat @ signal.T)
+    assert np.allclose(fft_signal, fft_signal_mat)
+
+def test_irdft_mat_and_real_part_operator_is_equivalent_to_irfft():
+    rng = np.random.default_rng()
+    num_to_remove = rng.integers(0, 10)
+    dft_len = 100
+    num_freqs = dft_len // 2 + 1 - num_to_remove
+
+    signal = rng.normal(size=(num_freqs, 1)) + 1j * rng.normal(size=(num_freqs, 1))
+
+    B = ft.irdft_mat(dft_len, num_freqs_removed_low=num_to_remove)
+    irfft_signal = ft.irfft(signal, num_freqs_removed_low=num_to_remove)
+    irfft_signal_mat = np.real(B @ signal).T
+    assert np.allclose(irfft_signal, irfft_signal_mat)

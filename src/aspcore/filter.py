@@ -761,13 +761,13 @@ def wola_synthesis(spectrum, sig_last_block, window, overlap):
     
     if overlap != block_size // 2:
         raise NotImplementedError
-    if not utils.is_power_of_2(block_size):
-        raise NotImplementedError
+    #if not utils.is_power_of_2(block_size):
+    #    raise NotImplementedError
 
     win_broadcast_dims = spectrum.ndim - 1
     window = window.reshape(win_broadcast_dims*(1,) + (-1,))
 
-    sig = window * np.real_if_close(ft.irfft(np.moveaxis(spectrum, -1, 0)))
+    sig = window * ft.irfft(np.moveaxis(spectrum, -1, 0))
     
     sig[...,:overlap] += sig_last_block
     return sig
