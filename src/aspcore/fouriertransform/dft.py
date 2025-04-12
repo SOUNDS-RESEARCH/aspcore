@@ -9,7 +9,7 @@ The motivation is that the methods are build for multichannel audio processing, 
 Important
 ---------
 Note the time convention, which is not the same as in the numpy.fft module. This is to achieve consistency with 
-the acoustics literature that is used for the sound field analysis modules. The definition of the DFT is
+the acoustics literature. The definition of the DFT is
 u(k) = \sum_{n=0}^{N-1} u[n] e^{i 2pi k n / N}, for frequency bins k = 0, 1, ..., N-1,
 and the definition of the Inverse DFT is
 u[n] = \frac{1}{N} \sum_{k=0}^{N-1} u(k) e^{-i 2pi k n / N}.
