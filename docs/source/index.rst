@@ -12,8 +12,10 @@ Audio signal processing core (aspcore)
    aspcore.filterdesign
    aspcore.filterdynamic
    aspcore.fouriertransform
+   aspcore.fouriertransform_jax
    aspcore.lowrank
    aspcore.matrices
+   aspcore.matrices_jax
    aspcore.montecarlo
    aspcore.pseq
    aspcore.utilities

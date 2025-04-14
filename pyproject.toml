@@ -20,9 +20,11 @@ dependencies = [
     "scipy",
     "numba",
     "numexpr",
+    "jax"
     "matplotlib",
     "tensorly",
     "samplerate",
+    "tikzplotlib"
 ]
 
 [project.optional-dependencies]
