@@ -20,7 +20,7 @@ dependencies = [
     "scipy",
     "numba",
     "numexpr",
-    "jax"
+    "jax",
     "matplotlib",
     "tensorly",
     "samplerate",
