@@ -1,0 +1,6 @@
+aspcore.fouriertransform.frequencyfiltering.convolve\_euclidian\_ff
+===================================================================
+
+.. currentmodule:: aspcore.fouriertransform.frequencyfiltering
+
+.. autofunction:: convolve_euclidian_ff

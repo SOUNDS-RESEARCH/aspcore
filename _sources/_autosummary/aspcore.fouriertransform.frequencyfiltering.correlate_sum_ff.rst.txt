@@ -1,0 +1,6 @@
+aspcore.fouriertransform.frequencyfiltering.correlate\_sum\_ff
+==============================================================
+
+.. currentmodule:: aspcore.fouriertransform.frequencyfiltering
+
+.. autofunction:: correlate_sum_ff

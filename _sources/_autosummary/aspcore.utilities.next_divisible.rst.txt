@@ -1,0 +1,6 @@
+aspcore.utilities.next\_divisible
+=================================
+
+.. currentmodule:: aspcore.utilities
+
+.. autofunction:: next_divisible

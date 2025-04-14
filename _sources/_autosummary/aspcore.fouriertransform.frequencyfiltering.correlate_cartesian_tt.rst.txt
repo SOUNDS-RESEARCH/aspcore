@@ -1,0 +1,6 @@
+aspcore.fouriertransform.frequencyfiltering.correlate\_cartesian\_tt
+====================================================================
+
+.. currentmodule:: aspcore.fouriertransform.frequencyfiltering
+
+.. autofunction:: correlate_cartesian_tt

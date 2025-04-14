@@ -1,0 +1,39 @@
+﻿aspcore.matrices\_jax
+=====================
+
+.. automodule:: aspcore.matrices_jax
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      matmul_param
+      regularize_matrix_with_condition_number
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: new-class-template.rst
+   
+      partial
+   
+   
+
+   
+   
+   
+
+
+

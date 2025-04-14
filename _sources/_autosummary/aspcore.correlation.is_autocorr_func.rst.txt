@@ -1,0 +1,6 @@
+aspcore.correlation.is\_autocorr\_func
+======================================
+
+.. currentmodule:: aspcore.correlation
+
+.. autofunction:: is_autocorr_func

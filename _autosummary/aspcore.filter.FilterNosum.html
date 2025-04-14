@@ -1,0 +1,191 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>aspcore.filter.FilterNosum &mdash; aspcore 0.0.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=8c5712d9"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="aspcore.filter.FilterSumFreq" href="aspcore.filter.FilterSumFreq.html" />
+    <link rel="prev" title="aspcore.filter.FilterMD_slow_fallback" href="aspcore.filter.FilterMD_slow_fallback.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            aspcore
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="aspcore.adaptivefilter.html">aspcore.adaptivefilter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.correlation.html">aspcore.correlation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="aspcore.filter.html">aspcore.filter</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="aspcore.filter.html#usage">Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.filter.create_filter.html">aspcore.filter.create_filter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.filter.get_window_wola.html">aspcore.filter.get_window_wola</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.filter.wola_analysis.html">aspcore.filter.wola_analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.filter.wola_synthesis.html">aspcore.filter.wola_synthesis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.filter.FilterBroadcastFreq.html">aspcore.filter.FilterBroadcastFreq</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.filter.FilterMD_slow_fallback.html">aspcore.filter.FilterMD_slow_fallback</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">aspcore.filter.FilterNosum</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#aspcore.filter.FilterNosum"><code class="docutils literal notranslate"><span class="pre">FilterNosum</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#aspcore.filter.FilterNosum.__init__"><code class="docutils literal notranslate"><span class="pre">FilterNosum.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#aspcore.filter.FilterNosum.process"><code class="docutils literal notranslate"><span class="pre">FilterNosum.process()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.filter.FilterSumFreq.html">aspcore.filter.FilterSumFreq</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.filter.IIRFilter.html">aspcore.filter.IIRFilter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.filter.MovingAverage.html">aspcore.filter.MovingAverage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.filter.WOLA.html">aspcore.filter.WOLA</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.filterdesign.html">aspcore.filterdesign</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.filterdynamic.html">aspcore.filterdynamic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.fouriertransform.html">aspcore.fouriertransform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.fouriertransform_jax.html">aspcore.fouriertransform_jax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.lowrank.html">aspcore.lowrank</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.matrices.html">aspcore.matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.matrices_jax.html">aspcore.matrices_jax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.montecarlo.html">aspcore.montecarlo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.pseq.html">aspcore.pseq</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.utilities.html">aspcore.utilities</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">aspcore</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="aspcore.filter.html">aspcore.filter</a></li>
+      <li class="breadcrumb-item active">aspcore.filter.FilterNosum</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/_autosummary/aspcore.filter.FilterNosum.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="aspcore-filter-filternosum">
+<h1>aspcore.filter.FilterNosum<a class="headerlink" href="#aspcore-filter-filternosum" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="aspcore.filter.FilterNosum">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aspcore.filter.</span></span><span class="sig-name descname"><span class="pre">FilterNosum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ir_len</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_in</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aspcore.filter.FilterNosum" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Filters a signal with a MIMO filter without summing over the input dimension.</p>
+<p>Is essentially equivalent to FilterBroadcast with ir_dims1=1,
+although this can be more convenient to use in some cases.</p>
+<p>Is not JIT compiled, and is therefore generally slower than FilterBroadcast
+and FilterSum.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ir</strong> (<em>ndarray</em><em> of </em><em>shape</em><em> (</em><em>num_in</em><em>, </em><em>num_out</em><em>, </em><em>ir_len</em><em>)</em>) – The impulse response of the filter</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="aspcore.filter.FilterNosum.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ir_len</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_in</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aspcore.filter.FilterNosum.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#aspcore.filter.FilterNosum.__init__" title="aspcore.filter.FilterNosum.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>([ir, ir_len, num_in, num_out])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#aspcore.filter.FilterNosum.process" title="aspcore.filter.FilterNosum.process"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process</span></code></a>(data_to_filter)</p></td>
+<td><p>Filter the data with the impulse response.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="aspcore.filter.FilterNosum.process">
+<span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_to_filter</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aspcore.filter.FilterNosum.process" title="Link to this definition"></a></dt>
+<dd><p>Filter the data with the impulse response.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data_to_filter</strong> (<em>ndarray</em><em> of </em><em>shape</em><em> (</em><em>num_in</em><em>, </em><em>num_samples</em><em>)</em>) – The data to be filtered</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>filtered</strong> – The filtered data</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ndarray of shape (num_in, num_out, num_samples)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="aspcore.filter.FilterMD_slow_fallback.html" class="btn btn-neutral float-left" title="aspcore.filter.FilterMD_slow_fallback" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="aspcore.filter.FilterSumFreq.html" class="btn btn-neutral float-right" title="aspcore.filter.FilterSumFreq" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Jesper Brunnström.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

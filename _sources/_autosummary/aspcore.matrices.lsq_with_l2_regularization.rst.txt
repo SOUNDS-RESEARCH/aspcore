@@ -1,0 +1,6 @@
+aspcore.matrices.lsq\_with\_l2\_regularization
+==============================================
+
+.. currentmodule:: aspcore.matrices
+
+.. autofunction:: lsq_with_l2_regularization

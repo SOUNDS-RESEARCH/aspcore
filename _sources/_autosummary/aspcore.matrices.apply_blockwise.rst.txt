@@ -1,0 +1,6 @@
+aspcore.matrices.apply\_blockwise
+=================================
+
+.. currentmodule:: aspcore.matrices
+
+.. autofunction:: apply_blockwise

@@ -1,0 +1,26 @@
+aspcore.filter.IIRFilter
+========================
+
+.. currentmodule:: aspcore.filter
+
+.. autoclass:: IIRFilter
+   :show-inheritance:
+   :inherited-members:
+   :members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~IIRFilter.__init__
+      ~IIRFilter.process
+   
+   
+
+   
+   
+   

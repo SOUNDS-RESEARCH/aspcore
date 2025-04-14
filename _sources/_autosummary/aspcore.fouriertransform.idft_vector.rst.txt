@@ -1,0 +1,6 @@
+aspcore.fouriertransform.idft\_vector
+=====================================
+
+.. currentmodule:: aspcore.fouriertransform
+
+.. autofunction:: idft_vector

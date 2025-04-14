@@ -1,0 +1,6 @@
+aspcore.fouriertransform.dft.freqs\_to\_wavenum
+===============================================
+
+.. currentmodule:: aspcore.fouriertransform.dft
+
+.. autofunction:: freqs_to_wavenum

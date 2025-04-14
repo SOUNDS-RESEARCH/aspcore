@@ -1,0 +1,6 @@
+aspcore.correlation.cov\_est\_oas
+=================================
+
+.. currentmodule:: aspcore.correlation
+
+.. autofunction:: cov_est_oas

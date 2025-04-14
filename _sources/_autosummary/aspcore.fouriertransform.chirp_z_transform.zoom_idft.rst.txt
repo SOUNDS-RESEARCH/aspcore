@@ -1,0 +1,6 @@
+aspcore.fouriertransform.chirp\_z\_transform.zoom\_idft
+=======================================================
+
+.. currentmodule:: aspcore.fouriertransform.chirp_z_transform
+
+.. autofunction:: zoom_idft

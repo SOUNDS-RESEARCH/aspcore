@@ -1,0 +1,6 @@
+aspcore.lowrank.decompose\_ir
+=============================
+
+.. currentmodule:: aspcore.lowrank
+
+.. autofunction:: decompose_ir

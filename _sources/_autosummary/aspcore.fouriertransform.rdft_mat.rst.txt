@@ -1,0 +1,6 @@
+aspcore.fouriertransform.rdft\_mat
+==================================
+
+.. currentmodule:: aspcore.fouriertransform
+
+.. autofunction:: rdft_mat

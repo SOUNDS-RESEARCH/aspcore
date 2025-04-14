@@ -1,0 +1,6 @@
+aspcore.fouriertransform.get\_real\_wavenum
+===========================================
+
+.. currentmodule:: aspcore.fouriertransform
+
+.. autofunction:: get_real_wavenum

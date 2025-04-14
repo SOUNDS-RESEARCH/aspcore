@@ -1,0 +1,6 @@
+aspcore.matrices.is\_pos\_semidef
+=================================
+
+.. currentmodule:: aspcore.matrices
+
+.. autofunction:: is_pos_semidef

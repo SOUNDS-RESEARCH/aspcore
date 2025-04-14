@@ -1,0 +1,6 @@
+aspcore.montecarlo.uniform\_random\_on\_circle
+==============================================
+
+.. currentmodule:: aspcore.montecarlo
+
+.. autofunction:: uniform_random_on_circle

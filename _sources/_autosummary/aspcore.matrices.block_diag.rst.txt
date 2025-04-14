@@ -1,0 +1,6 @@
+aspcore.matrices.block\_diag
+============================
+
+.. currentmodule:: aspcore.matrices
+
+.. autofunction:: block_diag

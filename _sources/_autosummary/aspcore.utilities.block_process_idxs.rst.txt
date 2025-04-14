@@ -1,0 +1,6 @@
+aspcore.utilities.block\_process\_idxs
+======================================
+
+.. currentmodule:: aspcore.utilities
+
+.. autofunction:: block_process_idxs

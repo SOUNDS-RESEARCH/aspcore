@@ -1,0 +1,6 @@
+aspcore.fouriertransform.frequencyfiltering.correlate\_euclidian\_ft
+====================================================================
+
+.. currentmodule:: aspcore.fouriertransform.frequencyfiltering
+
+.. autofunction:: correlate_euclidian_ft

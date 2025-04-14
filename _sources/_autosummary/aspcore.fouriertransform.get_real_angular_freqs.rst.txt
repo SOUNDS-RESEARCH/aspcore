@@ -1,0 +1,6 @@
+aspcore.fouriertransform.get\_real\_angular\_freqs
+==================================================
+
+.. currentmodule:: aspcore.fouriertransform
+
+.. autofunction:: get_real_angular_freqs

@@ -1,0 +1,6 @@
+aspcore.filter.wola\_analysis
+=============================
+
+.. currentmodule:: aspcore.filter
+
+.. autofunction:: wola_analysis

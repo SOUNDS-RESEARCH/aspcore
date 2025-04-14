@@ -1,0 +1,214 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>aspcore.fouriertransform_jax.dft_jax &mdash; aspcore 0.0.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=8c5712d9"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="aspcore.fouriertransform_jax.dft_jax.dft_vector" href="aspcore.fouriertransform_jax.dft_jax.dft_vector.html" />
+    <link rel="prev" title="aspcore.fouriertransform_jax.partial" href="aspcore.fouriertransform_jax.partial.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            aspcore
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="aspcore.adaptivefilter.html">aspcore.adaptivefilter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.correlation.html">aspcore.correlation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.filter.html">aspcore.filter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.filterdesign.html">aspcore.filterdesign</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.filterdynamic.html">aspcore.filterdynamic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.fouriertransform.html">aspcore.fouriertransform</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="aspcore.fouriertransform_jax.html">aspcore.fouriertransform_jax</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="aspcore.fouriertransform_jax.dft_vector.html">aspcore.fouriertransform_jax.dft_vector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.fouriertransform_jax.fft.html">aspcore.fouriertransform_jax.fft</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.fouriertransform_jax.get_angular_freqs.html">aspcore.fouriertransform_jax.get_angular_freqs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.fouriertransform_jax.get_freqs.html">aspcore.fouriertransform_jax.get_freqs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.fouriertransform_jax.get_wavenum.html">aspcore.fouriertransform_jax.get_wavenum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.fouriertransform_jax.idft_vector.html">aspcore.fouriertransform_jax.idft_vector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.fouriertransform_jax.ifft.html">aspcore.fouriertransform_jax.ifft</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.fouriertransform_jax.insert_negative_frequencies.html">aspcore.fouriertransform_jax.insert_negative_frequencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.fouriertransform_jax.irfft.html">aspcore.fouriertransform_jax.irfft</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.fouriertransform_jax.rfft.html">aspcore.fouriertransform_jax.rfft</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.fouriertransform_jax.partial.html">aspcore.fouriertransform_jax.partial</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">aspcore.fouriertransform_jax.dft_jax</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="aspcore.fouriertransform_jax.dft_jax.dft_vector.html">aspcore.fouriertransform_jax.dft_jax.dft_vector</a></li>
+<li class="toctree-l3"><a class="reference internal" href="aspcore.fouriertransform_jax.dft_jax.fft.html">aspcore.fouriertransform_jax.dft_jax.fft</a></li>
+<li class="toctree-l3"><a class="reference internal" href="aspcore.fouriertransform_jax.dft_jax.get_angular_freqs.html">aspcore.fouriertransform_jax.dft_jax.get_angular_freqs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="aspcore.fouriertransform_jax.dft_jax.get_freqs.html">aspcore.fouriertransform_jax.dft_jax.get_freqs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="aspcore.fouriertransform_jax.dft_jax.get_wavenum.html">aspcore.fouriertransform_jax.dft_jax.get_wavenum</a></li>
+<li class="toctree-l3"><a class="reference internal" href="aspcore.fouriertransform_jax.dft_jax.idft_vector.html">aspcore.fouriertransform_jax.dft_jax.idft_vector</a></li>
+<li class="toctree-l3"><a class="reference internal" href="aspcore.fouriertransform_jax.dft_jax.ifft.html">aspcore.fouriertransform_jax.dft_jax.ifft</a></li>
+<li class="toctree-l3"><a class="reference internal" href="aspcore.fouriertransform_jax.dft_jax.insert_negative_frequencies.html">aspcore.fouriertransform_jax.dft_jax.insert_negative_frequencies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="aspcore.fouriertransform_jax.dft_jax.irfft.html">aspcore.fouriertransform_jax.dft_jax.irfft</a></li>
+<li class="toctree-l3"><a class="reference internal" href="aspcore.fouriertransform_jax.dft_jax.rfft.html">aspcore.fouriertransform_jax.dft_jax.rfft</a></li>
+<li class="toctree-l3"><a class="reference internal" href="aspcore.fouriertransform_jax.dft_jax.partial.html">aspcore.fouriertransform_jax.dft_jax.partial</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.lowrank.html">aspcore.lowrank</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.matrices.html">aspcore.matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.matrices_jax.html">aspcore.matrices_jax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.montecarlo.html">aspcore.montecarlo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.pseq.html">aspcore.pseq</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.utilities.html">aspcore.utilities</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">aspcore</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="aspcore.fouriertransform_jax.html">aspcore.fouriertransform_jax</a></li>
+      <li class="breadcrumb-item active">aspcore.fouriertransform_jax.dft_jax</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/_autosummary/aspcore.fouriertransform_jax.dft_jax.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-aspcore.fouriertransform_jax.dft_jax">
+<span id="aspcore-fouriertransform-jax-dft-jax"></span><h1>aspcore.fouriertransform_jax.dft_jax<a class="headerlink" href="#module-aspcore.fouriertransform_jax.dft_jax" title="Link to this heading"></a></h1>
+<p>Methods for discrete Fourier transform, and linear convolution and correlation in the frequency domain</p>
+<p>The forward transforms will operate on the last axis, and put the resulting frequency axis first. The inverse transforms will operate on the first axis and put the resulting time axis last.
+A time domain sample can be accessed as time_signal[…,n]
+A frequency domain sample can be accessed as freq_signal[f,…]</p>
+<p>The motivation is that the methods are build for multichannel audio processing, where the assumption is that only 1-D FFTs are needed. The most common use case is that time domain processing operates directly on the last axis, and frequency domain processing operates on the channel axes, but broadcasts over the frequency axis. This behaviour for the transforms results in much fewer transpositions, and makes the code more readable.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Note the time convention, which is not the same as in the numpy.fft module. This is to achieve consistency with
+the acoustics literature that is used for the sound field analysis modules. The definition of the DFT is
+u(k) = sum_{n=0}^{N-1} u[n] e^{i 2pi k n / N}, for frequency bins k = 0, 1, …, N-1,
+and the definition of the Inverse DFT is
+u[n] =
+rac{1}{N} sum_{k=0}^{N-1} u(k) e^{-i 2pi k n / N}.</p>
+<p>It can be viewed as a direct consequence of choosing the definition of a plane wave propagating in the d direction to be
+u(r) = e^{i k r^T d}, where k is the wavenumber.</p>
+</div>
+<p>The following methods can be helpful for filtering using frequency-domain filters
+when multiple channels are involved. When possible, for correlation and convolution
+the functions will zero-pad the signals correctly in order to avoid circular convolution.</p>
+<p>In particular, the functions can be useful frequency domain adaptive filters, where overlap-save
+is used for both linear convolutions and correlations. It can be tricky there to get
+the zero-padding right.</p>
+<p class="rubric">References</p>
+<p class="rubric">Functions</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="aspcore.fouriertransform_jax.dft_jax.dft_vector.html#aspcore.fouriertransform_jax.dft_jax.dft_vector" title="aspcore.fouriertransform_jax.dft_jax.dft_vector"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dft_vector</span></code></a>(freq_idx, dft_len)</p></td>
+<td><p>All exponential values to calculate the DFT for a specific frequency bin</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="aspcore.fouriertransform_jax.dft_jax.fft.html#aspcore.fouriertransform_jax.dft_jax.fft" title="aspcore.fouriertransform_jax.dft_jax.fft"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fft</span></code></a>(time_sig[, n])</p></td>
+<td><p>Computes the FFT</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="aspcore.fouriertransform_jax.dft_jax.get_angular_freqs.html#aspcore.fouriertransform_jax.dft_jax.get_angular_freqs" title="aspcore.fouriertransform_jax.dft_jax.get_angular_freqs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_angular_freqs</span></code></a>(num_freq, samplerate)</p></td>
+<td><p>Returns the angular frequencies associated with the sampled frequencies of the DFT</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="aspcore.fouriertransform_jax.dft_jax.get_freqs.html#aspcore.fouriertransform_jax.dft_jax.get_freqs" title="aspcore.fouriertransform_jax.dft_jax.get_freqs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_freqs</span></code></a>(num_freq, samplerate)</p></td>
+<td><p>Returns the sampled frequencies in Hz for a discrete Fourier transform</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="aspcore.fouriertransform_jax.dft_jax.get_wavenum.html#aspcore.fouriertransform_jax.dft_jax.get_wavenum" title="aspcore.fouriertransform_jax.dft_jax.get_wavenum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_wavenum</span></code></a>(num_freq, samplerate, c)</p></td>
+<td><p>Returns the wave numbers associated with the sampled frequencies of the DFT</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="aspcore.fouriertransform_jax.dft_jax.idft_vector.html#aspcore.fouriertransform_jax.dft_jax.idft_vector" title="aspcore.fouriertransform_jax.dft_jax.idft_vector"><code class="xref py py-obj docutils literal notranslate"><span class="pre">idft_vector</span></code></a>(freq_idx, dft_len)</p></td>
+<td><p>All exponential values to calculate the IDFT for a specific output time step</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="aspcore.fouriertransform_jax.dft_jax.ifft.html#aspcore.fouriertransform_jax.dft_jax.ifft" title="aspcore.fouriertransform_jax.dft_jax.ifft"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ifft</span></code></a>(freq_signal)</p></td>
+<td><p>Computes the inverse FFT</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="aspcore.fouriertransform_jax.dft_jax.insert_negative_frequencies.html#aspcore.fouriertransform_jax.dft_jax.insert_negative_frequencies" title="aspcore.fouriertransform_jax.dft_jax.insert_negative_frequencies"><code class="xref py py-obj docutils literal notranslate"><span class="pre">insert_negative_frequencies</span></code></a>(freq_signal, even)</p></td>
+<td><p>Inserts the values associated with negative frequencies.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="aspcore.fouriertransform_jax.dft_jax.irfft.html#aspcore.fouriertransform_jax.dft_jax.irfft" title="aspcore.fouriertransform_jax.dft_jax.irfft"><code class="xref py py-obj docutils literal notranslate"><span class="pre">irfft</span></code></a>(freq_signal[, n])</p></td>
+<td><p>Inverse FFT, and moves the first axis to the last axis</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="aspcore.fouriertransform_jax.dft_jax.rfft.html#aspcore.fouriertransform_jax.dft_jax.rfft" title="aspcore.fouriertransform_jax.dft_jax.rfft"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rfft</span></code></a>(time_sig[, n])</p></td>
+<td><p>Computes the real FFT</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Classes</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="aspcore.fouriertransform_jax.dft_jax.partial.html#aspcore.fouriertransform_jax.dft_jax.partial" title="aspcore.fouriertransform_jax.dft_jax.partial"><code class="xref py py-obj docutils literal notranslate"><span class="pre">partial</span></code></a></p></td>
+<td><p>partial(func, <a href="#id1"><span class="problematic" id="id2">*</span></a>args, <a href="#id3"><span class="problematic" id="id4">**</span></a>keywords) - new function with partial application of the given arguments and keywords.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="aspcore.fouriertransform_jax.partial.html" class="btn btn-neutral float-left" title="aspcore.fouriertransform_jax.partial" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="aspcore.fouriertransform_jax.dft_jax.dft_vector.html" class="btn btn-neutral float-right" title="aspcore.fouriertransform_jax.dft_jax.dft_vector" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Jesper Brunnström.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

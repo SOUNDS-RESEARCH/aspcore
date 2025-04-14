@@ -1,0 +1,6 @@
+aspcore.utilities.next\_power\_of\_two
+======================================
+
+.. currentmodule:: aspcore.utilities
+
+.. autofunction:: next_power_of_two

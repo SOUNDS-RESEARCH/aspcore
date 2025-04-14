@@ -1,0 +1,6 @@
+aspcore.matrices.matmul\_param
+==============================
+
+.. currentmodule:: aspcore.matrices
+
+.. autofunction:: matmul_param

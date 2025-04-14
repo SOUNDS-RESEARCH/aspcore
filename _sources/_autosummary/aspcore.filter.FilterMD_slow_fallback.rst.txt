@@ -1,0 +1,26 @@
+aspcore.filter.FilterMD\_slow\_fallback
+=======================================
+
+.. currentmodule:: aspcore.filter
+
+.. autoclass:: FilterMD_slow_fallback
+   :show-inheritance:
+   :inherited-members:
+   :members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~FilterMD_slow_fallback.__init__
+      ~FilterMD_slow_fallback.process
+   
+   
+
+   
+   
+   

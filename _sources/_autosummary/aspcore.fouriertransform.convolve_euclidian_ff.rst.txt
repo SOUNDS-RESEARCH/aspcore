@@ -1,0 +1,6 @@
+aspcore.fouriertransform.convolve\_euclidian\_ff
+================================================
+
+.. currentmodule:: aspcore.fouriertransform
+
+.. autofunction:: convolve_euclidian_ff

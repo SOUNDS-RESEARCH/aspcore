@@ -1,0 +1,6 @@
+aspcore.filterdesign.filterbank\_third\_octave
+==============================================
+
+.. currentmodule:: aspcore.filterdesign
+
+.. autofunction:: filterbank_third_octave

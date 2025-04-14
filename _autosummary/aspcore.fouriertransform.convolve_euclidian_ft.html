@@ -1,0 +1,189 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>aspcore.fouriertransform.convolve_euclidian_ft &mdash; aspcore 0.0.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=8c5712d9"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="aspcore.fouriertransform.convolve_sum" href="aspcore.fouriertransform.convolve_sum.html" />
+    <link rel="prev" title="aspcore.fouriertransform.convolve_euclidian_ff" href="aspcore.fouriertransform.convolve_euclidian_ff.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            aspcore
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="aspcore.adaptivefilter.html">aspcore.adaptivefilter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.correlation.html">aspcore.correlation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.filter.html">aspcore.filter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.filterdesign.html">aspcore.filterdesign</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.filterdynamic.html">aspcore.filterdynamic</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="aspcore.fouriertransform.html">aspcore.fouriertransform</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="aspcore.fouriertransform.angular_freqs_to_wavenum.html">aspcore.fouriertransform.angular_freqs_to_wavenum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.fouriertransform.convolve_euclidian_ff.html">aspcore.fouriertransform.convolve_euclidian_ff</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">aspcore.fouriertransform.convolve_euclidian_ft</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#aspcore.fouriertransform.convolve_euclidian_ft"><code class="docutils literal notranslate"><span class="pre">convolve_euclidian_ft()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.fouriertransform.convolve_sum.html">aspcore.fouriertransform.convolve_sum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.fouriertransform.correlate_cartesian_tt.html">aspcore.fouriertransform.correlate_cartesian_tt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.fouriertransform.correlate_euclidian_ff.html">aspcore.fouriertransform.correlate_euclidian_ff</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.fouriertransform.correlate_euclidian_ft.html">aspcore.fouriertransform.correlate_euclidian_ft</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.fouriertransform.correlate_euclidian_tf.html">aspcore.fouriertransform.correlate_euclidian_tf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.fouriertransform.correlate_sum_ff.html">aspcore.fouriertransform.correlate_sum_ff</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.fouriertransform.correlate_sum_ft.html">aspcore.fouriertransform.correlate_sum_ft</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.fouriertransform.correlate_sum_tf.html">aspcore.fouriertransform.correlate_sum_tf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.fouriertransform.correlate_sum_tt.html">aspcore.fouriertransform.correlate_sum_tt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.fouriertransform.czt.html">aspcore.fouriertransform.czt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.fouriertransform.czt_unit_circle.html">aspcore.fouriertransform.czt_unit_circle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.fouriertransform.dft_mat.html">aspcore.fouriertransform.dft_mat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.fouriertransform.dft_vector.html">aspcore.fouriertransform.dft_vector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.fouriertransform.fft.html">aspcore.fouriertransform.fft</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.fouriertransform.freqs_to_angular_freqs.html">aspcore.fouriertransform.freqs_to_angular_freqs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.fouriertransform.freqs_to_wavenum.html">aspcore.fouriertransform.freqs_to_wavenum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.fouriertransform.get_angular_freqs.html">aspcore.fouriertransform.get_angular_freqs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.fouriertransform.get_freqs.html">aspcore.fouriertransform.get_freqs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.fouriertransform.get_real_angular_freqs.html">aspcore.fouriertransform.get_real_angular_freqs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.fouriertransform.get_real_freqs.html">aspcore.fouriertransform.get_real_freqs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.fouriertransform.get_real_wavenum.html">aspcore.fouriertransform.get_real_wavenum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.fouriertransform.get_wavenum.html">aspcore.fouriertransform.get_wavenum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.fouriertransform.iczt.html">aspcore.fouriertransform.iczt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.fouriertransform.iczt_unit_circle.html">aspcore.fouriertransform.iczt_unit_circle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.fouriertransform.idft_vector.html">aspcore.fouriertransform.idft_vector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.fouriertransform.ifft.html">aspcore.fouriertransform.ifft</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.fouriertransform.insert_negative_frequencies.html">aspcore.fouriertransform.insert_negative_frequencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.fouriertransform.irdft_mat.html">aspcore.fouriertransform.irdft_mat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.fouriertransform.irfft.html">aspcore.fouriertransform.irfft</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.fouriertransform.rdft_mat.html">aspcore.fouriertransform.rdft_mat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.fouriertransform.rdft_weighting.html">aspcore.fouriertransform.rdft_weighting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.fouriertransform.rfft.html">aspcore.fouriertransform.rfft</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.fouriertransform.zoom_dft.html">aspcore.fouriertransform.zoom_dft</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.fouriertransform.zoom_idft.html">aspcore.fouriertransform.zoom_idft</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.fouriertransform.chirp_z_transform.html">aspcore.fouriertransform.chirp_z_transform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.fouriertransform.dft.html">aspcore.fouriertransform.dft</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.fouriertransform.frequencyfiltering.html">aspcore.fouriertransform.frequencyfiltering</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.fouriertransform_jax.html">aspcore.fouriertransform_jax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.lowrank.html">aspcore.lowrank</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.matrices.html">aspcore.matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.matrices_jax.html">aspcore.matrices_jax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.montecarlo.html">aspcore.montecarlo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.pseq.html">aspcore.pseq</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.utilities.html">aspcore.utilities</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">aspcore</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="aspcore.fouriertransform.html">aspcore.fouriertransform</a></li>
+      <li class="breadcrumb-item active">aspcore.fouriertransform.convolve_euclidian_ft</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/_autosummary/aspcore.fouriertransform.convolve_euclidian_ft.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="aspcore-fouriertransform-convolve-euclidian-ft">
+<h1>aspcore.fouriertransform.convolve_euclidian_ft<a class="headerlink" href="#aspcore-fouriertransform-convolve-euclidian-ft" title="Link to this heading"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="aspcore.fouriertransform.convolve_euclidian_ft">
+<span class="sig-prename descclassname"><span class="pre">aspcore.fouriertransform.</span></span><span class="sig-name descname"><span class="pre">convolve_euclidian_ft</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">freq_filter</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_signal</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aspcore.fouriertransform.convolve_euclidian_ft" title="Link to this definition"></a></dt>
+<dd><p>Convolves every channel of input with every channel of the filter</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>freq_filter</strong> (<em>ndarray</em><em> of </em><em>shape</em><em> (</em><em>num_freq</em><em>, </em><em>f_1</em><em>, </em><em>f_2</em><em>, </em><em>...</em><em>, </em><em>f_n</em><em>)</em>) – The filter. The first axis should correspond to frequency.
+Before it was transformed, it should have been padded with zeros
+equal to the length of the impulse response <em>after</em> the impulse response.</p></li>
+<li><p><strong>time_signal</strong> (<em>ndarray</em><em> of </em><em>shape</em><em> (</em><em>s_1</em><em>, </em><em>s_2</em><em>, </em><em>...</em><em>, </em><em>s_n</em><em>, </em><em>num_samples</em><em>)</em>) – The signal. The last axis should correspond to time.
+Should be exactly twice as long as the impulse response of the filter.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>filtered_signal</strong> – The signal filtered through the frequency domain filter</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ndarray of shape (filter.shape[:-1], signal.shape[:-1], num_samples)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="aspcore.fouriertransform.convolve_euclidian_ff.html" class="btn btn-neutral float-left" title="aspcore.fouriertransform.convolve_euclidian_ff" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="aspcore.fouriertransform.convolve_sum.html" class="btn btn-neutral float-right" title="aspcore.fouriertransform.convolve_sum" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Jesper Brunnström.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

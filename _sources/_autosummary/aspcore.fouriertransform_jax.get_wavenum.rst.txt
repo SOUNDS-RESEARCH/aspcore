@@ -1,0 +1,6 @@
+aspcore.fouriertransform\_jax.get\_wavenum
+==========================================
+
+.. currentmodule:: aspcore.fouriertransform_jax
+
+.. autofunction:: get_wavenum

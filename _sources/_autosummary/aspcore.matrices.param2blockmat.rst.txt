@@ -1,0 +1,6 @@
+aspcore.matrices.param2blockmat
+===============================
+
+.. currentmodule:: aspcore.matrices
+
+.. autofunction:: param2blockmat

@@ -1,0 +1,6 @@
+aspcore.fouriertransform.get\_freqs
+===================================
+
+.. currentmodule:: aspcore.fouriertransform
+
+.. autofunction:: get_freqs

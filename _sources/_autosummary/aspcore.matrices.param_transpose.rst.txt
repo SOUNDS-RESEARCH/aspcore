@@ -1,0 +1,6 @@
+aspcore.matrices.param\_transpose
+=================================
+
+.. currentmodule:: aspcore.matrices
+
+.. autofunction:: param_transpose

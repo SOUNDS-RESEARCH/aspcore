@@ -1,0 +1,210 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>aspcore.filter &mdash; aspcore 0.0.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=8c5712d9"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="aspcore.filter.create_filter" href="aspcore.filter.create_filter.html" />
+    <link rel="prev" title="aspcore.correlation.SampleCorrelation" href="aspcore.correlation.SampleCorrelation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            aspcore
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="aspcore.adaptivefilter.html">aspcore.adaptivefilter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.correlation.html">aspcore.correlation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">aspcore.filter</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.filter.create_filter.html">aspcore.filter.create_filter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.filter.get_window_wola.html">aspcore.filter.get_window_wola</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.filter.wola_analysis.html">aspcore.filter.wola_analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.filter.wola_synthesis.html">aspcore.filter.wola_synthesis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.filter.FilterBroadcastFreq.html">aspcore.filter.FilterBroadcastFreq</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.filter.FilterMD_slow_fallback.html">aspcore.filter.FilterMD_slow_fallback</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.filter.FilterNosum.html">aspcore.filter.FilterNosum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.filter.FilterSumFreq.html">aspcore.filter.FilterSumFreq</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.filter.IIRFilter.html">aspcore.filter.IIRFilter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.filter.MovingAverage.html">aspcore.filter.MovingAverage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.filter.WOLA.html">aspcore.filter.WOLA</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.filterdesign.html">aspcore.filterdesign</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.filterdynamic.html">aspcore.filterdynamic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.fouriertransform.html">aspcore.fouriertransform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.fouriertransform_jax.html">aspcore.fouriertransform_jax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.lowrank.html">aspcore.lowrank</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.matrices.html">aspcore.matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.matrices_jax.html">aspcore.matrices_jax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.montecarlo.html">aspcore.montecarlo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.pseq.html">aspcore.pseq</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.utilities.html">aspcore.utilities</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">aspcore</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">aspcore.filter</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/_autosummary/aspcore.filter.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-aspcore.filter">
+<span id="aspcore-filter"></span><h1>aspcore.filter<a class="headerlink" href="#module-aspcore.filter" title="Link to this heading"></a></h1>
+<p>A collection of classes implementing linear convolution.</p>
+<p>The functionality offered beyond what is available in numpy and scipy is
+inherent support for MIMO filters in different forms, as well as
+streaming filtering, where only a part of the signal is known at a time.
+It is also possible to filter with a time-varying impulse response.</p>
+<p>The classes are JIT compiled using numba’s experimental jitclass to keep
+computational cost low.</p>
+<p>The main function of the module is create_filter, which constructs the appropriate
+filter object according to the chosen parameters. The only required parameters is
+either an impulse response or the dimensions of the impulse response. In the
+latter case, the impulse response is initialized to zero.</p>
+<p>In addition to linear convolution, the module also contains implementations of
+- Weighted overlap-add (WOLA) [crochiereWeighted1980, ruizComparison2021]
+- IIR filter
+- Mean with forgetting factor</p>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading"></a></h2>
+<p>The main function of this package is create_filter(). Using the keyword arguments, it will select and return the appropriate filter class. The filter can then be used to convolve using its process() method, which returns the filtered signal.</p>
+<p>Signals are formatted with the time index as the last axis, with most filters accepting signals of the form (num_channels, num_samples). Some filters accepts signals with higher dimensional channels, such as (a, b, c, …, num_samples).</p>
+<p><a href="#id1"><span class="problematic" id="id2">``</span></a><a href="#id3"><span class="problematic" id="id4">`</span></a>python
+import numpy as np
+import aspcore
+rng = np.random.default_rng()</p>
+<p>channels_in, channels_out, num_samples, ir_len = 5, 3, 128, 16</p>
+<p>signal = rng.normal(0,1,size=(channels_in, num_samples))
+ir = rng.normal(0,1,size=(channels_out, ir_len))</p>
+<p>filt = aspcore.create_filter(ir=ir, sum_over_inputs=True)</p>
+<p>filtered_signal = filt.process(signal)
+<a href="#id5"><span class="problematic" id="id6">``</span></a><a href="#id7"><span class="problematic" id="id8">`</span></a></p>
+<p class="rubric">References</p>
+<p>[crochiereWeighted1980] R. Crochiere, “A weighted overlap-add method of short-time Fourier analysis/synthesis,” IEEE Transactions on Acoustics, Speech, and Signal Processing, vol. 28, no. 1, pp. 99–102, Feb. 1980, doi: 10.1109/TASSP.1980.1163353. <a class="reference external" href="https://doi.org/10.1109/TASSP.1980.1163353">[link]</a></p>
+<p>[ruizComparison2021] S. Ruiz, T. Dietzen, T. van Waterschoot, and M. Moonen, “A comparison between overlap-save and weighted overlap-add filter banks for multi-channel Wiener filter based noise reduction,” in 2021 29th European Signal Processing Conference (EUSIPCO), Aug. 2021, pp. 336–340. doi: 10.23919/EUSIPCO54536.2021.9616352. <a class="reference external" href="https://doi.org/10.23919/EUSIPCO54536.2021.9616352">[link]</a></p>
+</section>
+<p class="rubric">Functions</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="aspcore.filter.create_filter.html#aspcore.filter.create_filter" title="aspcore.filter.create_filter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_filter</span></code></a>([ir, num_in, num_out, ir_len, ...])</p></td>
+<td><p>Returns the appropriate filter object for the desired use.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="aspcore.filter.get_window_wola.html#aspcore.filter.get_window_wola" title="aspcore.filter.get_window_wola"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_window_wola</span></code></a>(block_size, overlap)</p></td>
+<td><p>block_size is number of samples overlap is number of samples</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="aspcore.filter.wola_analysis.html#aspcore.filter.wola_analysis" title="aspcore.filter.wola_analysis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wola_analysis</span></code></a>(sig, window)</p></td>
+<td><p>Generate WOLA spectrum from time domain signal</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="aspcore.filter.wola_synthesis.html#aspcore.filter.wola_synthesis" title="aspcore.filter.wola_synthesis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wola_synthesis</span></code></a>(spectrum, sig_last_block, ...)</p></td>
+<td><p>Generate time domain signal from WOLA spectrum</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Classes</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="aspcore.filter.FilterBroadcastFreq.html#aspcore.filter.FilterBroadcastFreq" title="aspcore.filter.FilterBroadcastFreq"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FilterBroadcastFreq</span></code></a>(data_dims[, tf, ir, ...])</p></td>
+<td><p>ir is the time domain impulse response, with shape (a0, a1,..., an, irLen) tf is frequency domain transfer function, with shape (2*irLen, a0, a1,..., an),</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="aspcore.filter.FilterMD_slow_fallback.html#aspcore.filter.FilterMD_slow_fallback" title="aspcore.filter.FilterMD_slow_fallback"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FilterMD_slow_fallback</span></code></a>(data_dims[, ir, ...])</p></td>
+<td><p>Equivalent to FilterBroadcast, but can handle arbitrary number of dimensions.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="aspcore.filter.FilterNosum.html#aspcore.filter.FilterNosum" title="aspcore.filter.FilterNosum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FilterNosum</span></code></a>([ir, ir_len, num_in, num_out])</p></td>
+<td><p>Filters a signal with a MIMO filter without summing over the input dimension.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="aspcore.filter.FilterSumFreq.html#aspcore.filter.FilterSumFreq" title="aspcore.filter.FilterSumFreq"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FilterSumFreq</span></code></a>([tf, ir, num_in, num_out, ...])</p></td>
+<td><p>ir is the time domain impulse response, with shape (numIn, numOut, irLen) tf is frequency domain transfer function, with shape (2*irLen, numOut, numIn), it is also possible to only provide the dimensions of the filter, numIn and numOut, together with either number of frequencies or ir length, where 2*irLen==numFreq dataDims is extra dimensions of the data to broadcast over. Input should then be with shape (<a href="#id9"><span class="problematic" id="id10">*</span></a>dataDims, numIn, numSamples), output will be (<a href="#id11"><span class="problematic" id="id12">*</span></a>dataDims, numOut, numSamples).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="aspcore.filter.IIRFilter.html#aspcore.filter.IIRFilter" title="aspcore.filter.IIRFilter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IIRFilter</span></code></a>(num_coeffs, denom_coeffs)</p></td>
+<td><p>num_coeffs and denom_coeffs should be a list of ndarrays,</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="aspcore.filter.MovingAverage.html#aspcore.filter.MovingAverage" title="aspcore.filter.MovingAverage"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MovingAverage</span></code></a>(forget_factor, dim[, dtype])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="aspcore.filter.WOLA.html#aspcore.filter.WOLA" title="aspcore.filter.WOLA"><code class="xref py py-obj docutils literal notranslate"><span class="pre">WOLA</span></code></a>(num_in, num_out, block_size, overlap)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="aspcore.correlation.SampleCorrelation.html" class="btn btn-neutral float-left" title="aspcore.correlation.SampleCorrelation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="aspcore.filter.create_filter.html" class="btn btn-neutral float-right" title="aspcore.filter.create_filter" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Jesper Brunnström.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

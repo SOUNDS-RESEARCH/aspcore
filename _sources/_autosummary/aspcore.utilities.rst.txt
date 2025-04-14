@@ -1,0 +1,50 @@
+﻿aspcore.utilities
+=================
+
+.. automodule:: aspcore.utilities
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      block_process_idxs
+      get_smallest_coprime
+      get_time_string
+      get_unique_folder
+      is_integer
+      is_power_of_2
+      next_divisible
+      next_power_of_two
+      power_of_filtered_signal
+      save_plot
+      set_basic_plot_look
+      simplify_ratio
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: new-class-template.rst
+   
+      EventCounter
+      PhaseCounter
+   
+   
+
+   
+   
+   
+
+
+

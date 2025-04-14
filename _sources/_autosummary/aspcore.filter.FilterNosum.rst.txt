@@ -1,0 +1,26 @@
+aspcore.filter.FilterNosum
+==========================
+
+.. currentmodule:: aspcore.filter
+
+.. autoclass:: FilterNosum
+   :show-inheritance:
+   :inherited-members:
+   :members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~FilterNosum.__init__
+      ~FilterNosum.process
+   
+   
+
+   
+   
+   

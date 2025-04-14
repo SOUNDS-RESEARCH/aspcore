@@ -1,0 +1,30 @@
+aspcore.filter.FilterSumFreq
+============================
+
+.. currentmodule:: aspcore.filter
+
+.. autoclass:: FilterSumFreq
+   :show-inheritance:
+   :inherited-members:
+   :members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~FilterSumFreq.__init__
+      ~FilterSumFreq.process
+      ~FilterSumFreq.process_euclidian
+      ~FilterSumFreq.process_freq
+      ~FilterSumFreq.process_without_sum
+      ~FilterSumFreq.set_ir
+   
+   
+
+   
+   
+   

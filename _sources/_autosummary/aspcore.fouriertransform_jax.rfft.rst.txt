@@ -1,0 +1,6 @@
+aspcore.fouriertransform\_jax.rfft
+==================================
+
+.. currentmodule:: aspcore.fouriertransform_jax
+
+.. autofunction:: rfft

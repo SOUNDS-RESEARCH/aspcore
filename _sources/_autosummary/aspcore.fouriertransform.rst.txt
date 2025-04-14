@@ -1,0 +1,77 @@
+﻿aspcore.fouriertransform
+========================
+
+.. automodule:: aspcore.fouriertransform
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      angular_freqs_to_wavenum
+      convolve_euclidian_ff
+      convolve_euclidian_ft
+      convolve_sum
+      correlate_cartesian_tt
+      correlate_euclidian_ff
+      correlate_euclidian_ft
+      correlate_euclidian_tf
+      correlate_sum_ff
+      correlate_sum_ft
+      correlate_sum_tf
+      correlate_sum_tt
+      czt
+      czt_unit_circle
+      dft_mat
+      dft_vector
+      fft
+      freqs_to_angular_freqs
+      freqs_to_wavenum
+      get_angular_freqs
+      get_freqs
+      get_real_angular_freqs
+      get_real_freqs
+      get_real_wavenum
+      get_wavenum
+      iczt
+      iczt_unit_circle
+      idft_vector
+      ifft
+      insert_negative_frequencies
+      irdft_mat
+      irfft
+      rdft_mat
+      rdft_weighting
+      rfft
+      zoom_dft
+      zoom_idft
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :template: new-module-template.rst
+   :recursive:
+
+   chirp_z_transform
+   dft
+   frequencyfiltering
+

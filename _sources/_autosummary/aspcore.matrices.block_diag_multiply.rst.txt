@@ -1,0 +1,6 @@
+aspcore.matrices.block\_diag\_multiply
+======================================
+
+.. currentmodule:: aspcore.matrices
+
+.. autofunction:: block_diag_multiply

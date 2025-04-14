@@ -1,0 +1,34 @@
+﻿aspcore.montecarlo
+==================
+
+.. automodule:: aspcore.montecarlo
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      diagnostics
+      integrate
+      sample_complex_gaussian
+      uniform_random_on_circle
+      uniform_random_on_sphere
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

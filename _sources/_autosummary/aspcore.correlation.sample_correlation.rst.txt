@@ -1,0 +1,6 @@
+aspcore.correlation.sample\_correlation
+=======================================
+
+.. currentmodule:: aspcore.correlation
+
+.. autofunction:: sample_correlation

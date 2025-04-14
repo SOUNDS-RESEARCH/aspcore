@@ -1,0 +1,193 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>aspcore.correlation &mdash; aspcore 0.0.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=8c5712d9"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="aspcore.correlation.autocorr" href="aspcore.correlation.autocorr.html" />
+    <link rel="prev" title="aspcore.adaptivefilter.RLS" href="aspcore.adaptivefilter.RLS.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            aspcore
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="aspcore.adaptivefilter.html">aspcore.adaptivefilter</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">aspcore.correlation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.correlation.autocorr.html">aspcore.correlation.autocorr</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.correlation.corr_matrix.html">aspcore.correlation.corr_matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.correlation.corr_matrix_from_autocorrelation.html">aspcore.correlation.corr_matrix_from_autocorrelation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.correlation.cov_est_oas.html">aspcore.correlation.cov_est_oas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.correlation.cov_est_qis.html">aspcore.correlation.cov_est_qis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.correlation.get_filter_for_autocorrelation.html">aspcore.correlation.get_filter_for_autocorrelation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.correlation.is_autocorr_func.html">aspcore.correlation.is_autocorr_func</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.correlation.is_autocorr_mat.html">aspcore.correlation.is_autocorr_mat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.correlation.multichannel_acf_from_independent_acf.html">aspcore.correlation.multichannel_acf_from_independent_acf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.correlation.periodic_autocorr.html">aspcore.correlation.periodic_autocorr</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.correlation.sample_correlation.html">aspcore.correlation.sample_correlation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.correlation.Autocorrelation.html">aspcore.correlation.Autocorrelation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.correlation.SampleCorrelation.html">aspcore.correlation.SampleCorrelation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.filter.html">aspcore.filter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.filterdesign.html">aspcore.filterdesign</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.filterdynamic.html">aspcore.filterdynamic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.fouriertransform.html">aspcore.fouriertransform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.fouriertransform_jax.html">aspcore.fouriertransform_jax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.lowrank.html">aspcore.lowrank</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.matrices.html">aspcore.matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.matrices_jax.html">aspcore.matrices_jax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.montecarlo.html">aspcore.montecarlo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.pseq.html">aspcore.pseq</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.utilities.html">aspcore.utilities</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">aspcore</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">aspcore.correlation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/_autosummary/aspcore.correlation.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-aspcore.correlation">
+<span id="aspcore-correlation"></span><h1>aspcore.correlation<a class="headerlink" href="#module-aspcore.correlation" title="Link to this heading"></a></h1>
+<p>Implements autocorrelation and cross-correlation estimators, as well as related useful calculations.</p>
+<ul class="simple">
+<li><p>Estimation of correlation function and covariance matrix of signal.</p></li>
+<li><p>Sample covariance for vector-valued variable, including the non-zero mean case, even for processing a streaming signal, where the full signal is not available at once.</p></li>
+<li><p>Covariance estimation with optimal linear shrinkage [chenShrinkage2010] and almost optimal non-linear shrinkage [ledoitQuadratic2020].</p></li>
+</ul>
+<p class="rubric">References</p>
+<p>[chenShrinkage2010] Y. Chen, A. Wiesel, Y. C. Eldar, and A. O. Hero, “Shrinkage Algorithms for MMSE Covariance Estimation,” IEEE Trans. Signal Process., vol. 58, no. 10, pp. 5016–5029, Oct. 2010, doi: 10.1109/TSP.2010.2053029. <a class="reference external" href="https://doi.org/10.1109/TSP.2010.2053029">[link]</a></p>
+<p>[ledoitQuadratic2020] O. Ledoit and M. Wolf, “Quadratic shrinkage for large covariance matrices,” Dec. 2020, doi: 10.5167/UZH-176887. <a class="reference external" href="https://doi.org/10.5167/UZH-176887">[link]</a></p>
+<p class="rubric">Functions</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="aspcore.correlation.autocorr.html#aspcore.correlation.autocorr" title="aspcore.correlation.autocorr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autocorr</span></code></a>(sig, max_lag[, normalize])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="aspcore.correlation.corr_matrix.html#aspcore.correlation.corr_matrix" title="aspcore.correlation.corr_matrix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">corr_matrix</span></code></a>(seq1, seq2, lag1, lag2)</p></td>
+<td><p>Computes the cross-correlation matrix from two signals.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="aspcore.correlation.corr_matrix_from_autocorrelation.html#aspcore.correlation.corr_matrix_from_autocorrelation" title="aspcore.correlation.corr_matrix_from_autocorrelation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">corr_matrix_from_autocorrelation</span></code></a>(corr)</p></td>
+<td><p>The correlation is of shape (num_channels, num_channels, max_lag) corr[i,j,k] = E[x_i(n)x_j(n-k)], for k = 0,...,max_lag-1 That means corr[i,j,k] == corr[j,i,-k]</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="aspcore.correlation.cov_est_oas.html#aspcore.correlation.cov_est_oas" title="aspcore.correlation.cov_est_oas"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cov_est_oas</span></code></a>(sample_cov, n[, verbose])</p></td>
+<td><p>Implements the OAS covariance estimator with linear shrinkage from Shrinkage Algorithms for MMSE Covariance Estimation</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="aspcore.correlation.cov_est_qis.html#aspcore.correlation.cov_est_qis" title="aspcore.correlation.cov_est_qis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cov_est_qis</span></code></a>(sample_cov, n)</p></td>
+<td><p>Implements the quadratic-inverse shrinkage, the non-linear shrinkage from &quot;Quadratic shrinkage for large covariance matrices&quot; by Ledoit and Wolf.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="aspcore.correlation.get_filter_for_autocorrelation.html#aspcore.correlation.get_filter_for_autocorrelation" title="aspcore.correlation.get_filter_for_autocorrelation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_filter_for_autocorrelation</span></code></a>(autocorr)</p></td>
+<td><p>autocorr is of shape (num_channels, max_lag)</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="aspcore.correlation.is_autocorr_func.html#aspcore.correlation.is_autocorr_func" title="aspcore.correlation.is_autocorr_func"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_autocorr_func</span></code></a>(func[, verbose])</p></td>
+<td><p>An autocorrelation function should be of shape (num_channels, num_channels, max_lag)</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="aspcore.correlation.is_autocorr_mat.html#aspcore.correlation.is_autocorr_mat" title="aspcore.correlation.is_autocorr_mat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_autocorr_mat</span></code></a>(ac_mat[, verbose])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="aspcore.correlation.multichannel_acf_from_independent_acf.html#aspcore.correlation.multichannel_acf_from_independent_acf" title="aspcore.correlation.multichannel_acf_from_independent_acf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">multichannel_acf_from_independent_acf</span></code></a>(acf_2d)</p></td>
+<td><p>Takes a (num_channels, corr_len) autocorrelation function</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="aspcore.correlation.periodic_autocorr.html#aspcore.correlation.periodic_autocorr" title="aspcore.correlation.periodic_autocorr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">periodic_autocorr</span></code></a>(seq)</p></td>
+<td><p>seq is a single channel sequence of shape (1, period_length), that should be a single period of a periodic signal</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="aspcore.correlation.sample_correlation.html#aspcore.correlation.sample_correlation" title="aspcore.correlation.sample_correlation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sample_correlation</span></code></a>(data[, data2, estimate_mean])</p></td>
+<td><p>data is a matrix of size (data_dim, num_samples) data2 is an optional matrix of size (data_dim2, num_samples) the cross-correlation is calulcated if this is supplied</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Classes</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="aspcore.correlation.Autocorrelation.html#aspcore.correlation.Autocorrelation" title="aspcore.correlation.Autocorrelation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Autocorrelation</span></code></a>(forget_factor, max_lag, ...)</p></td>
+<td><p>Autocorrelation is defined as r_m1m2(i) = E[s_m1(n) s_m2(n-i)] the returned shape is (num_channels, num_channels, max_lag) r[m1, m2, i] is positive entries, r_m1m2(i) r[m2, m1, i] is negative entries, r_m1m2(-i)</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="aspcore.correlation.SampleCorrelation.html#aspcore.correlation.SampleCorrelation" title="aspcore.correlation.SampleCorrelation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SampleCorrelation</span></code></a>(forget_factor, size[, ...])</p></td>
+<td><p>Estimates the correlation matrix between two random vectors v(n) &amp; w(n) by iteratively computing (1/N) sum_{n=0}^{N-1} v(n) w^T(n) The goal is to estimate R = E[v(n) w^T(n)]</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="aspcore.adaptivefilter.RLS.html" class="btn btn-neutral float-left" title="aspcore.adaptivefilter.RLS" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="aspcore.correlation.autocorr.html" class="btn btn-neutral float-right" title="aspcore.correlation.autocorr" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Jesper Brunnström.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

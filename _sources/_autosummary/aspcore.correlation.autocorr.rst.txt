@@ -1,0 +1,6 @@
+aspcore.correlation.autocorr
+============================
+
+.. currentmodule:: aspcore.correlation
+
+.. autofunction:: autocorr

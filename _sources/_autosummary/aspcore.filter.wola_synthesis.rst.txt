@@ -1,0 +1,6 @@
+aspcore.filter.wola\_synthesis
+==============================
+
+.. currentmodule:: aspcore.filter
+
+.. autofunction:: wola_synthesis

@@ -1,0 +1,218 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>aspcore.matrices &mdash; aspcore 0.0.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=8c5712d9"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="aspcore.matrices.apply_blockwise" href="aspcore.matrices.apply_blockwise.html" />
+    <link rel="prev" title="aspcore.lowrank.reconstruct_ir" href="aspcore.lowrank.reconstruct_ir.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            aspcore
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="aspcore.adaptivefilter.html">aspcore.adaptivefilter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.correlation.html">aspcore.correlation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.filter.html">aspcore.filter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.filterdesign.html">aspcore.filterdesign</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.filterdynamic.html">aspcore.filterdynamic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.fouriertransform.html">aspcore.fouriertransform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.fouriertransform_jax.html">aspcore.fouriertransform_jax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.lowrank.html">aspcore.lowrank</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">aspcore.matrices</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.matrices.apply_blockwise.html">aspcore.matrices.apply_blockwise</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.matrices.block_diag.html">aspcore.matrices.block_diag</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.matrices.block_diag_multiply.html">aspcore.matrices.block_diag_multiply</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.matrices.block_diagonal_same.html">aspcore.matrices.block_diagonal_same</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.matrices.block_of_toeplitz.html">aspcore.matrices.block_of_toeplitz</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.matrices.block_transpose.html">aspcore.matrices.block_transpose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.matrices.blockmat2param.html">aspcore.matrices.blockmat2param</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.matrices.broadcast_func.html">aspcore.matrices.broadcast_func</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.matrices.ensure_hermitian.html">aspcore.matrices.ensure_hermitian</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.matrices.ensure_pos_def_adhoc.html">aspcore.matrices.ensure_pos_def_adhoc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.matrices.ensure_pos_semidef.html">aspcore.matrices.ensure_pos_semidef</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.matrices.is_hermitian.html">aspcore.matrices.is_hermitian</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.matrices.is_hermitian_hardcoded.html">aspcore.matrices.is_hermitian_hardcoded</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.matrices.is_pos_def.html">aspcore.matrices.is_pos_def</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.matrices.is_pos_semidef.html">aspcore.matrices.is_pos_semidef</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.matrices.lsq_with_l2_regularization.html">aspcore.matrices.lsq_with_l2_regularization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.matrices.matmul_param.html">aspcore.matrices.matmul_param</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.matrices.param2blockmat.html">aspcore.matrices.param2blockmat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.matrices.param_transpose.html">aspcore.matrices.param_transpose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.matrices.psd_matrix_metadata.html">aspcore.matrices.psd_matrix_metadata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.matrices.regularize_matrix_with_condition_number.html">aspcore.matrices.regularize_matrix_with_condition_number</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aspcore.matrices.to_length.html">aspcore.matrices.to_length</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.matrices_jax.html">aspcore.matrices_jax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.montecarlo.html">aspcore.montecarlo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.pseq.html">aspcore.pseq</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aspcore.utilities.html">aspcore.utilities</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">aspcore</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">aspcore.matrices</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/_autosummary/aspcore.matrices.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-aspcore.matrices">
+<span id="aspcore-matrices"></span><h1>aspcore.matrices<a class="headerlink" href="#module-aspcore.matrices" title="Link to this heading"></a></h1>
+<p>Functions for common operations on matrices.</p>
+<p>Some examples include constructing a block matrix, ensure positive definiteness, applying a function to individual blocks of a block matrix.</p>
+<p class="rubric">References</p>
+<p class="rubric">Functions</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="aspcore.matrices.apply_blockwise.html#aspcore.matrices.apply_blockwise" title="aspcore.matrices.apply_blockwise"><code class="xref py py-obj docutils literal notranslate"><span class="pre">apply_blockwise</span></code></a>(mat, func, out_shape, *args)</p></td>
+<td><p>Applies the same function to each block in the block matrix mat.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="aspcore.matrices.block_diag.html#aspcore.matrices.block_diag" title="aspcore.matrices.block_diag"><code class="xref py py-obj docutils literal notranslate"><span class="pre">block_diag</span></code></a>(arrays)</p></td>
+<td><p>Creates a block diagonal matrix</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="aspcore.matrices.block_diag_multiply.html#aspcore.matrices.block_diag_multiply" title="aspcore.matrices.block_diag_multiply"><code class="xref py py-obj docutils literal notranslate"><span class="pre">block_diag_multiply</span></code></a>(mat[, block_left, ...])</p></td>
+<td><p>This function can easily be replaced by apply_blockwise.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="aspcore.matrices.block_diagonal_same.html#aspcore.matrices.block_diagonal_same" title="aspcore.matrices.block_diagonal_same"><code class="xref py py-obj docutils literal notranslate"><span class="pre">block_diagonal_same</span></code></a>(block, num_blocks)</p></td>
+<td><p>Creates a block diagonal matrix from a single block.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="aspcore.matrices.block_of_toeplitz.html#aspcore.matrices.block_of_toeplitz" title="aspcore.matrices.block_of_toeplitz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">block_of_toeplitz</span></code></a>(block_of_col[, block_of_row])</p></td>
+<td><p>Generates a block matrix of toeplitz blocks from a set of columns and rows The values in the last axis for each (m,n) block is turned into a toeplitz matrix.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="aspcore.matrices.block_transpose.html#aspcore.matrices.block_transpose" title="aspcore.matrices.block_transpose"><code class="xref py py-obj docutils literal notranslate"><span class="pre">block_transpose</span></code></a>(matrix, block_size[, out])</p></td>
+<td><p>Transposes each block individually in a block matrix.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="aspcore.matrices.blockmat2param.html#aspcore.matrices.blockmat2param" title="aspcore.matrices.blockmat2param"><code class="xref py py-obj docutils literal notranslate"><span class="pre">blockmat2param</span></code></a>(R, num_blocks, block_len)</p></td>
+<td><p>Converts from a standard block matrix to a parametrized form</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="aspcore.matrices.broadcast_func.html#aspcore.matrices.broadcast_func" title="aspcore.matrices.broadcast_func"><code class="xref py py-obj docutils literal notranslate"><span class="pre">broadcast_func</span></code></a>(mat, func, *args[, ...])</p></td>
+<td><p>Applies the same function to each matrix in the array</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="aspcore.matrices.ensure_hermitian.html#aspcore.matrices.ensure_hermitian" title="aspcore.matrices.ensure_hermitian"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ensure_hermitian</span></code></a>(mat[, overwrite_ok])</p></td>
+<td><p>Symmetrizes mat if it is not already Hermitian</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="aspcore.matrices.ensure_pos_def_adhoc.html#aspcore.matrices.ensure_pos_def_adhoc" title="aspcore.matrices.ensure_pos_def_adhoc"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ensure_pos_def_adhoc</span></code></a>(mat[, start_reg, verbose])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="aspcore.matrices.ensure_pos_semidef.html#aspcore.matrices.ensure_pos_semidef" title="aspcore.matrices.ensure_pos_semidef"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ensure_pos_semidef</span></code></a>(mat)</p></td>
+<td><p>Modifies mat to ensure it is positive semidefinite if it is not already.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="aspcore.matrices.is_hermitian.html#aspcore.matrices.is_hermitian" title="aspcore.matrices.is_hermitian"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_hermitian</span></code></a>(mat)</p></td>
+<td><p>Returns true if mat is hermitian, false otherwise</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="aspcore.matrices.is_hermitian_hardcoded.html#aspcore.matrices.is_hermitian_hardcoded" title="aspcore.matrices.is_hermitian_hardcoded"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_hermitian_hardcoded</span></code></a>(mat)</p></td>
+<td><p>Deprecated, use is_hermitian instead</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="aspcore.matrices.is_pos_def.html#aspcore.matrices.is_pos_def" title="aspcore.matrices.is_pos_def"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_pos_def</span></code></a>(mat)</p></td>
+<td><p>Returns true if mat is positive definite, false otherwise</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="aspcore.matrices.is_pos_semidef.html#aspcore.matrices.is_pos_semidef" title="aspcore.matrices.is_pos_semidef"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_pos_semidef</span></code></a>(mat)</p></td>
+<td><p>Returns true if mat is positive semidefinite, false otherwise</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="aspcore.matrices.lsq_with_l2_regularization.html#aspcore.matrices.lsq_with_l2_regularization" title="aspcore.matrices.lsq_with_l2_regularization"><code class="xref py py-obj docutils literal notranslate"><span class="pre">lsq_with_l2_regularization</span></code></a>(A, y[, lamb])</p></td>
+<td><p>Solves a linear least squares problem with L2 regularization</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="aspcore.matrices.matmul_param.html#aspcore.matrices.matmul_param" title="aspcore.matrices.matmul_param"><code class="xref py py-obj docutils literal notranslate"><span class="pre">matmul_param</span></code></a>(mat1, mat2)</p></td>
+<td><p>Multiplies two parametriced block matrices without explicitly converting to full matrices.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="aspcore.matrices.param2blockmat.html#aspcore.matrices.param2blockmat" title="aspcore.matrices.param2blockmat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">param2blockmat</span></code></a>(R)</p></td>
+<td><p>Converts from a parametrized block matrix to the standard form</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="aspcore.matrices.param_transpose.html#aspcore.matrices.param_transpose" title="aspcore.matrices.param_transpose"><code class="xref py py-obj docutils literal notranslate"><span class="pre">param_transpose</span></code></a>(R)</p></td>
+<td><p>Transpose of a block matrix without converting back from parametrized form</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="aspcore.matrices.psd_matrix_metadata.html#aspcore.matrices.psd_matrix_metadata" title="aspcore.matrices.psd_matrix_metadata"><code class="xref py py-obj docutils literal notranslate"><span class="pre">psd_matrix_metadata</span></code></a>(matrices)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="aspcore.matrices.regularize_matrix_with_condition_number.html#aspcore.matrices.regularize_matrix_with_condition_number" title="aspcore.matrices.regularize_matrix_with_condition_number"><code class="xref py py-obj docutils literal notranslate"><span class="pre">regularize_matrix_with_condition_number</span></code></a>(mat)</p></td>
+<td><p>Adds a scaled identity matrix to the matrix so that the condition number is at most max_cond</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="aspcore.matrices.to_length.html#aspcore.matrices.to_length" title="aspcore.matrices.to_length"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_length</span></code></a>(ar, length[, axis])</p></td>
+<td><p>Either truncates or pads ar at the end with zeros, so that the length along axis is equal to length.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="aspcore.lowrank.reconstruct_ir.html" class="btn btn-neutral float-left" title="aspcore.lowrank.reconstruct_ir" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="aspcore.matrices.apply_blockwise.html" class="btn btn-neutral float-right" title="aspcore.matrices.apply_blockwise" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Jesper Brunnström.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

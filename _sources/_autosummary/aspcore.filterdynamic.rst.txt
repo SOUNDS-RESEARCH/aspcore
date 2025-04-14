@@ -1,0 +1,31 @@
+﻿aspcore.filterdynamic
+=====================
+
+.. automodule:: aspcore.filterdynamic
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: new-class-template.rst
+   
+      FilterSumDynamic_python
+   
+   
+
+   
+   
+   
+
+
+

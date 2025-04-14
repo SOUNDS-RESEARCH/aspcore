@@ -1,0 +1,6 @@
+aspcore.filterdesign.fir\_from\_frequency\_function
+===================================================
+
+.. currentmodule:: aspcore.filterdesign
+
+.. autofunction:: fir_from_frequency_function

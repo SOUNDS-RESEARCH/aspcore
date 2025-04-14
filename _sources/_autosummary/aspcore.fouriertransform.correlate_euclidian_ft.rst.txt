@@ -1,0 +1,6 @@
+aspcore.fouriertransform.correlate\_euclidian\_ft
+=================================================
+
+.. currentmodule:: aspcore.fouriertransform
+
+.. autofunction:: correlate_euclidian_ft

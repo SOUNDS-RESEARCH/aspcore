@@ -1,0 +1,6 @@
+aspcore.utilities.is\_power\_of\_2
+==================================
+
+.. currentmodule:: aspcore.utilities
+
+.. autofunction:: is_power_of_2
