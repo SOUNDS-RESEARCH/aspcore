@@ -75,7 +75,7 @@ def regularize_matrix_with_condition_number(mat, max_cond= 1e10):
     all_evs = jnp.linalg.eigvalsh(mat)#, subset_by_index=(mat.shape[-1]-1, mat.shape[-1]-1))
     max_ev = all_evs[-1]
     identity_scaling = max_ev / max_cond
-    mat_reg = mat + identity_scaling * np.eye(mat.shape[-1])
+    mat_reg = mat + identity_scaling * jnp.eye(mat.shape[-1])
     return mat_reg
 
 @partial(jax.jit, static_argnames=["num_blocks"])

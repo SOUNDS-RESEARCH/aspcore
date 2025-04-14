@@ -1,7 +1,116 @@
 import copy
 import numpy as np
+import datetime
 
 import aspcore.filter as fc
+
+import matplotlib.pyplot as plt
+import tikzplotlib
+try:
+    import tikzplotlib
+except ImportError:
+    tikzplotlib = None
+
+def _tikzplotlib_fix_ncols(obj):
+    """Workaround for matplotlib 3.6 renamed legend's _ncol to _ncols, which breaks tikzplotlib
+
+    Parameters
+    ----------
+    obj : Figure object
+        Figure object to fix the _ncol attribute in.
+    """
+    if hasattr(obj, "_ncols"):
+        obj._ncol = obj._ncols
+    for child in obj.get_children():
+        _tikzplotlib_fix_ncols(child)
+
+def save_plot(print_method, folder, name=""):
+    """Save plot to file in a number of formats.
+
+    Parameters
+    ----------
+    print_method : str
+        Method for saving the plot. Options are 'show', 'tikz', 'pdf', 'svg', 'none'.
+        If 'show', the plot is shown in a window.
+        If 'tikz', the plot is saved as a tikz file and a pdf file. Requires tikzplotlib installed. 
+        If 'pdf', the plot is saved as a pdf file.
+        If 'svg', the plot is saved as a svg file.
+        If 'none', the plot is not saved.
+    folder : Path
+        Folder to save the plot in.
+    name : str, optional
+        Name of the file. The default is "".
+    """
+    if print_method == "show":
+        plt.show()
+    elif print_method == "tikz":
+        if folder is not None:
+            nested_folder = folder.joinpath(name)
+            try:
+                nested_folder.mkdir()
+            except FileExistsError:
+                pass
+
+            fig = plt.gcf()
+            _tikzplotlib_fix_ncols(fig)
+            tikzplotlib.save(
+                str(nested_folder.joinpath(f"{name}.tex")),
+                externalize_tables=True,
+                float_format=".8g",
+            )
+            plt.savefig(
+                str(nested_folder.joinpath(name + ".pdf")),
+                dpi=300,
+                facecolor="w",
+                edgecolor="w",
+                orientation="portrait",
+                format="pdf",
+                transparent=True,
+                bbox_inches=None,
+                pad_inches=0.2,
+            )
+    elif print_method == "pdf":
+        if folder is not None:
+            plt.savefig(
+                str(folder.joinpath(name + ".pdf")),
+                dpi=300,
+                facecolor="w",
+                edgecolor="w",
+                orientation="portrait",
+                format="pdf",
+                transparent=True,
+                bbox_inches="tight",
+                pad_inches=0.2,
+            )
+    elif print_method == "svg":
+        if folder is not None:
+            plt.savefig(
+                str(folder.joinpath(name + ".svg")),
+                dpi=300,
+                format="svg",
+                transparent=True,
+                bbox_inches="tight",
+                pad_inches=0.2,
+            )
+    elif print_method == "none":
+        pass
+    else:
+        raise ValueError
+    plt.close("all")
+
+
+def set_basic_plot_look(ax):
+    """Sets basic look for a plot.
+    
+    Parameters
+    ----------
+    ax : Axes
+        Axes object to set the look of.
+    """
+    ax.grid(True)
+    ax.spines['right'].set_visible(False)
+    ax.spines['top'].set_visible(False)
+
 
 
 def power_of_filtered_signal(src, ir, num_samples):
@@ -170,6 +279,70 @@ def block_process_idxs(num_samples : int, block_size : int, overlap : int, start
 
 
 
+
+def get_time_string(detailed=False):
+    """Returns a string with the current time in the format 'year_month_day_hour_minute'
+    
+    Parameters
+    ----------
+    detailed : bool
+        If True, seconds and microseconds will be included in the string
+
+    Returns
+    -------
+    time_str : str
+        The time string
+    """
+    tm = datetime.datetime.now()
+    time_str = (
+        str(tm.year)
+        + "_"
+        + str(tm.month).zfill(2)
+        + "_"
+        + str(tm.day).zfill(2)
+        + "_"
+        + str(tm.hour).zfill(2)
+        + "_"
+        + str(tm.minute).zfill(2)
+    )
+    if detailed:
+        time_str += "_" + str(tm.second).zfill(2)
+        time_str += "_" + str(tm.microsecond).zfill(2)
+    return time_str
+
+def get_unique_folder(prefix, parent_folder, detailed_naming=False):
+    """Returns a unique folder name in the parent folder with the prefix and the current time
+
+    The folder name has the form parent_folder / prefix_year_month_day_hour_minute_0. If multiple folders are created
+    within the same minute, the number is incremented by 1 for each new folder. 
+
+    Parameters
+    ----------
+    prefix : str
+        The prefix for the folder name
+    parent_folder : Path
+        The parent folder where the new folder should be created, as a Path object (from pathlib)
+    detailed_naming : bool
+        If True, the folder name will include seconds and microseconds. 
+        If used with multithreading, it is a good idea to set this to True. 
+        In that case, uniqueness is not guaranteed, but it reduces the risk of clashes significantly.
+    
+    Returns
+    -------
+    folder_name : Path
+        The full path to the new folder. The folder is not created by this function.
+    """
+    file_name = prefix + get_time_string(detailed=detailed_naming)
+    file_name += "_0"
+    folder_name = parent_folder / file_name
+    if folder_name.exists():
+        idx = 1
+        folder_name_len = len(folder_name.name) - 2
+        while folder_name.exists():
+            new_name = folder_name.name[:folder_name_len] + "_" + str(idx)
+            folder_name = folder_name.parent / new_name
+            idx += 1
+    return folder_name
 
 
 
