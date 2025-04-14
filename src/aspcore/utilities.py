@@ -5,7 +5,6 @@ import datetime
 import aspcore.filter as fc
 
 import matplotlib.pyplot as plt
-import tikzplotlib
 try:
     import tikzplotlib
 except ImportError:
@@ -32,7 +31,9 @@ def save_plot(print_method, folder, name=""):
     print_method : str
         Method for saving the plot. Options are 'show', 'tikz', 'pdf', 'svg', 'none'.
         If 'show', the plot is shown in a window.
-        If 'tikz', the plot is saved as a tikz file and a pdf file. Requires tikzplotlib installed. 
+        If 'tikz', the plot is saved as a tikz file and a pdf file. Requires tikzplotlib installed, and
+        the 'correct' matplotlib version. tikzplotlib is no longer maintained, so this is getting increasingly
+        difficult.
         If 'pdf', the plot is saved as a pdf file.
         If 'svg', the plot is saved as a svg file.
         If 'none', the plot is not saved.
