@@ -118,7 +118,7 @@ def correlate_sum_ff(freq_filter, freq_signal):
     assert freq_filter.shape[0] % 2 == 0
     output_len = freq_filter.shape[0] // 2
     filtered_signal = dft.ifft(np.sum(freq_filter * freq_signal.conj(), axis=-1))
-    return np.real_if_close(filtered_signal[..., :output_len])
+    return np.real(filtered_signal[..., :output_len])
 
 
 def correlate_cartesian_tt(time_filter, time_signal):
@@ -221,7 +221,7 @@ def correlate_euclidian_ff(freq_filter, freq_signal):
         ).conj()
     )
     filtered_signal = dft.ifft(filtered_signal)
-    return np.real_if_close(filtered_signal[..., :output_len])
+    return np.real(filtered_signal[..., :output_len])
 
 
 
@@ -253,7 +253,7 @@ def convolve_sum(freq_filter, time_signal):
 
     filtered_signal = np.squeeze(freq_filter @ dft.fft(time_signal)[...,None], axis=-1)
     filtered_signal = dft.ifft(filtered_signal)
-    return np.real_if_close(filtered_signal[..., output_len:])
+    return np.real(filtered_signal[..., output_len:])
 
 
 def convolve_euclidian_ff(freq_filter, freq_signal):
@@ -284,7 +284,7 @@ def convolve_euclidian_ff(freq_filter, freq_signal):
         freq_signal.shape[0:1] + (1,) * (freq_filter.ndim - 1) + freq_signal.shape[1:]
     )
     filtered_signal = dft.ifft(filtered_signal)
-    return np.real_if_close(filtered_signal[..., output_len:])
+    return np.real(filtered_signal[..., output_len:])
 
 
 def convolve_euclidian_ft(freq_filter, time_signal):
