@@ -172,3 +172,39 @@ def test_irdft_mat_and_real_part_operator_is_equivalent_to_irfft():
     irfft_signal = ft.irfft(signal, num_freqs_removed_low=num_to_remove)
     irfft_signal_mat = np.real(B @ signal).T
     assert np.allclose(irfft_signal, irfft_signal_mat)
+
+
+
+def test_time_domain_inner_product_is_equivalent_to_freq_domain_real_inner_product():
+    rng = np.random.default_rng()
+    vec_len = rng.integers(1, 100)
+
+    signal1 = rng.normal(size=(vec_len,))
+    signal2 = rng.normal(size=(vec_len,))
+    inner_td = np.sum(signal1 * signal2)
+
+    sig1_f = ft.rfft(signal1)
+    sig2_f = ft.rfft(signal2)
+    C = ft.rdft_weighting(sig1_f.shape[0], vec_len)
+    inner_fd = np.sum(np.real(sig1_f * np.conj(sig2_f) * C))
+
+    assert np.allclose(inner_td, inner_fd)
+
+def test_time_domain_inner_product_is_equivalent_to_freq_domain_real_inner_product_backwards_transform():
+    rng = np.random.default_rng()
+    vec_len = 2*rng.integers(1, 100)
+    num_real_freqs = vec_len // 2 + 1
+
+    sig1_f = rng.normal(size=(num_real_freqs,)).astype(complex)
+    sig1_f[1:-1] += 1j * rng.normal(size=(num_real_freqs-2,))
+    sig2_f = rng.normal(size=(num_real_freqs,)).astype(complex)
+    sig2_f[1:-1] += 1j * rng.normal(size=(num_real_freqs-2,))
+
+    C = ft.rdft_weighting(sig1_f.shape[0], vec_len)
+    inner_fd = np.sum(np.real(sig1_f * np.conj(sig2_f) * C))
+
+    signal1 = ft.irfft(sig1_f)
+    signal2 = ft.irfft(sig2_f)
+    inner_td = np.sum(signal1 * signal2)
+
+    assert np.allclose(inner_td, inner_fd)
