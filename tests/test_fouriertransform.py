@@ -208,3 +208,67 @@ def test_time_domain_inner_product_is_equivalent_to_freq_domain_real_inner_produ
     inner_td = np.sum(signal1 * signal2)
 
     assert np.allclose(inner_td, inner_fd)
+
+
+def test_dft_domain_to_real_vec_is_invertible():
+    rng = np.random.default_rng()
+    td_len = rng.integers(50, 100)
+    even = td_len % 2 == 0
+    remove_freqs = rng.integers(0, 10)
+
+    signal1 = rng.normal(size=(td_len,))
+
+    test_sig = ft.dft_domain_to_real_vec(ft.rfft(signal1, num_freqs_removed_low=remove_freqs), even=even, num_freqs_removed_low=remove_freqs)
+    real_len = test_sig.shape[-1]
+
+    signal = rng.normal(size=(real_len,))
+    sig_dft = ft.real_vec_to_dft_domain(signal, scale=True, num_freqs_removed_low=remove_freqs)
+    signal_inverted = ft.dft_domain_to_real_vec(sig_dft, even =even, scale=True, num_freqs_removed_low=remove_freqs)
+
+    assert np.allclose(signal, np.squeeze(signal_inverted))
+
+def test_dft_domain_inner_product_is_equivalent_to_real_inner_product():
+    rng = np.random.default_rng()
+    vec_len = rng.integers(50, 100)
+    even = vec_len % 2 == 0
+    remove_freqs = rng.integers(0, 10)
+
+    signal1 = rng.normal(size=(vec_len,))
+    signal2 = rng.normal(size=(vec_len,))
+    #inner_td = np.sum(signal1 * signal2)
+
+    sig1_f = ft.rfft(signal1, num_freqs_removed_low=remove_freqs)
+    sig2_f = ft.rfft(signal2, num_freqs_removed_low=remove_freqs)
+    C = ft.rdft_weighting(sig1_f.shape[0], vec_len, freqs_to_remove_low=remove_freqs)
+    inner_fd = np.sum(np.real(sig1_f * np.conj(sig2_f) * C))
+
+    sig1 = ft.dft_domain_to_real_vec(sig1_f, even = even, scale=True, num_freqs_removed_low=remove_freqs)
+    sig2 = ft.dft_domain_to_real_vec(sig2_f, even = even, scale=True, num_freqs_removed_low=remove_freqs)
+    inner_real = np.sum(sig1 * sig2)
+
+    assert np.allclose(inner_real, inner_fd)
+
+
+def test_dft_domain_inner_product_is_equivalent_to_real_inner_product_backwards_transform():
+    rng = np.random.default_rng()
+    td_len = 99
+    even = td_len % 2 == 0
+    remove_freqs = 10
+
+    signal1 = rng.normal(size=(td_len,))
+    test_sig = ft.dft_domain_to_real_vec(ft.rfft(signal1, num_freqs_removed_low=remove_freqs), even=even, num_freqs_removed_low=remove_freqs)
+    real_len = test_sig.shape[-1]
+
+    signal_real1 = rng.normal(size=(real_len,))
+    signal_real2 = rng.normal(size=(real_len,))
+
+    signal_dft1 = ft.real_vec_to_dft_domain(signal_real1, scale=True, num_freqs_removed_low=remove_freqs)
+    signal_dft2 = ft.real_vec_to_dft_domain(signal_real2, scale=True, num_freqs_removed_low=remove_freqs)
+
+    #sig2_f = ft.rfft(signal2, num_freqs_removed_low=remove_freqs)
+    C = ft.rdft_weighting(signal_dft1.shape[0], td_len, freqs_to_remove_low=remove_freqs)
+    inner_fd = np.sum(np.real(signal_dft1 * np.conj(signal_dft2) * C[:,None]))
+
+    inner_real = np.sum(signal_real1 * signal_real2)
+
+    assert np.allclose(inner_real, inner_fd)
