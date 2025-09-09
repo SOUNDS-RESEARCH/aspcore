@@ -105,6 +105,46 @@ def rfft(time_sig, n=None, num_freqs_removed_low = 0):
         freq_signal = freq_signal[num_freqs_removed_low:,...]
     return freq_signal
 
+def rfft_set(time_sig, n=None, remove_bins = None):
+    """Computes the real FFT
+    
+    Parameters
+    ----------
+    time_sig : ndarray
+        The signal to be transformed. The last axis should correspond to time
+    n : int, optional
+        length of the FFT. If None, the length is the length of the last axis of time_sig
+    remove_bins : int, optional
+        The number of frequency bins to remove from the low end of the spectrum. Default
+        option is None, which corresponds to the full real DFT.
+
+    Returns
+    -------
+    freq_signal : ndarray
+        The transformed signal
+
+    Notes
+    -----
+    Corresponds to numpy.fft.rfft, but with the time convention used in this package. 
+    """
+    if n is None:
+        n = time_sig.shape[-1]
+    freq_signal = np.fft.ifft(time_sig, n=n, axis=-1) * n
+    freq_signal = np.moveaxis(freq_signal, -1, 0)
+
+    num_real_freqs = n // 2 + 1
+    freq_signal = freq_signal[:num_real_freqs,...]
+
+    to_delete = []
+    if remove_bins is not None:
+        to_delete.extend(int(b) for b in remove_bins if 0 <= b < num_real_freqs)
+        to_delete.sort()
+
+    if len(to_delete) > 0:
+        freq_signal = np.delete(freq_signal, to_delete, axis=0)
+
+    return freq_signal
+
 def irfft(freq_signal, n=None, num_freqs_removed_low = 0):
     """Inverse FFT, and moves the first axis to the last axis
 
@@ -145,6 +185,59 @@ def irfft(freq_signal, n=None, num_freqs_removed_low = 0):
             n = freq_signal.shape[0]
         else:  
             raise NotImplementedError("irfft with arbitrary output length not implemented")
+    time_signal = np.fft.fft(freq_signal, axis=0) / n
+    time_signal = np.moveaxis(time_signal, 0, -1)
+    return np.real_if_close(time_signal)
+
+def irfft_set(freq_signal, n=None, removed_bins = None):
+    """Inverse FFT, and moves the first axis to the last axis
+
+    Parameters
+    ----------
+    freq_signal : ndarray
+        The signal to be transformed. The first axis should 
+        correspond to frequency
+    n : int, optional
+        length of the FFT. This is the length of the resulting time domain signal, not the frequency domain input.
+        If not supplied, it is assumed to be 2 * (freq_signal.shape[0] - 1), corresponding to the 
+        output of rfft without argument. To get an odd output length, you need to supply n.
+    num_freqs_removed_low : int, optional
+        The number of frequencies that were removed from the low end of the spectrum. 
+        Default option is 0, which corresponds to the full real DFT. The low frequencies are filled in
+        with zeros. 
+
+    Returns
+    -------
+    time_signal : ndarray
+        The transformed signal
+    """
+    if removed_bins is None:
+        removed_bins = np.array([], dtype=int)
+    else:
+        removed_bins = np.unique(np.asarray(removed_bins, dtype=int))
+
+    if n is None:
+        num_real_full = freq_signal.shape[0] + len(removed_bins)
+        n = 2 * (num_real_full - 1)
+        even = True # assume even by default?
+    else:
+        num_real_full = n // 2 + 1
+        even = (n % 2 == 0)
+    if freq_signal.shape[0] + removed_bins.size != num_real_full:
+        raise ValueError(
+            "Inconsistent inputs: freq_signal.shape[0] + len(removed_bins) "
+            f"({freq_signal.shape[0]} + {removed_bins.size}) != n//2 + 1 ({num_real_full})."
+        )
+    if removed_bins.size:
+        if removed_bins.min() < 0 or removed_bins.max() >= num_real_full:
+            raise ValueError("removed_bins contains out-of-range indices for the real spectrum.")
+
+    full_positive_freqs = np.zeros((num_real_full, *freq_signal.shape[1:]), dtype=freq_signal.dtype)
+    keep_bins = np.setdiff1d(np.arange(num_real_full), removed_bins, assume_unique=True)
+    full_positive_freqs[keep_bins, ...] = freq_signal
+
+    freq_signal = insert_negative_frequencies(full_positive_freqs, even=even)
+
     time_signal = np.fft.fft(freq_signal, axis=0) / n
     time_signal = np.moveaxis(time_signal, 0, -1)
     return np.real_if_close(time_signal)
@@ -293,7 +386,40 @@ def rdft_weighting(num_real_freqs, dft_len, freqs_to_remove_low=0):
     #C = np.diag(c_diag)
     return c_diag
 
+def rdft_weighting_set(num_real_freqs, dft_len, removed_bins = None):
+    """The weighting required for the real DFT to be the same as the complex DFT.
 
+    np.diag(c_diag) corresponds to C in the paper [brunnstromTimedomain2025]
+
+    Parameters
+    ----------
+    num_freqs : int
+        The number of frequencies in the resulting real-valued DFT. Technically redundant information
+        as this is the same as dft_len // 2 + 1 - freqs_to_remove, so will not be necessary later. 
+    dft_len : int
+        The length of the DFT. 
+    removed_bins : array-like of int, optional
+        The indices of the frequency bins that were removed from the spectrum. 
+
+    Returns
+    -------
+    c_diag : np.ndarray of shape (num_freqs,)
+    """
+    num_real_freqs = dft_len // 2 + 1
+    even = (dft_len % 2 == 0)
+    # assume that removed_bins is sorted, unique, and valid
+    if removed_bins is None:
+        removed_bins = np.array([], dtype=int)
+    
+    keep_mask = np.ones(num_real_freqs, dtype=bool)
+    if len(removed_bins) > 0:
+        keep_mask[removed_bins] = False
+    
+    c_diag = np.ones(num_real_freqs) * 2 / dft_len
+    c_diag[0] = 1 / dft_len
+    if even: #only if even
+        c_diag[-1] = 1 / dft_len
+    return c_diag[keep_mask]
 
 
 def real_vec_to_dft_domain(vec_real, scale=True, num_freqs_removed_low=0):
@@ -424,6 +550,125 @@ def dft_domain_to_real_vec(vec, even=True, scale=True, num_freqs_removed_low=0):
     return vec_real
 
 
+def real_vec_to_dft_domain_set(vec_real, dft_len, scale=True, removed_bins = None):
+    """Isomorphism between a real-valued vector and a complex DFT domain vector
+
+    Note that this is not a Fourier transform, but merely a way to treat frequency domain vectors as real-valued vectors.
+
+    Parameters
+    ----------
+    vec : ndarray of shape (num_freqs, ...)
+        Real-valued vector, where num_freqs is the number of time-domain samples used in the DFT
+        Should be oriented such that the first half of the first axis corresponds
+        to the real part, and the second half corresponds to the imaginary part.
+    scale : bool, optional
+        If true, it is scaled such that the inner product of the real vector and the dft vector are equal.
+        According to the definitions in [brunnstromTimedomain2025], where the real DFT is
+        unitary.
+    removed_bins : array-like of int, optional
+        The indices of the frequency bins that were removed from the low end of the
+        spectrum. Default option is None, which corresponds to the full real DFT.
+
+    Returns
+    -------
+    dft_vec : ndarray of shape (num_real_freqs, ...)
+        Complex DFT domain vector, where num_real_freqs is the number of positive frequency bins. 
+    """
+    if vec_real.ndim == 1:
+        vec_real = vec_real[:, None]
+
+    even = (dft_len % 2 == 0)
+    num_real_full = dft_len // 2 + 1
+
+    if removed_bins is None:
+        removed_bins = np.array([], dtype=int) 
+    else:
+        removed_bins = np.array(sorted([int(b) for b in removed_bins if 0 <= b < num_real_full]))
+    
+    keep_bins = np.array(
+        sorted(set(range(num_real_full)) - set(removed_bins.tolist() if removed_bins.size else [])),
+    dtype=int)
+
+    imag_mask = (keep_bins != 0)
+    if even:
+        imag_mask &= (keep_bins != (dft_len // 2)) # exclude Nyquist if even
+
+    K = keep_bins.size
+    M = int(imag_mask.sum())
+
+    real_block = vec_real[:K, ...]
+    vec_dft = real_block.astype(complex, copy=True)
+
+    if M > 0:
+        imag_block = vec_real[K:K+M, ...] if M > 0 else None
+        vec_dft[imag_mask, ...] += 1j * imag_block
+
+    if scale:
+        scaling = 1.0/np.sqrt(rdft_weighting_set(num_real_full, dft_len, removed_bins))
+        vec_dft *= scaling.reshape(-1, *((1,)*(vec_real.ndim - 1)))
+    return vec_dft
+
+
+def dft_domain_to_real_vec_set(vec, dft_len, even=True, scale=True, removed_bins = None):
+    """Isomorphism between a complex DFT domain vector and a real-valued vector
+
+    Note that this is not a Fourier transform, but merely a way to treat frequency domain vectors as real-valued vectors.
+
+    Parameters
+    ----------
+    vec : ndarray of shape (num_real_freqs, ...)
+        DFT domain vector
+    even : bool, optional
+        If True, the DFT length is even, if False it is odd. This must be supplied
+        as it is not possible to infer from the shape of vec.
+    scale : bool, optional
+        If true, it is scaled such that the inner product of the real vector and the dft vector are equal.
+        According to the definitions in [brunnstromTimedomain2025], where the real DFT is
+        unitary.
+    removed_bins : array-like of int, optional
+        The indices of the frequency bins that were removed from the spectrum.
+
+    Returns
+    -------
+    real_vec : ndarray of shape (num_freqs, ...)
+        Real-valued vector with real and imaginary parts interleaved
+    """
+
+    num_real_full = dft_len // 2 + 1
+    even = (dft_len % 2 == 0)
+
+    if removed_bins is None:
+        removed_bins = np.array([], dtype=int) 
+    else:
+        removed_bins = np.array(sorted([int(b) for b in removed_bins if 0 <= b < num_real_full]))
+    
+    keep_bins = np.array(
+        sorted(set(range(num_real_full)) - set(removed_bins.tolist() if removed_bins.size else [])),
+    dtype=int)
+    K = keep_bins.size
+    assert vec.shape[0] == K, (
+        f"Inconsistent inputs: vec.shape[0] ({vec.shape[0]}) != number of kept bins ({K})."
+    )
+
+    imag_mask = (keep_bins != 0)
+    if even:
+        imag_mask &= (keep_bins != (dft_len // 2))
+    M = int(imag_mask.sum())
+
+
+    real_block = np.real(vec)
+    if M > 0:
+        imag_block = np.imag(vec[imag_mask, ...])
+        vec_real = np.concatenate((real_block, imag_block), axis=0)
+    else:
+        vec_real = real_block
+
+    if scale:
+        scaling = rdft_weighting_set(num_real_full, dft_len, removed_bins)
+        scaling_stacked = np.concatenate((scaling, scaling[imag_mask]), axis=0)
+        vec_real *= np.sqrt(scaling_stacked).reshape(-1, *((1,)*(vec_real.ndim - 1)))
+
+    return vec_real
 
 
 
