@@ -311,3 +311,126 @@ def get_real_angular_freqs(num_freq : int, samplerate : int):
     See documentation for get_real_freqs
     """
     return 2 * jnp.pi * get_real_freqs(num_freq, samplerate)
+
+
+
+
+
+
+
+
+
+
+
+@partial(jax.jit, static_argnames=["dft_len"])
+def rdft_weighting(dft_len):
+    """The weighting required for the real DFT to be the same as the complex DFT.
+
+    np.diag(c_diag) corresponds to C in the paper [brunnstromTimedomain2025]
+
+    Parameters
+    ----------
+    dft_len : int
+        The length of the DFT. 
+
+    Returns
+    -------
+    c_diag : np.ndarray of shape (num_freqs,)
+    """
+    num_real_freqs = dft_len // 2 + 1
+    c_diag = jnp.ones(num_real_freqs) * 2 / dft_len
+    c_diag = c_diag.at[0].set(1 / dft_len)
+
+    if dft_len % 2 == 0: #only if even
+        c_diag = c_diag.at[-1].set(1 / dft_len)
+    return c_diag
+
+
+@partial(jax.jit, static_argnames=["scale"])
+def real_vec_to_dft_domain(vec, scale=True):
+    """Isomorphism between a real-valued vector and a complex DFT domain vector
+
+    Note that this is not a Fourier transform, but merely a way to treat frequency domain vectors as real-valued vectors.
+
+    Parameters
+    ----------
+    vec : ndarray of shape (num_freqs, ...)
+        Real-valued vector, where num_freqs is the number of time-domain samples used in the DFT
+        Should be oriented such that the first half of the first axis corresponds
+        to the real part, and the second half corresponds to the imaginary part.
+    scale : bool, optional
+        If true, it is scaled such that the inner product of the real vector and the dft vector are equal.
+        According to the definitions in [brunnstromTimedomain2025], where the real DFT is unitary.
+
+    Returns
+    -------
+    dft_vec : ndarray of shape (num_real_freqs, ...)
+        Complex DFT domain vector, where num_real_freqs is the number of positive frequency bins. 
+    """
+    if vec.ndim == 1:
+        vec = vec[:, None]
+
+    num_freqs = vec.shape[0]
+    num_real_freqs = num_freqs // 2 + 1
+    even = (num_freqs % 2 == 0)
+
+    # scale_vec = jnp.ones(num_real_freqs) * 2
+    # scale_vec[0] = 1
+    # if even:
+    #     scale_vec[-1] = 1
+
+    if even:
+        dft_vec = vec[:num_real_freqs,...].astype(complex)
+        dft_vec = dft_vec.at[1:-1,...].add(1j * vec[num_real_freqs:,...].astype(complex))
+    else:
+        dft_vec = vec[:num_real_freqs,...].astype(complex)
+        dft_vec = dft_vec.at[1:,...].add(1j * vec[num_real_freqs:,...].astype(complex))
+
+    if scale:
+        scaling = rdft_weighting(num_freqs)
+        dft_vec = dft_vec / jnp.sqrt(scaling).reshape(-1, *((1,)*(vec.ndim - 1)))
+    return dft_vec
+
+@partial(jax.jit, static_argnames=["even", "scale"])
+def dft_domain_to_real_vec(vec, even=True, scale=True):
+    """Isomorphism between a complex DFT domain vector and a real-valued vector
+
+    Note that this is not a Fourier transform, but merely a way to treat frequency domain vectors as real-valued vectors.
+
+    Parameters
+    ----------
+    vec : ndarray of shape (num_real_freqs, ...)
+        DFT domain vector
+    even : bool, optional
+        If True, the DFT length is even, if False it is odd. This must be supplied
+        as it is not possible to infer from the shape of vec.
+    scale : bool, optional
+        If true, it is scaled such that the inner product of the real vector and the dft vector are equal.
+        According to the definitions in [brunnstromTimedomain2025], where the real DFT is unitary.
+
+    Returns
+    -------
+    real_vec : ndarray of shape (num_freqs, ...)
+        Real-valued vector with real and imaginary parts interleaved
+    """
+    if even:
+        dft_len = 2 * (vec.shape[0] - 1)
+    else:
+        dft_len = 2 * (vec.shape[0] - 1) + 1
+    
+    if scale:
+        scaling = rdft_weighting(dft_len)
+        vec = vec * jnp.sqrt(scaling).reshape(-1, *((1,)*(vec.ndim - 1)))
+
+    if even:
+        vec_real = jnp.concatenate((jnp.real(vec), jnp.imag(vec[1:-1,...])), axis=0)
+    else:
+        vec_real = jnp.concatenate((jnp.real(vec), jnp.imag(vec[1:,...])), axis=0)
+
+    # L = vec_real.shape[0]
+    # scale_vec = np.ones(L) * 2
+    # scale_vec[0] = 1
+    # if even:
+    #     scale_vec[L//2] = 1
+
+    return vec_real

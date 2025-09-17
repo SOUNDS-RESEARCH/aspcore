@@ -13,11 +13,32 @@ filter object according to the chosen parameters. The only required parameters i
 either an impulse response or the dimensions of the impulse response. In the 
 latter case, the impulse response is initialized to zero.
 
-
 In addition to linear convolution, the module also contains implementations of
 - Weighted overlap-add (WOLA) [crochiereWeighted1980, ruizComparison2021]
 - IIR filter
 - Mean with forgetting factor
+
+Usage
+-----
+The main function of this package is create_filter(). Using the keyword arguments, it will select and return the appropriate filter class. The filter can then be used to convolve using its process() method, which returns the filtered signal. 
+
+Signals are formatted with the time index as the last axis, with most filters accepting signals of the form (num_channels, num_samples). Some filters accepts signals with higher dimensional channels, such as (a, b, c, ..., num_samples). 
+
+```python
+import numpy as np
+import aspcore
+rng = np.random.default_rng()
+
+channels_in, channels_out, num_samples, ir_len = 5, 3, 128, 16
+
+signal = rng.normal(0,1,size=(channels_in, num_samples))
+ir = rng.normal(0,1,size=(channels_out, ir_len))
+
+filt = aspcore.create_filter(ir=ir, sum_over_inputs=True)
+
+filtered_signal = filt.process(signal)
+```
+
 
 References
 ----------

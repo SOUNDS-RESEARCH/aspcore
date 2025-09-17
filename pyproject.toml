@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "aspcore"
-version = "0.0.2"
+version = "0.0.5"
 authors = [
     {name = "Jesper Brunnström", email = "jesper_brunnstrom@hotmail.com"}
 ]
@@ -20,6 +20,7 @@ dependencies = [
     "scipy",
     "numba",
     "numexpr",
+    "jax",
     "matplotlib",
     "tensorly",
     "samplerate",
@@ -30,6 +31,9 @@ test = [
     "pytest",
     "hypothesis",
     "aspsim",
+]
+extra = [
+    "tikzplotlib"
 ]
 
 [project.urls]

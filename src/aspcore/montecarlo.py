@@ -4,6 +4,7 @@ References
 ----------
 """
 import numpy as np
+import scipy.stats as stats
 
 
 def integrate(
@@ -119,25 +120,6 @@ def diagnostics(new_val, old_val, block_idx):
 
 
 
-
-
-def uniform_random_on_sphere(num_points, rng):
-    """Generate uniformly random points on the unit sphere.
-
-    num_points : int
-        The number of points to generate
-    rng : numpy.random.Generator
-        The random number generator to use
-
-    Returns
-    -------
-    points : ndarray of shape (num_points, 3)
-        The points on the unit sphere
-    """
-    points = rng.normal(size=(num_points, 3))
-    points = points / np.linalg.norm(points, axis=-1)[:,None]
-    return points
-
 def uniform_random_on_circle(num_points, rng):
     """Generate uniformly random points on the unit circle in R^3.
 
@@ -157,7 +139,48 @@ def uniform_random_on_circle(num_points, rng):
     points = np.concatenate((points, np.zeros((num_points, 1))), axis=1)
     return points
 
+def uniform_random_on_sphere(num_points, rng):
+    """Generate uniformly random points on the unit sphere.
 
+    num_points : int
+        The number of points to generate
+    rng : numpy.random.Generator
+        The random number generator to use
+
+    Returns
+    -------
+    points : ndarray of shape (num_points, 3)
+        The points on the unit sphere
+    """
+    points = rng.normal(size=(num_points, 3))
+    points = points / np.linalg.norm(points, axis=-1)[:,None]
+    return points
+
+def vonmises_fisher_on_sphere(num_points, mean_direction, kappa, rng):
+    """Generate points on the unit sphere according to the von Mises-Fisher distribution.
+    Parameters
+    ----------
+    num_points : int
+        The number of points to generate
+    mean_direction : ndarray of shape (3,) or (1,3)
+        The mean direction of the distribution
+    kappa : float
+        The concentration parameter of the distribution
+    rng : numpy.random.Generator
+        The random number generator to use
+    Returns
+    -------
+    points : ndarray of shape (num_points, 3)
+        The points on the unit sphere
+    """
+    mean_direction = np.asarray(mean_direction)
+    mean_direction = mean_direction / np.linalg.norm(mean_direction)
+    if mean_direction.ndim == 2:
+        assert mean_direction.shape[0] == 1, "Not implemented for multiple directions"
+        mean_direction = np.squeeze(mean_direction, axis=0)
+    
+    points = stats.vonmises_fisher(mean_direction, kappa, rng.integers(0, 1000000)).rvs(size=num_points, random_state=rng)
+    return points
 
 def _real_gaussian_from_complex(mean, cov):
     cov = 0.5 * np.block([[np.real(cov), -np.imag(cov)], [np.imag(cov), np.real(cov)]])

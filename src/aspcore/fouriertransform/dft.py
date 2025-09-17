@@ -19,6 +19,7 @@ u(r) = e^{i k r^T d}, where k is the wavenumber.
 
 References
 ----------
+[brunnstromTimedomain2025]
 
 """
 import numpy as np
@@ -263,18 +264,18 @@ def irdft_mat(dft_len : int, num_freqs_removed_low = 0):
     #F = F[num_freqs_removed_low:dft_len//2 + 1, :]
     return B
 
-def rdft_weighting(num_freqs, dft_len, freqs_to_remove_low):
+def rdft_weighting(num_real_freqs, dft_len, freqs_to_remove_low=0):
     """The weighting required for the real DFT to be the same as the complex DFT.
 
-    np.diag(c_diag) corresponds to C in the paper
+    np.diag(c_diag) corresponds to C in the paper [brunnstromTimedomain2025]
 
     Parameters
     ----------
-    dft_len : int
-        The length of the DFT. 
     num_freqs : int
         The number of frequencies in the resulting real-valued DFT. Technically redundant information
         as this is the same as dft_len // 2 + 1 - freqs_to_remove, so will not be necessary later. 
+    dft_len : int
+        The length of the DFT. 
     freqs_to_remove_low : int
         The number of frequencies that were remove from the lower end of the DFT.
 
@@ -282,13 +283,148 @@ def rdft_weighting(num_freqs, dft_len, freqs_to_remove_low):
     -------
     c_diag : np.ndarray of shape (num_freqs,)
     """
-    c_diag = np.ones(num_freqs) * 2 / dft_len
-    c_diag[-1] = 1 / dft_len
+    c_diag = np.ones(num_real_freqs) * 2 / dft_len
+
+    if dft_len % 2 == 0: #only if even
+        c_diag[-1] = 1 / dft_len
     if freqs_to_remove_low == 0:
         c_diag[0] = 1 / dft_len
     #c_diag = np.tile(c_diag, num_pos)
     #C = np.diag(c_diag)
     return c_diag
+
+
+
+
+def real_vec_to_dft_domain(vec_real, scale=True, num_freqs_removed_low=0):
+    """Isomorphism between a real-valued vector and a complex DFT domain vector
+
+    Note that this is not a Fourier transform, but merely a way to treat frequency domain vectors as real-valued vectors.
+
+    Parameters
+    ----------
+    vec : ndarray of shape (num_freqs, ...)
+        Real-valued vector, where num_freqs is the number of time-domain samples used in the DFT
+        Should be oriented such that the first half of the first axis corresponds
+        to the real part, and the second half corresponds to the imaginary part.
+    scale : bool, optional
+        If true, it is scaled such that the inner product of the real vector and the dft vector are equal.
+        According to the definitions in [brunnstromTimedomain2025], where the real DFT is unitary.
+    num_freqs_removed_low : int, optional
+        The number of frequencies that were removed from the low end of the spectrum. 
+        Default option is 0, which corresponds to the full real DFT.
+
+    Returns
+    -------
+    dft_vec : ndarray of shape (num_real_freqs, ...)
+        Complex DFT domain vector, where num_real_freqs is the number of positive frequency bins. 
+    """
+    if vec_real.ndim == 1:
+        vec_real = vec_real[:, None]
+
+    if num_freqs_removed_low > 0:
+        dft_len = vec_real.shape[0] + num_freqs_removed_low * 2 - 1
+    else:
+        dft_len = vec_real.shape[0]
+
+    num_real_freqs = dft_len // 2 + 1 - num_freqs_removed_low
+    scaling = rdft_weighting(num_real_freqs, dft_len, num_freqs_removed_low)
+    scaling = 1 / np.sqrt(scaling)
+    even = (dft_len % 2 == 0)
+
+    if num_freqs_removed_low > 0:
+        low_imag = 0
+    else:
+        low_imag = 1
+
+    if even:
+        high_imag = num_real_freqs - 1
+    else:
+        high_imag = num_real_freqs
+
+    #num_freqs = vec_real.shape[0]
+    #num_real_freqs = num_freqs // 2 + 1 #- num_freqs_removed_low
+    #even = (num_freqs % 2 == 0)
+
+    # scale_vec = np.ones(num_real_freqs) * 2
+    # scale_vec[0] = 1
+    # if even:
+    #     scale_vec[-1] = 1
+
+    vec_dft = vec_real[:num_real_freqs,...].astype(complex)
+    vec_dft[low_imag:high_imag,...] += 1j * vec_real[num_real_freqs:,...]
+
+    # if even:
+    #     vec_dft = vec_real[:num_real_freqs,...].astype(complex)
+    #     vec_dft[1:-1,...] += 1j * vec_real[num_real_freqs:,...]
+    # else:
+    #     vec_dft = vec_real[:num_real_freqs,...].astype(complex)
+    #     vec_dft[1:,...] += 1j * vec_real[num_real_freqs:,...]
+    if scale:
+        vec_dft *= scaling.reshape(-1, *((1,)*(vec_real.ndim - 1)))
+    return vec_dft
+
+def dft_domain_to_real_vec(vec, even=True, scale=True, num_freqs_removed_low=0):
+    """Isomorphism between a complex DFT domain vector and a real-valued vector
+
+    Note that this is not a Fourier transform, but merely a way to treat frequency domain vectors as real-valued vectors.
+
+    Parameters
+    ----------
+    vec : ndarray of shape (num_real_freqs, ...)
+        DFT domain vector
+    even : bool, optional
+        If True, the DFT length is even, if False it is odd. This must be supplied
+        as it is not possible to infer from the shape of vec.
+    scale : bool, optional
+        If true, it is scaled such that the inner product of the real vector and the dft vector are equal.
+        According to the definitions in [brunnstromTimedomain2025], where the real DFT is unitary.
+    num_freqs_removed_low : int, optional
+        The number of frequencies that were removed from the low end of the spectrum. 
+        Default option is 0, which corresponds to the full real DFT.
+
+    Returns
+    -------
+    real_vec : ndarray of shape (num_freqs, ...)
+        Real-valued vector with real and imaginary parts interleaved
+    """
+
+    #low_real = num_freqs_removed_low
+    if num_freqs_removed_low > 0:
+        low_imag = 0
+    else:
+        low_imag = 1
+
+    if even:
+        high_imag = vec.shape[0] - 1
+    else:
+        high_imag = vec.shape[0]
+
+    #if even:
+    vec_real = np.concatenate((np.real(vec), np.imag(vec[low_imag:high_imag,...])), axis=0)
+    #lse:
+    #    vec_real = np.concatenate((np.real(vec), np.imag(vec[low_imag:,...])), axis=0)
+
+    if num_freqs_removed_low > 0:
+        dft_len = vec_real.shape[0] + num_freqs_removed_low * 2 - 1
+    else:
+        dft_len = vec_real.shape[0]
+    
+    scaling = rdft_weighting(vec.shape[0], dft_len, num_freqs_removed_low)
+    scaling_stacked = np.concatenate((scaling, scaling[low_imag:high_imag,...]), axis=0)
+    vec_real *= np.sqrt(scaling_stacked).reshape(-1, *((1,)*(vec_real.ndim - 1)))
+
+    # scale_vec = np.ones(dft_len) * 2
+    # if num_freqs_removed_low == 0:
+    #     scale_vec[0] = 1
+    # if even:
+    #     scale_vec[L//2] = 1
+    # if scale:
+    #     vec_real *= np.sqrt(scale_vec / L).reshape(-1, *((1,)*(vec_real.ndim - 1)))
+    return vec_real
+
+
+
 
 
 
