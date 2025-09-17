@@ -48,13 +48,23 @@ def param2blockmat(param):
 
     Parameters
     ----------
-    param : ndarray of shape (num_blocks1, num_blocks2, ir_len, ir_len)
+    param : ndarray of shape (num_blocks1, num_blocks2, ir_len, ir_len) or (num_mats, num_blocks1, num_blocks2, ir_len, ir_len)
+        In the latter case the operation is applied to each matrix independently.
 
     Returns
     -------
     block matrix : ndarray of shape (num_blocks1 * ir_len, num_blocks2 * ir_len)
+        or (num_mats, num_blocks1 * ir_len, num_blocks2 * ir_len)
     """
-    return jnp.concatenate(jnp.concatenate(param, axis=1), axis=1)
+    if param.ndim > 5:
+        raise NotImplementedError("param must be 4 or 5 dimensions")
+
+    def _param2blockmat_inner(mat):
+        return jnp.concatenate(jnp.concatenate(mat, axis=1), axis=1)
+
+    if param.ndim == 4:
+        return _param2blockmat_inner(param)
+    return jax.vmap(_param2blockmat_inner, in_axes=0)(param)
 
 
 def regularize_matrix_with_condition_number(mat, max_cond= 1e10):
