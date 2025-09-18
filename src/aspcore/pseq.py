@@ -70,8 +70,8 @@ def create_pseq(seq_len : int):
     N_half = int(np.ceil(seq_len / 2))
     ph = np.zeros((seq_len))
 
-    group_delay = np.arange(N_half) / (1/2)
-    delta_omega = 2 * np.pi * 1 / seq_len
+    group_delay = np.arange(N_half) * 2
+    delta_omega = 2 * np.pi / seq_len
     ph[:N_half] = - group_delay * np.arange(N_half) * delta_omega / 2
 
     if is_even:
@@ -79,7 +79,7 @@ def create_pseq(seq_len : int):
     else:
         ph[N_half:] = -np.flip(ph[1:N_half])
 
-    c = 10*np.exp(1j*ph)
+    c = 10*np.exp(-1j*ph)
     s = np.real_if_close(ft.ifft(c))
 
     # Normalize signal to have max amplitude 1
@@ -120,6 +120,50 @@ def create_pseq_lowfreq(seq_len : int, sr : int, max_pseq_freq : int):
     #seq_len_upsampled = len(seq_upsampled) // 3
     seq_upsampled = seq_upsampled[seq_len:2*seq_len]
     return seq_upsampled[None,:]
+
+
+def create_pseq_random_phase(seq_len : int, rng = None):
+    """Creates a perfect sweep with random phase and constant magnitude spectrum
+
+    Parameters
+    ----------
+    seq_len : int
+        length of the sequence in samples
+
+    Returns
+    -------
+    seq : ndarray of shape (1, seq_len)
+    """
+    if rng is None:
+        rng = np.random.default_rng()
+    is_even = seq_len % 2 == 0
+    N_half = int(np.ceil(seq_len / 2))
+    
+    phase = np.zeros((seq_len))
+    # ph = np.zeros((seq_len))
+    # group_delay = 2 * np.arange(N_half)
+    # delta_omega = 2 * np.pi * 1 / seq_len
+    # ph[:N_half] = - group_delay * np.arange(N_half) * delta_omega / 2
+
+    phase[:N_half] = rng.uniform(low = 0, high = 2 * np.pi, size=N_half)
+    phase[0] = 0
+    #P_half = np.exp(-1j * phase)
+
+    if is_even:
+        phase[-1] = 1
+    
+    if is_even:
+        phase[N_half:] = np.concatenate((np.array([0]), -np.flip(phase[1:N_half])))
+    else:
+        phase[N_half:] = -np.flip(phase[1:N_half])
+
+
+    c = 10*np.exp(-1j*phase)
+    s = np.real_if_close(ft.ifft(c))
+
+    # Normalize signal to have max amplitude 1
+    s = s / np.max(np.abs(s))
+    return s[None,:]
 
 def create_shifted_pseq(pseq, num_channels, rir_len):
     """For system identification of MISO system, each source should be
@@ -178,6 +222,8 @@ def verify_pseq(pseq, plot=False, samples_to_show=300):
         "Average power" : np.mean(np.abs(pseq)**2),
         "Perfect periodic autocorrelation" : np.abs(autocorr[0]) > 1e-3 and np.allclose(autocorr[1:], 0),
     }
+
+    samples_to_show = np.min((samples_to_show, pseq.shape[-1] // 2))
 
     if plot:
         plt.figure()
