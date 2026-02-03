@@ -30,15 +30,25 @@ def matmul_param(mat1, mat2):
         The product matrix.
     
     """
-    dim1, dim2, ir_len, _ = mat1.shape
-    dim2b, dim3, _, _ = mat2.shape
-    assert dim2 == dim2b, "The inner dimensions must match."
-    assert mat1.dtype == mat2.dtype, "The matrices must have the same dtype."
-    def _matmul_param_inner(m1, m2):
-        return m1[:,None,:,:] @ m2[None,:,:,:]
+    if mat1.ndim > 5 or mat2.ndim > 5:
+        raise NotImplementedError("param must be 4 or 5 dimensions")
+    assert mat1.ndim == mat2.ndim, "Both matrices must have the same number of dimensions."
+
+    def _matmul_param_broadcast(m1, m2):
+        dim1, dim2, ir_len, _ = m1.shape
+        dim2b, dim3, _, _ = m2.shape
+        assert dim2 == dim2b, "The inner dimensions must match."
+        #assert m1.dtype == m2.dtype, "The matrices must have the same dtype."
+        def _matmul_param_inner(m1, m2):
+            return m1[:,None,:,:] @ m2[None,:,:,:]
+
+        all_outer_products = jax.vmap(_matmul_param_inner, in_axes=(1, 0))(m1, m2)
+        mm_res = jnp.sum(all_outer_products, axis=0)
+        return mm_res
     
-    all_outer_products = jax.vmap(_matmul_param_inner, in_axes=(1, 0))(mat1, mat2)
-    matmul_result = jnp.sum(all_outer_products, axis=0)
+    if mat1.ndim == 4:
+        return _matmul_param_broadcast(mat1, mat2)
+    matmul_result = jax.vmap(_matmul_param_broadcast, in_axes=(0, 0))(mat1, mat2)
     return matmul_result
 
 
@@ -48,13 +58,13 @@ def param2blockmat(param):
 
     Parameters
     ----------
-    param : ndarray of shape (num_blocks1, num_blocks2, ir_len, ir_len) or (num_mats, num_blocks1, num_blocks2, ir_len, ir_len)
+    param : ndarray of shape (num_blocks1, num_blocks2, block_len, block_len) or (num_mats, num_blocks1, num_blocks2, block_len, block_len)
         In the latter case the operation is applied to each matrix independently.
 
     Returns
     -------
-    block matrix : ndarray of shape (num_blocks1 * ir_len, num_blocks2 * ir_len)
-        or (num_mats, num_blocks1 * ir_len, num_blocks2 * ir_len)
+    block matrix : ndarray of shape (num_blocks1 * block_len, num_blocks2 * block_len)
+        or (num_mats, num_blocks1 * block_len, num_blocks2 * block_len)
     """
     if param.ndim > 5:
         raise NotImplementedError("param must be 4 or 5 dimensions")
@@ -65,6 +75,36 @@ def param2blockmat(param):
     if param.ndim == 4:
         return _param2blockmat_inner(param)
     return jax.vmap(_param2blockmat_inner, in_axes=0)(param)
+
+
+
+def blockmat2param(R, num_blocks, block_len):
+    """Converts from a standard block matrix to a parametrized form
+
+    Parameters
+    ----------
+    R : ndarray of shape (num_blocks * block_len, num_blocks * block_len)
+        The input block matrix in standard form.
+        Assumes for now that the matrix and the blocks are square.
+    num_blocks : int
+        The number of blocks in each dimension.
+    block_len : int
+        The length of each block.
+
+    Returns
+    -------
+    param_mat : ndarray of shape (num_blocks, num_blocks, block_len, block_len)
+        The output block matrix in parametrized form.
+
+    Notes
+    -----
+    The parametrized form is a block matrix where each (identically sized) block is accessed as R[i,j,:,:].
+    The standard form is a matrix, where the same data is accessed as R[i*len1:(i+1)*len1, j*len2:(j+1)*len2].
+    """
+    new_mat = R.reshape((num_blocks * block_len, num_blocks, block_len))
+    new_mat = new_mat.reshape((num_blocks, block_len, num_blocks, block_len))
+    new_mat = jnp.moveaxis(new_mat, 1, 2)
+    return new_mat
 
 
 def regularize_matrix_with_condition_number(mat, max_cond= 1e10):
