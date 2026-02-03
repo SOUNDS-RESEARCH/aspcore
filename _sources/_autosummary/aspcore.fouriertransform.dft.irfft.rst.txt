@@ -1,0 +1,6 @@
+aspcore.fouriertransform.dft.irfft
+==================================
+
+.. currentmodule:: aspcore.fouriertransform.dft
+
+.. autofunction:: irfft

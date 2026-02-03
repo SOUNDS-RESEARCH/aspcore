@@ -1,0 +1,6 @@
+aspcore.montecarlo.diagnostics
+==============================
+
+.. currentmodule:: aspcore.montecarlo
+
+.. autofunction:: diagnostics

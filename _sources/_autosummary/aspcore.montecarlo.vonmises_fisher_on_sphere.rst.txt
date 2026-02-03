@@ -1,0 +1,6 @@
+aspcore.montecarlo.vonmises\_fisher\_on\_sphere
+===============================================
+
+.. currentmodule:: aspcore.montecarlo
+
+.. autofunction:: vonmises_fisher_on_sphere

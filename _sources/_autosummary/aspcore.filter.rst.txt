@@ -1,0 +1,47 @@
+﻿aspcore.filter
+==============
+
+.. automodule:: aspcore.filter
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      create_filter
+      get_window_wola
+      wola_analysis
+      wola_synthesis
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: new-class-template.rst
+   
+      FilterBroadcastFreq
+      FilterMD_slow_fallback
+      FilterNosum
+      FilterSumFreq
+      IIRFilter
+      MovingAverage
+      WOLA
+   
+   
+
+   
+   
+   
+
+
+

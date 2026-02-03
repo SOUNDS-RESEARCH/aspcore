@@ -1,0 +1,6 @@
+aspcore.matrices\_jax.blockmat2param
+====================================
+
+.. currentmodule:: aspcore.matrices_jax
+
+.. autofunction:: blockmat2param

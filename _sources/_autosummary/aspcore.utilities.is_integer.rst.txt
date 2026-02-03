@@ -1,0 +1,6 @@
+aspcore.utilities.is\_integer
+=============================
+
+.. currentmodule:: aspcore.utilities
+
+.. autofunction:: is_integer

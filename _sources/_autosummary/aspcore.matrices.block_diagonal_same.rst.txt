@@ -1,0 +1,6 @@
+aspcore.matrices.block\_diagonal\_same
+======================================
+
+.. currentmodule:: aspcore.matrices
+
+.. autofunction:: block_diagonal_same

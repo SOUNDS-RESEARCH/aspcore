@@ -1,0 +1,6 @@
+aspcore.pseq.verify\_pseq
+=========================
+
+.. currentmodule:: aspcore.pseq
+
+.. autofunction:: verify_pseq

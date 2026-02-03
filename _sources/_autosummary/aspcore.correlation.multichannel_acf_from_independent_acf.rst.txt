@@ -1,0 +1,6 @@
+aspcore.correlation.multichannel\_acf\_from\_independent\_acf
+=============================================================
+
+.. currentmodule:: aspcore.correlation
+
+.. autofunction:: multichannel_acf_from_independent_acf

@@ -1,0 +1,6 @@
+aspcore.filter.create\_filter
+=============================
+
+.. currentmodule:: aspcore.filter
+
+.. autofunction:: create_filter

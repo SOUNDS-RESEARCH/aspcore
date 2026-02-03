@@ -1,0 +1,6 @@
+aspcore.filterdesign.min\_truncated\_length
+===========================================
+
+.. currentmodule:: aspcore.filterdesign
+
+.. autofunction:: min_truncated_length

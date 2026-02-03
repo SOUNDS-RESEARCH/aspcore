@@ -1,0 +1,6 @@
+aspcore.lowrank.create\_filter
+==============================
+
+.. currentmodule:: aspcore.lowrank
+
+.. autofunction:: create_filter

@@ -1,0 +1,6 @@
+aspcore.pseq.create\_pseq
+=========================
+
+.. currentmodule:: aspcore.pseq
+
+.. autofunction:: create_pseq

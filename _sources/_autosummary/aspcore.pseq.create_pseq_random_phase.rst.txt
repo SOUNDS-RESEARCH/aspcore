@@ -1,0 +1,6 @@
+aspcore.pseq.create\_pseq\_random\_phase
+========================================
+
+.. currentmodule:: aspcore.pseq
+
+.. autofunction:: create_pseq_random_phase

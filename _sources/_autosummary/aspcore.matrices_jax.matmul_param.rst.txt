@@ -1,0 +1,6 @@
+aspcore.matrices\_jax.matmul\_param
+===================================
+
+.. currentmodule:: aspcore.matrices_jax
+
+.. autofunction:: matmul_param

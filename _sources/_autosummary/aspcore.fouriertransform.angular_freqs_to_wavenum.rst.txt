@@ -1,0 +1,6 @@
+aspcore.fouriertransform.angular\_freqs\_to\_wavenum
+====================================================
+
+.. currentmodule:: aspcore.fouriertransform
+
+.. autofunction:: angular_freqs_to_wavenum

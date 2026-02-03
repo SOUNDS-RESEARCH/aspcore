@@ -1,0 +1,6 @@
+aspcore.fouriertransform.rdft\_weighting
+========================================
+
+.. currentmodule:: aspcore.fouriertransform
+
+.. autofunction:: rdft_weighting

@@ -1,0 +1,6 @@
+aspcore.fouriertransform.iczt
+=============================
+
+.. currentmodule:: aspcore.fouriertransform
+
+.. autofunction:: iczt

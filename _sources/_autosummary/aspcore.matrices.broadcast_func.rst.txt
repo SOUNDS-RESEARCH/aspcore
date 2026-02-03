@@ -1,0 +1,6 @@
+aspcore.matrices.broadcast\_func
+================================
+
+.. currentmodule:: aspcore.matrices
+
+.. autofunction:: broadcast_func

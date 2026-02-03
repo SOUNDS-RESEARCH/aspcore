@@ -1,0 +1,6 @@
+aspcore.utilities.get\_unique\_folder
+=====================================
+
+.. currentmodule:: aspcore.utilities
+
+.. autofunction:: get_unique_folder

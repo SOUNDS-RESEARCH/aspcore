@@ -1,0 +1,6 @@
+aspcore.matrices.psd\_matrix\_metadata
+======================================
+
+.. currentmodule:: aspcore.matrices
+
+.. autofunction:: psd_matrix_metadata

@@ -1,0 +1,6 @@
+aspcore.matrices.regularize\_matrix\_with\_condition\_number
+============================================================
+
+.. currentmodule:: aspcore.matrices
+
+.. autofunction:: regularize_matrix_with_condition_number

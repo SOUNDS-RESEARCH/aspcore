@@ -1,0 +1,6 @@
+aspcore.utilities.get\_time\_string
+===================================
+
+.. currentmodule:: aspcore.utilities
+
+.. autofunction:: get_time_string

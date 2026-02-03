@@ -1,0 +1,36 @@
+﻿aspcore.filterdesign
+====================
+
+.. automodule:: aspcore.filterdesign
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      calc_truncation_error
+      filterbank_third_octave
+      fir_from_freqs_window
+      fir_from_frequency_function
+      fractional_delay_filter
+      min_truncated_length
+      truncate_filter
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

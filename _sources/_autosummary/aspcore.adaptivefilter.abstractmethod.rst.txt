@@ -1,0 +1,6 @@
+aspcore.adaptivefilter.abstractmethod
+=====================================
+
+.. currentmodule:: aspcore.adaptivefilter
+
+.. autofunction:: abstractmethod

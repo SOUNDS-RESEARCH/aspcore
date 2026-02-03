@@ -1,0 +1,6 @@
+aspcore.fouriertransform.zoom\_dft
+==================================
+
+.. currentmodule:: aspcore.fouriertransform
+
+.. autofunction:: zoom_dft

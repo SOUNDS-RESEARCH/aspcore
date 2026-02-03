@@ -1,0 +1,6 @@
+aspcore.utilities.set\_basic\_plot\_look
+========================================
+
+.. currentmodule:: aspcore.utilities
+
+.. autofunction:: set_basic_plot_look

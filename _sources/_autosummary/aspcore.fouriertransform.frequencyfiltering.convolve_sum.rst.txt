@@ -1,0 +1,6 @@
+aspcore.fouriertransform.frequencyfiltering.convolve\_sum
+=========================================================
+
+.. currentmodule:: aspcore.fouriertransform.frequencyfiltering
+
+.. autofunction:: convolve_sum

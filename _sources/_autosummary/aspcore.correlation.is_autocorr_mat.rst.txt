@@ -1,0 +1,6 @@
+aspcore.correlation.is\_autocorr\_mat
+=====================================
+
+.. currentmodule:: aspcore.correlation
+
+.. autofunction:: is_autocorr_mat

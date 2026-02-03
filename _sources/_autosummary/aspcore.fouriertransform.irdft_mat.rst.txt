@@ -1,0 +1,6 @@
+aspcore.fouriertransform.irdft\_mat
+===================================
+
+.. currentmodule:: aspcore.fouriertransform
+
+.. autofunction:: irdft_mat

@@ -1,0 +1,6 @@
+aspcore.correlation.get\_filter\_for\_autocorrelation
+=====================================================
+
+.. currentmodule:: aspcore.correlation
+
+.. autofunction:: get_filter_for_autocorrelation

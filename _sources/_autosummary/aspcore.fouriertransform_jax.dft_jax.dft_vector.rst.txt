@@ -1,0 +1,6 @@
+aspcore.fouriertransform\_jax.dft\_jax.dft\_vector
+==================================================
+
+.. currentmodule:: aspcore.fouriertransform_jax.dft_jax
+
+.. autofunction:: dft_vector

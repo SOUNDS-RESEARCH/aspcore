@@ -1,0 +1,6 @@
+aspcore.utilities.save\_plot
+============================
+
+.. currentmodule:: aspcore.utilities
+
+.. autofunction:: save_plot

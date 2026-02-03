@@ -1,0 +1,6 @@
+aspcore.matrices.to\_length
+===========================
+
+.. currentmodule:: aspcore.matrices
+
+.. autofunction:: to_length

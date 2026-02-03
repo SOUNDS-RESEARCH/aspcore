@@ -1,0 +1,6 @@
+aspcore.filterdesign.calc\_truncation\_error
+============================================
+
+.. currentmodule:: aspcore.filterdesign
+
+.. autofunction:: calc_truncation_error

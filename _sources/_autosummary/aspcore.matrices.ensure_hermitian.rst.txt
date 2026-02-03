@@ -1,0 +1,6 @@
+aspcore.matrices.ensure\_hermitian
+==================================
+
+.. currentmodule:: aspcore.matrices
+
+.. autofunction:: ensure_hermitian

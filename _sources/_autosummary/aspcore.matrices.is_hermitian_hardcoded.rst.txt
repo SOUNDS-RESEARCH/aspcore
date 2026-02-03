@@ -1,0 +1,6 @@
+aspcore.matrices.is\_hermitian\_hardcoded
+=========================================
+
+.. currentmodule:: aspcore.matrices
+
+.. autofunction:: is_hermitian_hardcoded

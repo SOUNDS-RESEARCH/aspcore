@@ -1,0 +1,6 @@
+aspcore.fouriertransform\_jax.get\_angular\_freqs
+=================================================
+
+.. currentmodule:: aspcore.fouriertransform_jax
+
+.. autofunction:: get_angular_freqs

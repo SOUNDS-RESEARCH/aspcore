@@ -1,0 +1,6 @@
+aspcore.fouriertransform.dft.real\_vec\_to\_dft\_domain
+=======================================================
+
+.. currentmodule:: aspcore.fouriertransform.dft
+
+.. autofunction:: real_vec_to_dft_domain

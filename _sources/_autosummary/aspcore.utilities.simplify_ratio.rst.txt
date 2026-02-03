@@ -1,0 +1,6 @@
+aspcore.utilities.simplify\_ratio
+=================================
+
+.. currentmodule:: aspcore.utilities
+
+.. autofunction:: simplify_ratio

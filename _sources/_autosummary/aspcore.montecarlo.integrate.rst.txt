@@ -1,0 +1,6 @@
+aspcore.montecarlo.integrate
+============================
+
+.. currentmodule:: aspcore.montecarlo
+
+.. autofunction:: integrate

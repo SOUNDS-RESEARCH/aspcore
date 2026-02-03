@@ -1,0 +1,6 @@
+aspcore.matrices\_jax.regularize\_matrix\_with\_condition\_number
+=================================================================
+
+.. currentmodule:: aspcore.matrices_jax
+
+.. autofunction:: regularize_matrix_with_condition_number
