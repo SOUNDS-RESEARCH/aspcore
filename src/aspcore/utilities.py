@@ -1,14 +1,16 @@
 import copy
-import numpy as np
 import datetime
+
+import matplotlib.pyplot as plt
+import numpy as np
 
 import aspcore.filter as fc
 
-import matplotlib.pyplot as plt
 try:
     import tikzplotlib
 except ImportError:
     tikzplotlib = None
+
 
 def _tikzplotlib_fix_ncols(obj):
     """Workaround for matplotlib 3.6 renamed legend's _ncol to _ncols, which breaks tikzplotlib
@@ -23,6 +25,7 @@ def _tikzplotlib_fix_ncols(obj):
     for child in obj.get_children():
         _tikzplotlib_fix_ncols(child)
 
+
 def save_plot(print_method, folder, name=""):
     """Save plot to file in a number of formats.
 
@@ -33,7 +36,7 @@ def save_plot(print_method, folder, name=""):
         If 'show', the plot is shown in a window.
         If 'tikz', the plot is saved as a tikz file and a pdf file. Requires tikzplotlib installed, and
         the 'correct' matplotlib version. tikzplotlib is no longer maintained, so this is getting increasingly
-        difficult.
+        difficult. The package must be installed manually, from e.g. any of the patched forks on github.
         If 'pdf', the plot is saved as a pdf file.
         If 'svg', the plot is saved as a svg file.
         If 'none', the plot is not saved.
@@ -102,21 +105,20 @@ def save_plot(print_method, folder, name=""):
 
 def set_basic_plot_look(ax):
     """Sets basic look for a plot.
-    
+
     Parameters
     ----------
     ax : Axes
         Axes object to set the look of.
     """
     ax.grid(True)
-    ax.spines['right'].set_visible(False)
-    ax.spines['top'].set_visible(False)
-
+    ax.spines["right"].set_visible(False)
+    ax.spines["top"].set_visible(False)
 
 
 def power_of_filtered_signal(src, ir, num_samples):
     """Returns an estimate of average power of the signal after filtered through an impulse response
-        
+
     Requires non-standard dependency aspcore
 
     Parameters
@@ -129,7 +131,7 @@ def power_of_filtered_signal(src, ir, num_samples):
         The impulse response to filter the signal with
     num_samples : int
         The number of samples to use for the estimate. If the signal is periodic, this should be the period length
-        
+
     Returns
     -------
     avg_pow : ndarray of shape (num_recievers,)
@@ -138,13 +140,14 @@ def power_of_filtered_signal(src, ir, num_samples):
     assert ir.ndim == 3
     ir_len = ir.shape[-1]
     src_copy = copy.deepcopy(src)
-    in_sig = src_copy.get_samples(num_samples+ir_len-1)
+    in_sig = src_copy.get_samples(num_samples + ir_len - 1)
 
     filt = fc.create_filter(ir)
     filt_sig = filt.process(in_sig)
-    filt_sig = filt_sig[...,ir_len-1:]
+    filt_sig = filt_sig[..., ir_len - 1 :]
     avg_pow = np.mean(filt_sig**2, axis=-1)
     return avg_pow
+
 
 def is_power_of_2(x):
     """Returns True if x is a power of 2, False otherwise
@@ -161,14 +164,14 @@ def is_power_of_2(x):
     """
     return is_integer(np.log2(x))
 
+
 def next_power_of_two(x):
-    """ Returns the smallest number that is both a power of two and larger or equal to x. 
-    """
-    return int(2**(np.ceil(np.log2(x))))
+    """Returns the smallest number that is both a power of two and larger or equal to x."""
+    return int(2 ** (np.ceil(np.log2(x))))
+
 
 def is_integer(x):
-    """Returns True if x is an integer, False otherwise
-    """
+    """Returns True if x is an integer, False otherwise"""
     if not isinstance(x, np.ndarray):
         x = np.array(x)
     if np.all(np.isclose(x, x.astype(int))):
@@ -176,28 +179,28 @@ def is_integer(x):
     return False
 
 
-
 def get_smallest_coprime(N):
     """Get the smallest value that is coprime with N
-    
+
     Parameters
     ----------
     N : int
         The number to find a coprime to
-    
+
     Returns
     -------
     coprime : int
         The smallest coprime to N
     """
-    assert N > 2 #don't have to deal with 1 and 2 at this point
-    for i in range(2,N):
-        if np.gcd(i,N):
+    assert N > 2  # don't have to deal with 1 and 2 at this point
+    for i in range(2, N):
+        if np.gcd(i, N):
             return i
+
 
 def next_divisible(divisor, min_value):
     """Gives the smallest integer divisible by divisor, that is strictly larger than min_value
-    
+
     Parameters
     ----------
     divisor : int
@@ -214,8 +217,7 @@ def next_divisible(divisor, min_value):
     return min_value + divisor - rem
 
 
-
-def simplify_ratio(a : int, b : int):
+def simplify_ratio(a: int, b: int):
     """Simplifies the ratio a/b into the simplest possible ratio where both numerator and denominator are integers
 
     Parameters
@@ -232,17 +234,15 @@ def simplify_ratio(a : int, b : int):
     b : int
         simplified denominator
     """
-    d = np.gcd(a,b)
+    d = np.gcd(a, b)
     while d != 1:
         a = a // d
         b = b // d
-        d = np.gcd(a,b)
-    return a,b
+        d = np.gcd(a, b)
+    return a, b
 
 
-
-
-def block_process_idxs(num_samples : int, block_size : int, overlap : int, start_idx=0):
+def block_process_idxs(num_samples: int, block_size: int, overlap: int, start_idx=0):
     """Yields the starting index for each block, for block processing a signal
 
     Parameters
@@ -265,25 +265,22 @@ def block_process_idxs(num_samples : int, block_size : int, overlap : int, start
     assert 0 <= overlap < block_size
     assert 0 <= start_idx < num_samples
     hop = block_size - overlap
-    #left_in_block = block_size - start_idx
+    # left_in_block = block_size - start_idx
 
-    #indices = []
-    
+    # indices = []
+
     sample_counter = start_idx
-    while sample_counter+block_size < num_samples:
-        #block_len = min(num_samples - sample_counter, left_in_block)
-        yield sample_counter 
-        #indices.append(sample_counter)
-
+    while sample_counter + block_size < num_samples:
+        # block_len = min(num_samples - sample_counter, left_in_block)
+        yield sample_counter
+        # indices.append(sample_counter)
 
         sample_counter += hop
 
 
-
-
 def get_time_string(detailed=False):
     """Returns a string with the current time in the format 'year_month_day_hour_minute'
-    
+
     Parameters
     ----------
     detailed : bool
@@ -311,11 +308,12 @@ def get_time_string(detailed=False):
         time_str += "_" + str(tm.microsecond).zfill(2)
     return time_str
 
+
 def get_unique_folder(prefix, parent_folder, detailed_naming=False):
     """Returns a unique folder name in the parent folder with the prefix and the current time
 
     The folder name has the form parent_folder / prefix_year_month_day_hour_minute_0. If multiple folders are created
-    within the same minute, the number is incremented by 1 for each new folder. 
+    within the same minute, the number is incremented by 1 for each new folder.
 
     Parameters
     ----------
@@ -324,10 +322,10 @@ def get_unique_folder(prefix, parent_folder, detailed_naming=False):
     parent_folder : Path
         The parent folder where the new folder should be created, as a Path object (from pathlib)
     detailed_naming : bool
-        If True, the folder name will include seconds and microseconds. 
-        If used with multithreading, it is a good idea to set this to True. 
+        If True, the folder name will include seconds and microseconds.
+        If used with multithreading, it is a good idea to set this to True.
         In that case, uniqueness is not guaranteed, but it reduces the risk of clashes significantly.
-    
+
     Returns
     -------
     folder_name : Path
@@ -346,13 +344,12 @@ def get_unique_folder(prefix, parent_folder, detailed_naming=False):
     return folder_name
 
 
-
 class PhaseCounter:
     """
     An index counter to keep track of non-overlapping continous phases
-    
+
     Example:
-    A processor needs the first 2000 samples for an initialization, 
+    A processor needs the first 2000 samples for an initialization,
     then must wait 5000 samples before beginning the real processing step.
     The class can then be used by providing
     phase_def = {
@@ -362,36 +359,38 @@ class PhaseCounter:
     }
     and then checking if phase_counter.phase == 'init'
     or if phase_counter.current_phase_is('init'):
-    
+
     The number is how many samples that each phase should be
     The first phase will start at sample 0.
 
     np.inf represents an infinite length
     This should naturally only be used for the last phase
-    If all phases has finished, the phase will be None. 
+    If all phases has finished, the phase will be None.
 
     first_sample will be True on the first sample of each phase,
     allowing running one-time functions in each phase
 
     Extended implementation to blocksize != 1 can be done later
     """
+
     def __init__(self, phase_lengths, verbose=False):
         assert isinstance(phase_lengths, dict)
         self.phase_lengths = phase_lengths
         self.verbose = verbose
         self.phase = None
         self.first_sample = True
-        
 
-        #phase_lengths = {name : length for name, length in self.phase_lengths.items() if length != 0}
-        #phase_lengths = {name : length for name, length in self.phase_lengths.items()}
-        
-        #phase_idxs = [i for i in self.phase_lengths.values() if i != 0]
-        self.phase_lengths = {name : i if i >= 0 else np.inf for name, i in self.phase_lengths.items()}
-        #assert all([i != 0 for i in p_len])
+        # phase_lengths = {name : length for name, length in self.phase_lengths.items() if length != 0}
+        # phase_lengths = {name : length for name, length in self.phase_lengths.items()}
+
+        # phase_idxs = [i for i in self.phase_lengths.values() if i != 0]
+        self.phase_lengths = {
+            name: i if i >= 0 else np.inf for name, i in self.phase_lengths.items()
+        }
+        # assert all([i != 0 for i in p_len])
         self.start_idxs = np.cumsum(list(self.phase_lengths.values())).tolist()
         self.start_idxs = [i if np.isinf(i) else int(i) for i in self.start_idxs]
-        self.start_idxs.insert(0,0)
+        self.start_idxs.insert(0, 0)
 
         self.phase_names = list(self.phase_lengths.keys())
         if self.start_idxs[-1] < np.inf:
@@ -399,10 +398,23 @@ class PhaseCounter:
         else:
             self.start_idxs.pop()
 
-        self.start_idxs = {phase_name:start_idx for phase_name, start_idx in zip(self.phase_names, self.start_idxs)}
+        self.start_idxs = {
+            phase_name: start_idx
+            for phase_name, start_idx in zip(self.phase_names, self.start_idxs)
+        }
 
-        self._phase_names = [phase_name for phase_name, phase_len in self.phase_lengths.items() if phase_len > 0]
-        self._start_idxs = [start_idx for start_idx, phase_len in zip(self.start_idxs.values(), self.phase_lengths.values()) if phase_len > 0]
+        self._phase_names = [
+            phase_name
+            for phase_name, phase_len in self.phase_lengths.items()
+            if phase_len > 0
+        ]
+        self._start_idxs = [
+            start_idx
+            for start_idx, phase_len in zip(
+                self.start_idxs.values(), self.phase_lengths.values()
+            )
+            if phase_len > 0
+        ]
 
         self.idx = 0
         self.next_phase()
@@ -410,13 +422,13 @@ class PhaseCounter:
     def next_phase(self):
         if self.verbose:
             print(f"Changed phase from {self.phase}")
-            
+
         self.phase = self._phase_names.pop(0)
         self._start_idxs.pop(0)
         if len(self._start_idxs) == 0:
             self._start_idxs.append(np.inf)
         self.first_sample = True
-        
+
         if self.verbose:
             print(f"to {self.phase}")
 
@@ -431,10 +443,9 @@ class PhaseCounter:
         return self.phase == phase_name
 
 
-
 class EventCounter:
     """
-    An index counter to keep track of events that should 
+    An index counter to keep track of events that should
     only happen every x samples
 
     event_def is a dictionary with all event
@@ -443,19 +454,20 @@ class EventCounter:
     Example:
     event_counter = EventCounter({'event_1' : (256,0), 'event_2' : (1,0), 'event_3' : (1024,256)})
     event_2 will happen every sample, event_1 every 256 samples
-    First at sample 256 all three events will happen simultaneouly. 
+    First at sample 256 all three events will happen simultaneouly.
 
     To be used as:
     if 'event_name' in event_counter.event:
     do_thing()
 
     """
+
     def __init__(self, event_def):
         self.event_def = event_def
         self.event = []
 
-        self.freq = {name : freq for name, (freq, offset) in event_def.items()}
-        self.offset = {name : offset for name, (freq, offset) in event_def.items()}
+        self.freq = {name: freq for name, (freq, offset) in event_def.items()}
+        self.offset = {name: offset for name, (freq, offset) in event_def.items()}
 
         self.idx = 0
 
@@ -469,5 +481,5 @@ class EventCounter:
                 self.event.append(name)
 
     def progress(self):
-        self.idx += 1 
+        self.idx += 1
         self.check_events()
