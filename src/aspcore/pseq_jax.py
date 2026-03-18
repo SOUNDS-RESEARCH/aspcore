@@ -9,13 +9,9 @@ References
 [antweilerSystem2014] C. Antweiler, S. Kuehl, B. Sauert, and P. Vary, “System identification with perfect sequence excitation - efficient NLMS vs. inverse cyclic convolution,” in Speech Communication; 11. ITG Symposium, Sep. 2014, pp. 1–4.\n
 [hahnSimultaneous2018] N. Hahn and S. Spors, “Simultaneous measurement of spatial room impulse responses from multiple sound sources using a continuously moving microphone,” in 2018 26th European Signal Processing Conference (EUSIPCO), Sep. 2018, pp. 2180–2184. doi: 10.23919/EUSIPCO.2018.8553532. `[link] <https://doi.org/10.23919/EUSIPCO.2018.8553532>`__ \n
 """
-import numpy as np
-import scipy.linalg as splin
-import matplotlib.pyplot as plt
 
-import jax.numpy as jnp
 import jax
-
+import jax.numpy as jnp
 
 
 def decorrelate(sig, pseq, v=0):
@@ -43,13 +39,12 @@ def decorrelate(sig, pseq, v=0):
         pseq = jnp.squeeze(pseq, axis=0)
 
     normalize_factor = jnp.sum(pseq**2)
-    p_n = jnp.flip(jnp.roll(pseq, -1-v))
+    p_n = jnp.flip(jnp.roll(pseq, -1 - v))
     p_n = p_n / normalize_factor
     pn_rev = jnp.concatenate((jnp.array([0]), jnp.flip(p_n[1:])))
 
     system_mat = jax.scipy.linalg.toeplitz(p_n, pn_rev)
     rir_est = system_mat @ sig.T
 
-    
-    #rir_est = splin.matmul_toeplitz((p_n, pn_rev), sig.T)
+    # rir_est = splin.matmul_toeplitz((p_n, pn_rev), sig.T)
     return rir_est.T
