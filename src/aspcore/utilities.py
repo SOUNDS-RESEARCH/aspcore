@@ -116,6 +116,15 @@ def set_basic_plot_look(ax):
     ax.spines["top"].set_visible(False)
 
 
+def remove_axes_and_labels(ax):
+    ax.get_xaxis().set_visible(False)
+    ax.get_yaxis().set_visible(False)
+    ax.spines["right"].set_visible(False)
+    ax.spines["left"].set_visible(False)
+    ax.spines["top"].set_visible(False)
+    ax.spines["bottom"].set_visible(False)
+
+
 def power_of_filtered_signal(src, ir, num_samples):
     """Returns an estimate of average power of the signal after filtered through an impulse response
 
