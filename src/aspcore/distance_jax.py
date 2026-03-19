@@ -327,13 +327,8 @@ def wishart_log_likelihood(mat_variable, cov, N, regularization=1e6):
     l : float
         The log likelihood of the data given the covariance matrix
     """
-    M = mat_variable.shape[-1]
-    # mat_variable = mat_variable * N
-
     cov = matop.regularize_matrix_with_condition_number(cov, regularization)
     f1 = -N * jnp.log(jnp.linalg.det(cov))
     f2 = -jnp.trace(jnp.linalg.solve(cov, mat_variable))
-    l = f1 + f2
-    # if (jnp.abs(jnp.imag(l)) / jnp.abs(jnp.real(l))) > 1e-10:
-    #     print(f"warning: more than 1e-10 imaginary part for wishart likelihood")
-    return jnp.real(l)
+    likelihood = f1 + f2
+    return jnp.real(likelihood)
