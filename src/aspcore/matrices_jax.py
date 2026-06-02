@@ -11,9 +11,11 @@ from functools import partial
 import jax
 import jax.numpy as jnp
 
+import aspcore.fouriertransform_jax as ft
+
 
 def matmul_param(mat1, mat2):
-    """Multiplies two parametrized block matrices without explicitly converting to full matrices.
+    """Multiply two parametrized block matrices without explicitly converting to full matrices.
 
     Is equivalent to _blockmat2param(_param2blockmat(mat1) @ _param2blockmat(mat2), num_mic, ir_len).
 
@@ -57,7 +59,7 @@ def matmul_param(mat1, mat2):
 
 @jax.jit
 def param2blockmat(param):
-    """Turns an array of blocks and returns a single blocks matrix
+    """Turn an array of blocks and returns a single blocks matrix.
 
     Parameters
     ----------
@@ -81,7 +83,7 @@ def param2blockmat(param):
 
 
 def blockmat2param(R, num_blocks, block_len):
-    """Converts from a standard block matrix to a parametrized form
+    """Convert from a standard block matrix to a parametrized form.
 
     Parameters
     ----------
@@ -110,7 +112,7 @@ def blockmat2param(R, num_blocks, block_len):
 
 
 def regularize_matrix_with_condition_number(mat, max_cond=1e10):
-    """Adds a scaled identity matrix to the matrix in order to ensure a maximum condition number
+    """Add a scaled identity matrix to the matrix in order to ensure a maximum condition number.
 
     Parameters
     ----------
@@ -135,7 +137,7 @@ def regularize_matrix_with_condition_number(mat, max_cond=1e10):
 
 @partial(jax.jit, static_argnames=["num_blocks"])
 def block_diagonal_same(block, num_blocks):
-    """Creates a block diagonal matrix from a single block.
+    """Create a block diagonal matrix from a single block.
 
     Parameters
     ----------
@@ -153,7 +155,7 @@ def block_diagonal_same(block, num_blocks):
 
 
 def generalized_eigh(A, B):
-    """Computes the generalized eigenvalue decomposition of a pair of positive semidefinite matrices.
+    """Compute the generalized eigenvalue decomposition of a pair of positive semidefinite matrices.
 
     Returns the same as scipy.linalg.eigh(A, B)
 
@@ -180,7 +182,7 @@ def generalized_eigh(A, B):
 
 
 def generalized_eigvalsh(A, B):
-    """Computes the generalized eigenvalue decomposition of a pair of positive semidefinite matrices.
+    """Compute the generalized eigenvalue decomposition of a pair of positive semidefinite matrices.
 
     This can be used if only the eigenvalues are of interest, and not the eigenvectors.
     Returns the same as scipy.linalg.eigvalsh(A, B)
@@ -205,7 +207,7 @@ def generalized_eigvalsh(A, B):
 
 
 def matrix_sqrt(A):
-    """Computes the square root of a positive definite matrix A.
+    """Compute the square root of a positive definite matrix A.
 
     Clips eigenvalues below 1e-12 to avoid numerical instability.
 
@@ -223,3 +225,71 @@ def matrix_sqrt(A):
     eigvals, eigvecs = jnp.linalg.eigh(A)
     eigvals = jnp.maximum(eigvals, 1e-12)
     return eigvecs @ jnp.sqrt(jnp.diag(eigvals)) @ jnp.conj(eigvecs).T
+
+
+def matmul_toeplitz(c_or_cr, x):
+    """Multiplies a Toeplitz matrix A with a vector x, without explicitly constructing the full matrix A.
+
+    Uses the FFT for efficient computation. The result of matmul_toeplitz((c, r)), x) is the same as toeplitz(c, r) @ x.
+
+    Parameters
+    ----------
+    c_or_cr :
+        The vector c, or a tuple of arrays (c, r). If not supplied, r = conjugate(c) is assumed; in this case, if c[0] is real, the Toeplitz matrix is Hermitian. r[0] is ignored; the first row of the Toeplitz matrix is [c[0], r[1:]].
+    x : ndarray of shape (N,)
+        The vector to be multiplied.
+
+    Returns
+    -------
+    y : ndarray of shape (M,) or (M, K)
+        The Toeplitz product `toeplitz(c, r) @ x`.
+
+    """
+    if isinstance(c_or_cr, tuple):
+        c, r = c_or_cr
+    else:
+        c = c_or_cr
+        r = jnp.conj(c)
+
+    c = jnp.asarray(c)
+    r = jnp.asarray(r)
+    x = jnp.asarray(x)
+
+    if c.ndim != 1 or r.ndim != 1:
+        raise ValueError("c and r must be one-dimensional")
+    if x.ndim not in (1, 2):
+        raise ValueError("x must be one- or two-dimensional")
+    if x.shape[0] != r.shape[0]:
+        raise ValueError("x.shape[0] must equal len(r)")
+
+    m = c.shape[0]
+    n = r.shape[0]
+    full_len = m + n - 1
+
+    if x.ndim == 1:
+        x_2d = x[:, None]
+    else:
+        x_2d = x
+
+    toep_col = jnp.concatenate((c, r[-1:0:-1]))
+
+    use_real_fft = jnp.isrealobj(c) and jnp.isrealobj(r) and jnp.isrealobj(x)
+
+    x_t = jnp.moveaxis(x_2d, 0, -1)
+
+    if use_real_fft:
+        toep_fft = ft.rfft(jnp.real(toep_col), n=full_len)
+        x_fft = ft.rfft(jnp.real(x_t), n=full_len)
+        y_full_t = ft.irfft(toep_fft[:, None] * x_fft, n=full_len)
+    else:
+        complex_dtype = jnp.result_type(c, r, x, jnp.complex64)
+        toep_fft = ft.fft(toep_col.astype(complex_dtype), n=full_len)
+        x_fft = ft.fft(x_t.astype(complex_dtype), n=full_len)
+        y_full_t = ft.ifft(toep_fft[:, None] * x_fft)
+
+    y_full = jnp.moveaxis(y_full_t, -1, 0)
+    y = y_full[:m, :]
+
+    if x.ndim == 1:
+        return y[:, 0]
+    return y
