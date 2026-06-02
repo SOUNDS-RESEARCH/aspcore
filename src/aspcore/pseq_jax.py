@@ -10,8 +10,9 @@ References
 [hahnSimultaneous2018] N. Hahn and S. Spors, “Simultaneous measurement of spatial room impulse responses from multiple sound sources using a continuously moving microphone,” in 2018 26th European Signal Processing Conference (EUSIPCO), Sep. 2018, pp. 2180–2184. doi: 10.23919/EUSIPCO.2018.8553532. `[link] <https://doi.org/10.23919/EUSIPCO.2018.8553532>`__ \n
 """
 
-import jax
 import jax.numpy as jnp
+
+import aspcore.matrices_jax as aspmat
 
 
 def decorrelate(sig, pseq, v=0):
@@ -43,8 +44,10 @@ def decorrelate(sig, pseq, v=0):
     p_n = p_n / normalize_factor
     pn_rev = jnp.concatenate((jnp.array([0]), jnp.flip(p_n[1:])))
 
-    system_mat = jax.scipy.linalg.toeplitz(p_n, pn_rev)
-    rir_est = system_mat @ sig.T
+    rir_est = aspmat.matmul_toeplitz((p_n, pn_rev), sig.T).T
+
+    # system_mat = jax.scipy.linalg.toeplitz(p_n, pn_rev)
+    # rir_est = (system_mat @ sig.T).T
 
     # rir_est = splin.matmul_toeplitz((p_n, pn_rev), sig.T)
-    return rir_est.T
+    return rir_est
