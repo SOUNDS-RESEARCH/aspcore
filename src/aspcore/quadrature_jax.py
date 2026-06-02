@@ -1,16 +1,20 @@
 import jax.numpy as jnp
+
 import aspcore.quadrature as quad
 
 
 def t_design(order):
     """Returns the t-design directions for the given order.
 
+    T-designs represent quadratures on the sphere that are exact for spherical polynomials up to degree t.
+    The quadrature weights are uniform.
+
     Supported orders are odd positive integers from 1 to 15 (inclusive).
 
     Parameters
     ----------
     order : int
-        The order of the t-design. 
+        The order of the t-design.
 
     Returns
     -------
@@ -23,7 +27,7 @@ def t_design(order):
     https://web.maths.unsw.edu.au/~rsw/Sphere/EffSphDes/
     """
     assert isinstance(order, int), "Order must be an integer."
-    
+
     designs = {
         1: quad._t_design_1,
         3: quad._t_design_3,
@@ -35,6 +39,7 @@ def t_design(order):
         15: quad._t_design_15,
     }
 
-    assert order in designs, "The requested order is not supported. Supported orders are odd positive integers from 1 to 15 (inclusive)."
+    assert order in designs, (
+        "The requested order is not supported. Supported orders are odd positive integers from 1 to 15 (inclusive)."
+    )
     return jnp.asarray(designs[order]())
-    

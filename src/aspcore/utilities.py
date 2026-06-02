@@ -3,27 +3,9 @@ import datetime
 
 import matplotlib.pyplot as plt
 import numpy as np
+import tikzplotlib
 
 import aspcore.filter as fc
-
-try:
-    import tikzplotlib
-except ImportError:
-    tikzplotlib = None
-
-
-def _tikzplotlib_fix_ncols(obj):
-    """Workaround for matplotlib 3.6 renamed legend's _ncol to _ncols, which breaks tikzplotlib
-
-    Parameters
-    ----------
-    obj : Figure object
-        Figure object to fix the _ncol attribute in.
-    """
-    if hasattr(obj, "_ncols"):
-        obj._ncol = obj._ncols
-    for child in obj.get_children():
-        _tikzplotlib_fix_ncols(child)
 
 
 def save_plot(print_method, folder, name=""):
@@ -49,21 +31,20 @@ def save_plot(print_method, folder, name=""):
         plt.show()
     elif print_method == "tikz":
         if folder is not None:
-            nested_folder = folder.joinpath(name)
-            try:
-                nested_folder.mkdir()
-            except FileExistsError:
-                pass
+            subfolder_path = folder / name
+            subfolder_path.mkdir(parents=True, exist_ok=True)
+            fig_path = subfolder_path / name
 
-            fig = plt.gcf()
-            _tikzplotlib_fix_ncols(fig)
+            # fig: Figure = plt.gcf()
+            # fig_path = nested_folder / f"{name}"
             tikzplotlib.save(
-                str(nested_folder.joinpath(f"{name}.tex")),
+                str(fig_path.with_suffix(".tex")),
                 externalize_tables=True,
                 float_format=".8g",
             )
+            # pgfsave.save_plot(fig, fig_path, compile=True)
             plt.savefig(
-                str(nested_folder.joinpath(name + ".pdf")),
+                str(fig_path.with_suffix(".pdf")),
                 dpi=300,
                 facecolor="w",
                 edgecolor="w",
@@ -127,8 +108,6 @@ def remove_axes_and_labels(ax):
 
 def power_of_filtered_signal(src, ir, num_samples):
     """Returns an estimate of average power of the signal after filtered through an impulse response
-
-    Requires non-standard dependency aspcore
 
     Parameters
     ----------
@@ -267,7 +246,7 @@ def block_process_idxs(num_samples: int, block_size: int, overlap: int, start_id
         of the original signal than idx = 0
 
     Yields
-    -------
+    ------
     idx : int
         can be used to get your block as signal[..., idx:idx + block_size]
     """

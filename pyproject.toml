@@ -21,6 +21,7 @@ dependencies = [
     "samplerate>=0.2.3",
     "scipy>=1.17.1",
     "tensorly>=0.9.0",
+    "tikzplotlib-patched",
 ]
 
 [build-system]
@@ -33,8 +34,17 @@ dev = [
     "pytest>=9.0.2",
 ]
 
+[tool.ruff.lint]
+select = ["D"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "numpy"
+
 [tool.ruff.lint.per-file-ignores]
 "__init__.py" = ["F401"]
+
+[tool.uv.sources]
+tikzplotlib-patched = { git = "https://github.com/JasonGross/tikzplotlib" }
 
 [project.urls]
 Documentation = "https://sounds-research.github.io/aspcore/"
